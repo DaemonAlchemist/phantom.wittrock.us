@@ -1,0 +1,16 @@
+@import "@styles/globals.scss";
+
+.app {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    .container {
+        background-color: $bgColor;
+    }
+    .minimap {
+        height: 120px;
+    }
+}
