@@ -1,0 +1,31 @@
+@import "@styles/globals.scss";
+
+.conversation {
+    max-width: 768px;
+    margin: auto;
+    padding: 16px;
+    .message {
+        margin: 16px;
+        padding: 16px 16px 16px 48px;
+        text-indent: -38px;
+        border-radius: 16px;
+        &.user {
+            margin-left: 256px;
+            border-bottom-right-radius: 0;
+            background-color: #aaaaff;
+        }
+        &.assistant {
+            margin-right: 256px;
+            border-bottom-left-radius: 0;
+            background-color: #aaffaa;
+        }
+        :global(.anticon) {
+            font-size: x-large;
+            margin-right: 8px;
+        }
+    }
+    .clearBtn {
+        margin-top: 16px;
+        text-align: center;
+    }
+}
