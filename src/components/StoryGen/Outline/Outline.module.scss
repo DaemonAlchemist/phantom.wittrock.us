@@ -1,1 +1,55 @@
 @import "@styles/globals.scss";
+
+.outlinePrompt {
+    :global(.ant-alert) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    textarea {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    button {
+        display: block;
+        margin: 16px auto;
+    }
+}
+
+.basic {
+    border: solid 1px $lowLight;
+    border-radius: $borderRadius;
+    overflow: hidden;
+    .title {
+        background-color: $bgColor;
+        text-align: center;
+        font-size: x-large;
+        padding: $paddingSmall;
+    }
+    .genre, .timePeriod {
+        width: calc(50% - $paddingSmall * 2 - 2px);
+        display: inline-block;
+        text-align: center;
+        border: solid 1px $bgColor;
+        padding: $paddingSmall;
+    }
+}
+
+.themes {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+        position: relative;
+        margin: $paddingSmall;
+        border: solid 1px $lowLight;
+        background-color: $bgColor;
+        padding: $paddingSmall;
+        padding-right: 28px;
+        border-radius: $borderRadius;
+        span {
+            position: absolute;
+            right: 4px;
+            top: 6px;
+        }
+    }
+}

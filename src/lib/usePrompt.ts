@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import request from 'superagent';
-import { prop } from "ts-functional";
-import { Conversation, IChatResponse } from "./conversation";
-import { useLoader } from "./userLoader";
 import { Func } from "ts-functional/dist/types";
+import { Conversation } from "./conversation";
+import { prompt } from "./proxy";
+import { useLoader } from "./userLoader";
 
-export const usePrompt = (systemMessage: string, onUpdate:Func<string, void>, jsonOnly?: boolean) => {
+export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, jsonOnly?: boolean) => {
     const loader = useLoader();
     const [message, setMessage] = useState("");
 
@@ -19,24 +18,14 @@ export const usePrompt = (systemMessage: string, onUpdate:Func<string, void>, js
         }]
         loader.start();
         setMessage("");
-        request.post("http://localhost:11434/api/chat")
-            .send({
-                model: "llama2",
-                messages,
-                format: jsonOnly ? "json" : undefined,
-                stream: false,
-            })
-            .set('accept', 'application/json')
-            .then(prop("body"))
-            .then((msg:IChatResponse) => {
-                setMessage(msg.message.content);
-            })
+        prompt(messages, jsonOnly)
+            .then(setMessage)
             .finally(loader.done);
     }
 
     useEffect(() => {
         if(!!message) {
-            onUpdate(message);
+            onUpdate(JSON.parse(message));
         }
     }, [message]);
 

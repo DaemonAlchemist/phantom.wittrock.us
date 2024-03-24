@@ -15,3 +15,8 @@ export declare interface ICharacter {
     relationship: string;
     mainCharacterArcSupport;
 }
+
+export declare interface ISceneOutline {
+    outline: string;
+    characters: string[];
+}

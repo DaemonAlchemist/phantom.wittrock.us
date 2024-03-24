@@ -1,0 +1,24 @@
+@import "@styles/globals.scss";
+
+.engineSelect {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    .labeledSelect {
+        display: inline-block;
+        margin-right: 8px;
+        > span {
+            display: inline-block;
+            min-width: 64px;
+            background-color: #dddddd;
+            padding: 7px;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+        :global(.ant-select-selector) {
+            min-width: 256px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    }
+}

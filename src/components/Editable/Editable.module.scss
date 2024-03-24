@@ -1,0 +1,14 @@
+@import "@styles/globals.scss";
+
+.editable {
+    min-width: 32px;
+    border: solid 1px;
+    display: inline-block;
+    background: none !important;
+    text-align: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: 0;
+    margin: 0;
+    border: none;
+}

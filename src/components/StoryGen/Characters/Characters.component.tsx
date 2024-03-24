@@ -3,6 +3,7 @@ import { Button, Spin, Table } from "antd";
 import { usePrompt } from "../../../lib/usePrompt";
 import { systemPrompts, useMainCharacter, useOutline, useSupportingCharacters } from "../Storygen.helpers";
 import { CharactersProps } from "./Characters";
+import JSON5 from 'json5';
 
 export const CharactersComponent = ({}:CharactersProps) => {
     const [outline] = useOutline();
@@ -12,8 +13,12 @@ export const CharactersComponent = ({}:CharactersProps) => {
 
     const [supportingCharacters, setSupportingCharacters] = useSupportingCharacters();
     const updateCharacters = (json:string) => {
+        if(!json) {return;}
         try {
-            setSupportingCharacters(JSON.parse(json).characters);
+            const characters = JSON5.parse(json).characters;
+            if(!!characters && Array.isArray(characters) && characters.length > 0) {
+                setSupportingCharacters(characters);
+            }
         } catch (err) {
             console.log(`Error parsing supporting character info: ${err}`);
         }
