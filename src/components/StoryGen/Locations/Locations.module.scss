@@ -1,0 +1,42 @@
+@import "@styles/globals.scss";
+
+.locations {
+    > h2 {
+        button {float: right;}
+    }
+    .locationList {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        vertical-align: top;
+        display: grid;
+        grid-template-columns: 33% 33% 33%;
+        li {
+            display: inline-block;
+            margin: $paddingSmall;
+            border: solid 1px $lowLight;
+            border-radius: $borderRadius;
+            overflow: hidden;
+            .name {
+                margin: 0;
+                text-align: center;
+                background-color: $bgColor;
+                padding: $paddingSmall;
+                position: relative;
+                padding-right: 40px;
+                :global(.deleteBtn) {
+                    position: absolute;
+                    right: 8px;
+                    top: 8px;
+                }
+                }
+            .description {
+                padding: $paddingSmall;
+            }
+            .id {
+                padding: 0 $paddingSmall;
+                * {color: $lowLight;}
+            }
+        }
+    }
+}

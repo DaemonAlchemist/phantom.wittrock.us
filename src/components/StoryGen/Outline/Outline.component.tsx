@@ -8,6 +8,7 @@ import { OutlineProps } from "./Outline";
 import styles from "./Outline.module.scss";
 import { IStoryOutline } from "../story";
 import { Editable } from "../../Editable";
+import { DeleteBtn } from "../../DeleteBtn";
 
 export const OutlineComponent = ({}:OutlineProps) => {
     const [idea, setIdea] = useIdea();
@@ -64,9 +65,7 @@ export const OutlineComponent = ({}:OutlineProps) => {
                     <ul className={styles.themes}>
                         {story.themes.map((theme, i) => <li key={i}>
                             <Editable key={i} value={theme} onChange={update.theme.update(i)} placeholder="Theme goes here."/>
-                            <Typography.Text type="danger">
-                                <DeleteOutlined onClick={update.theme.remove(i)}/>
-                            </Typography.Text>
+                            <DeleteBtn onClick={update.theme.remove(i)} />
                         </li>)}
                     </ul>
                 </Col>

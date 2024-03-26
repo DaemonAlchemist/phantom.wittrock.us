@@ -1,44 +1,68 @@
 import { SendOutlined } from "@ant-design/icons";
-import { Button, Spin, Table } from "antd";
+import { Button, Spin, Switch, Tabs } from "antd";
+import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
-import { systemPrompts, useMainCharacter, useOutline, useSupportingCharacters } from "../Storygen.helpers";
+import { Editable } from "../../Editable";
+import { systemPrompts, userPrompts } from "../Storygen.helpers";
+import { ICharacter } from "../story.d";
 import { CharactersProps } from "./Characters";
-import JSON5 from 'json5';
+import styles from "./Characters.module.scss";
 
 export const CharactersComponent = ({}:CharactersProps) => {
-    const [outline] = useOutline();
+    const {story, update} = useStory();
 
-    const [mainCharacter, setMainCharacter] = useMainCharacter();
-    const mcPrompt = usePrompt(systemPrompts.mainCharacter, setMainCharacter);
-
-    const [supportingCharacters, setSupportingCharacters] = useSupportingCharacters();
-    const updateCharacters = (json:string) => {
-        if(!json) {return;}
-        try {
-            const characters = JSON5.parse(json).characters;
-            if(!!characters && Array.isArray(characters) && characters.length > 0) {
-                setSupportingCharacters(characters);
-            }
-        } catch (err) {
-            console.log(`Error parsing supporting character info: ${err}`);
-        }
+    const updateMainCharacter = (char:ICharacter) => {
+        update.character.add(char)();
     }
-    const spPrompt = usePrompt(systemPrompts.supportingCharacters, updateCharacters, true);
+
+    const updateCharacters = (response:{characters:ICharacter[]}) => {
+        response.characters.forEach(char => {update.character.add(char)()});
+    }
+
+    const mcPrompt = usePrompt(systemPrompts.mainCharacter, updateMainCharacter);
+    const spPrompt = usePrompt(systemPrompts.supportingCharacters, updateCharacters);
 
     return <Spin spinning={mcPrompt.isRunning || spPrompt.isRunning}>
-        <Button onClick={mcPrompt.run(`Story outline: ${outline}`)} type="primary">
+        <h2>Characters</h2>
+        <Button onClick={mcPrompt.run(userPrompts.mainCharacter(story))} type="primary">
             <SendOutlined /> Generate main character
         </Button>
-        <p>{mainCharacter}</p>
-        <Button onClick={spPrompt.run(`Story outline: ${outline}, main character: ${mainCharacter}`)} type="primary">
+        <Button onClick={spPrompt.run(userPrompts.supportingCharacters(story))} type="primary">
             <SendOutlined /> Generate supporting characters
         </Button>
-        <Table dataSource={supportingCharacters}>
-            <Table.Column dataIndex="name" title="Name" />
-            <Table.Column dataIndex="description" title="Description" />
-            <Table.Column dataIndex="backStory" title="Backstory" />
-            <Table.Column dataIndex="relationship" title="Relationship" />
-            <Table.Column dataIndex="mainCharacterArcSupport" title="Arc Support" />
-        </Table>
+        <hr />
+        <ul className={styles.characters}>
+            {story.characters.map((char, i) => <li key={i}>
+                <h2 className={styles.name}>
+                    <Editable value={char.name} onChange={update.character.name(i)} placeholder="Character name here" />
+                    <Switch checkedChildren="Main" unCheckedChildren="Supporting" checked={char.role === "main"} onChange={update.character.role(i)}/>
+                </h2>
+                <div className={styles.info}>
+                    <Tabs tabPosition="left">
+                        <Tabs.TabPane key="description" tabKey="description" tab="Description">
+                            <Editable value={char.physicalDescription} onChange={update.character.description(i)} placeholder="Physical description goes here." textArea/>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane key="personality" tabKey="personality" tab="Personality">
+                            <Editable value={char.personality} onChange={update.character.personality(i)} placeholder="Personality goes here." textArea/>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane key="backstory" tabKey="backstory" tab="Backstory">
+                            <Editable value={char.backstory} onChange={update.character.backstory(i)} placeholder="Backstory goes here." textArea/>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane key="arc" tabKey="arc" tab="Story Arc">
+                            <Editable value={char.storyArc} onChange={update.character.arc(i)} placeholder="Story arc goes here." textArea/>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane key="goals" tabKey="goals" tab="Goals">
+                            <Editable value={char.goals} onChange={update.character.goals(i)} placeholder="Goal goes here." textArea/>
+                        </Tabs.TabPane>
+                        <Tabs.TabPane key="motivations" tabKey="motivations" tab="Motivations">
+                            <Editable value={char.motivations} onChange={update.character.motivations(i)} placeholder="Motivations goes here." textArea/>
+                        </Tabs.TabPane>
+                    </Tabs>
+                </div>
+                <div className={styles.id}>
+                    <Editable value={char.id} onChange={update.character.id(i)} placeholder="idGoesHere" />
+                </div>
+            </li>)}
+        </ul>
     </Spin>
 }

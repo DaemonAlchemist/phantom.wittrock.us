@@ -13,11 +13,13 @@ export declare interface ISetting {
 }
 
 export declare interface ILocation {
+    id: string;
     name: string;
     description: string;
 }
 
 export declare interface ICharacter {
+    id: string;
     name: string;
     role: "main" | "supporting";
     physicalDescription: string;
@@ -30,8 +32,13 @@ export declare interface ICharacter {
 }
 
 export declare interface IRelation {
-    otherCharacterName: string;
+    otherCharacterId: string;
     description: string;
+}
+
+export declare interface IProgess {
+    characterId: string;
+    arcProgess: string;
 }
 
 export declare interface ISummarizable {

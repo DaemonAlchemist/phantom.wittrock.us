@@ -26,7 +26,13 @@ export const useStory = () => {
     const setTimePeriod = (timePeriod:string) => {setStory(old => ({...old, setting: {...old.setting, timePeriod}}));}
 
     // Locations
-    const addLocation = (location:ILocation)  => () => {setStory(old => ({...old, setting: {...old.setting, location: [...old.setting.locations, location]}}));}
+    const addLocation = (location:ILocation)  => () => {setStory(old => ({
+        ...old,
+        setting: {
+            ...old.setting,
+            locations: [...old.setting.locations.filter(l => l.id !== location.id), location]
+        }
+    }));}
     const removeLocation = (index: number) => () => { setStory(old => ({ ...old, setting: { ...old.setting, locations: old.setting.locations.filter((_, i) => i !== index) } })); }
     const updateLocationAttribute = (field:string) => (index: number) => (value: string) => { setStory(old => ({
         ...old, setting: {
@@ -34,6 +40,7 @@ export const useStory = () => {
             locations: old.setting.locations.map((location, i) => i === index ? { ...location, [field]: value } : location)
         }
     })); }
+    const updateLocationId = updateLocationAttribute("id");
     const updateLocationName = updateLocationAttribute("name");
     const updateLocationDescription = updateLocationAttribute("description");
 
@@ -43,13 +50,22 @@ export const useStory = () => {
     const updateTheme = (index: number) => (theme: string) => { setStory(old => ({ ...old, themes: old.themes.map((t, i) => i === index ? theme : t) })); }
 
     // Characters
-    const addCharacter = (character: ICharacter) => () => { setStory(old => ({ ...old, characters: [...old.characters, character] })); }
+    const addCharacter = (character: ICharacter) => () => { setStory(old => ({
+        ...old,
+        characters: [
+            ...old.characters.filter(c => c.id !== character.id),
+            character
+        ]
+    })); }
     const removeCharacter = (index: number) => () => { setStory(old => ({ ...old, characters: old.characters.filter((_, i) => i !== index) })); }
     const updateCharacterAttribute = (field:string) => (index: number) => (value: string) => { setStory(old => ({
         ...old, characters: old.characters.map((character, i) => i === index ? { ...character, [field]: value } : character)
     })); }
+    const updateCharacterId          = updateCharacterAttribute("id");
     const updateCharacterName        = updateCharacterAttribute("name");
-    const updateCharacterRole        = updateCharacterAttribute("role");
+    const updateCharacterRole        = (index:number) => (checked:boolean) => {
+        updateCharacterAttribute("role")(index)(checked ? "main" : "supporting");
+    };
     const updateCharacterDescription = updateCharacterAttribute("description");
     const updateCharacterPersonality = updateCharacterAttribute("personality");
     const updateCharacterBackstory   = updateCharacterAttribute("backstory");
@@ -179,6 +195,7 @@ export const useStory = () => {
         location: {
             add: addLocation,
             remove: removeLocation,
+            id: updateLocationId,
             name: updateLocationName,
             description: updateLocationDescription,
         },
@@ -190,6 +207,7 @@ export const useStory = () => {
         character: {
             add: addCharacter,
             remove: removeCharacter,
+            id: updateCharacterId,
             name: updateCharacterName,
             role: updateCharacterRole,
             description: updateCharacterDescription,

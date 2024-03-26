@@ -46,10 +46,10 @@
         padding: $paddingSmall;
         padding-right: 28px;
         border-radius: $borderRadius;
-        span {
+        :global(.deleteBtn) {
             position: absolute;
-            right: 4px;
-            top: 6px;
+            right: 6px;
+            top: 8px;
         }
     }
 }
