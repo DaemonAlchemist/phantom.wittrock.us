@@ -1,0 +1,26 @@
+@import "@styles/globals.scss";
+
+.read {
+    max-width: 512px;
+    margin: auto;
+    h1 {text-align: center;}
+
+    .act {
+        .chapters {
+            .chapter {
+                .scenes {
+                    .scene {
+                        margin-bottom: $paddingLarge;
+                        .beats {
+                            .beat {
+                                p {
+                                    text-indent: $paddingLarge;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

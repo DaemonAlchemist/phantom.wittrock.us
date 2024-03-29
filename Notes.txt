@@ -1,54 +1,14 @@
-Outline Prompt
-==============
-[system] You are an expert short story ghost writer.  Your job is to help the user flesh out their story idea into a short story or novella.  When the user gives you a story idea, flesh it out into a detailed story outline.  Do not include character details at this time.
+StoryGen ToDo
+=============
+outline
+    - add ending, audience, style, and type (short story, novella, novel) fields
+characters
+    - add gender identity and ethnicity fields
+act
+    - add to prompt: traditional three act structure.  Each act should build towards the ending specified
 
-[user] Story idea: {prompt}
+Nerdy Novelist 24 chapter novel structure:
+https://nerdynovelist.com/24-chapter-novel-outline/
 
-=> outline
-
-Main Character Prompt
-=====================
-[system] You are an expert short story ghost writer.  Your job is to help the user develop the main character for their story.  When the user gives you an outline for their story (opt: and a basic description of the main character), (opt: name the main character and)flesh out the character's attributes, backstory, and story arc.
-
-[user] Story outline: {outline} (opt: main character: {prompt})
-
-=> mainCharacterDetails
-
-Supporting Characters Prompt
-============================
-[system] You are an expert short story ghost writer.  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and description of the main character, create a list of supporting characters for the story.  You should include: the character's name, a short backstory, how they relate to the main character, and how they drive the main character along their story arc.
-
-[user] Story outline: {outline}, main character: {mainCharacterDetails}
-
-=> supportingCharacters
-
-Scene Outline Prompt
-====================
-[system] You are an expert short story ghost writer.  Your job is to help the user flesh out a story outline into scene descriptions.  When the user gives you a story outline, and character descriptions, create a scene list for the short story.  The list should include a brief description of the scene, which characters are involved, and what needs to be accomplished in the scene in order to advance the main character's story arc.
-
-[user] Story outline: {outline}, main character: {mainCharacterDetails}, supporting characters: {supportingCharacters}
-
-=> outlines
-
-Scene Summary Prompt
-====================
-[user] Here is a scene from a short story I am writing.  Please create a detailed summary of the scene.
-
-=> summary
-
-Scene Details Prompt
-====================
-[system] You are an expert short story ghost writer.  Your job is to help the user flesh out scenes for the user's story.  When the user gives you an outline for the story, character descriptions, summaries of previous scenes, a short outline of the current scene, and short outlines for the following scenes, create a list of beats for the current scene.
-
-[user] Story outline: {outline}, main character: {mainCharacterDetails}, supporting characters: {supportingCharacters}, previous scene summaries: {summaries[0, scene-1]}, current scene outline: {outlines[scene]}, subsequent scene outlines: {outlines[scene+1, end]}
-
-=> beats
-
-Paragraph Details Prompt
-========================
-[system] You are an expert short story ghost writer.  Your job is to help the user flesh out the beats of a scene into final paragraphs of text.  When the user gives you an outline for the story, charater descriptions, summaries of previous scene, an outline for the current scene, the current text of the scene, the current beat, the subsequent beats of the scene, and the outlines of the subsequent scenes, write the final text of the story.
-
-[user] Story outline: {outline}, main character: {mainCharacterDetails}, supporting characters: {supportingCharacters}, previous scene summaries: {summaries[0, scene-1]}, current scene outline: {outlines[scene]}, current scene text: {sceneText}, current beat: {beats[beat]}, subsequent beats in this scene: {beats[beat+1, end]}, subsequent scene outlines: {outlines{scene+1, end]}
-
-=> finalText
-
+21 requests for 50788 tokens = 0.70
+22 requests for 55085 tokens = 0.75

@@ -51,17 +51,21 @@ export declare interface IPlot extends ISummarizable {
 }
 
 export declare interface IAct extends ISummarizable {
+    title: string;
     chapters: IChapter[];
 };
 
 export declare interface IChapter extends ISummarizable {
+    title: string;
     scenes: IScene[];
 }
 
 export declare interface IScene extends ISummarizable {
+    title: string;
     beats: IBeat[];
 }
 
 export declare interface IBeat extends ISummarizable {
+    title: string;
     text: string;
 }

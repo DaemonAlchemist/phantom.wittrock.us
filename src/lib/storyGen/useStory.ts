@@ -101,13 +101,14 @@ export const useStory = () => {
         ...old.plot, acts: old.plot.acts.map((act, i) => i === index ? { ...act, [field]: value } : act)
     }
     })); }
+    const updateActTitle   = updateActAttribute("title");
     const updateActOutline = updateActAttribute("outline");
     const updateActSummary = updateActAttribute("summary");
 
     // Chapters
     const addChapter = (actIndex: number, chapter: IChapter) => () => { setStory(old => ({
         ...old, plot: {
-            ...old.plot, acts: old.plot.acts.map((act, i) => i === actIndex ? { ...act, chapters: [...act.chapters, chapter] } : act)
+            ...old.plot, acts: old.plot.acts.map((act, i) => i === actIndex ? { ...act, chapters: [...act.chapters || [], chapter] } : act)
         }
     })); }
     const removeChapter = (actIndex: number, chapterIndex: number) => () => { setStory(old => ({
@@ -122,6 +123,7 @@ export const useStory = () => {
             } : act)
         }
     })); }
+    const updateChapterTitle    = updateChapterAttribute("title");
     const updateChapterOutline = updateChapterAttribute("outline");
     const updateChapterSummary = updateChapterAttribute("summary");
 
@@ -129,7 +131,7 @@ export const useStory = () => {
     const addScene = (actIndex: number, chapterIndex: number, scene: IScene) => () => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
-                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? { ...chapter, scenes: [...chapter.scenes, scene] } : chapter)
+                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? { ...chapter, scenes: [...chapter.scenes || [], scene] } : chapter)
             } : act)
         }
     })); }
@@ -150,6 +152,7 @@ export const useStory = () => {
             } : act)
         }
     })); }
+    const updateSceneTitle   = updateSceneAttribute("title");
     const updateSceneOutline = updateSceneAttribute("outline");
     const updateSceneSummary = updateSceneAttribute("summary");
 
@@ -158,7 +161,7 @@ export const useStory = () => {
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
                 ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
-                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? { ...scene, beats: [...scene.beats, beat] } : scene)
+                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? { ...scene, beats: [...scene.beats || [], beat] } : scene)
                 } : chapter)
             } : act)
         }
@@ -230,18 +233,21 @@ export const useStory = () => {
         act: {
             add: addAct,
             remove: removeAct,
+            title: updateActTitle,
             outline: updateActOutline,
             summary: updateActSummary,
         },
         chapter: {
             add: addChapter,
             remove: removeChapter,
+            title: updateChapterTitle,
             outline: updateChapterOutline,
             summary: updateChapterSummary,
         },
         scene: {
             add: addScene,
             remove: removeScene,
+            title: updateSceneTitle,
             outline: updateSceneOutline,
             summary: updateSceneSummary,
         },

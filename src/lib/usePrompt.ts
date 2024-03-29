@@ -26,6 +26,7 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
     useEffect(() => {
         if(!!message) {
             onUpdate(JSON.parse(message));
+            setMessage("");
         }
     }, [message]);
 

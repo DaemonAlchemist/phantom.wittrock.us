@@ -1,9 +1,10 @@
 import { Tabs } from "antd";
+import { Acts } from "./Acts";
+import { Characters } from "./Characters";
+import { Locations } from "./Locations";
 import { Outline } from "./Outline";
 import { StoryGenProps } from "./StoryGen.d";
-import { Characters } from "./Characters";
-import { Scenes } from "./Scenes";
-import { Locations } from "./Locations";
+import { Read } from "./Read";
 
 export const StoryGenComponent = ({}:StoryGenProps) => 
     <div>
@@ -17,8 +18,11 @@ export const StoryGenComponent = ({}:StoryGenProps) =>
             <Tabs.TabPane key="characters" tabKey="characters" tab="Characters">
                 <Characters />
             </Tabs.TabPane>
-            <Tabs.TabPane key="scenes" tabKey="scenes" tab="Scenes">
-                <Scenes />
+            <Tabs.TabPane key="acts" tabKey="acts" tab="Acts">
+                <Acts />
+            </Tabs.TabPane>
+            <Tabs.TabPane key="read" tabKey="read" tab="Read">
+                <Read />
             </Tabs.TabPane>
         </Tabs>
     </div>;

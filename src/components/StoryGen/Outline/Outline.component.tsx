@@ -1,14 +1,14 @@
-import { DeleteOutlined, PlusCircleOutlined, SendOutlined } from "@ant-design/icons";
-import { Alert, Button, Col, Input, Row, Spin, Typography } from "antd";
+import { PlusCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { Alert, Button, Col, Input, Row, Spin } from "antd";
 import { onInputChange } from "../../../lib/onInputChange";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
+import { DeleteBtn } from "../../DeleteBtn";
+import { Editable } from "../../Editable";
 import { systemPrompts, useIdea } from "../Storygen.helpers";
+import { IStoryOutline } from "../story";
 import { OutlineProps } from "./Outline";
 import styles from "./Outline.module.scss";
-import { IStoryOutline } from "../story";
-import { Editable } from "../../Editable";
-import { DeleteBtn } from "../../DeleteBtn";
 
 export const OutlineComponent = ({}:OutlineProps) => {
     const [idea, setIdea] = useIdea();

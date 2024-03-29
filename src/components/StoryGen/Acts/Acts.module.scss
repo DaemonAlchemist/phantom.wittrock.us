@@ -1,10 +1,10 @@
 @import "@styles/globals.scss";
 
-.scenes {
+.acts {
     > h2 {
         button {float: right;}
     }
-    .scenes {
+    .act {
         :global(.deleteBtn) {float: right;}
     }
 }

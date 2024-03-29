@@ -1,18 +1,11 @@
+import { prop } from "ts-functional";
 import { Index } from "ts-functional/dist/types";
 import { useLocalStorage } from "unstateless";
-import { ICharacter, ISceneOutline } from "./StoryGen";
 import { IStoryOutline } from "./story";
 
-export const useIdea                 = useLocalStorage.string("storyIdea", "");
-export const useOutline              = useLocalStorage.string("storyOutline", "");
-export const useMainCharacter        = useLocalStorage.string("mainCharacter", "");
-export const useSupportingCharacters = useLocalStorage.object<ICharacter[]>("supportingCharacters", []);
-export const useSceneOutlines        = useLocalStorage.object<ISceneOutline[]>("sceneOutlines", []);
-export const useSceneSummaries       = useLocalStorage.object<string[]>("sceneSummaries", []);
-export const useSceneBeats           = useLocalStorage.object<string[][]>("sceneBeats", []);
-export const useSceneText            = useLocalStorage.object<string[]>("sceneText", []);
+export const useIdea = useLocalStorage.string("storyIdea", "");
 
-const botId = "You are an expert short story ghost writer.";
+const botId = "You are an expert fiction ghost writer.";
 
 const json = "Return the information in JSON with the format";
 
@@ -28,15 +21,19 @@ export const systemPrompts:Index<string> = {
 
     supportingCharacters: `${botId}  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and description of the main character, create a list of supporting characters for the story.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc.  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
 
-    // Notes:  Consider adding additional fields:  conflict, emotional  journey, goals, motivations, etc.
-    sceneOutline: `${botId}  Your job is to help the user flesh out a story outline into scene descriptions.  When the user gives you a story outline, and character descriptions, create a scene list for the short story.  The list should include a brief description of the scene, which characters are involved, and what needs to be accomplished in the scene in order to advance the main character's story arc.  Generate outlines for every scene in the story, from the beginning until the end.  ${json} {scenes: Array<{outline: string, characters: string[]}>}`,
+    acts: `${botId}  Your job is to help the user flesh out their story idea into a full story.  When the user gives you a story outline, locations, and character descriptions, create a list of acts for the story.  Do not include the act number in the outline text. ${json} {acts: Array<{title: string, outline: string}>}`,
+
+    chapters: `${botId}  Your job is to help the user flesh out their story's acts into chapters.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts and chapters, and outlines for subsequent acts and chapters, create a list of chapters for the current act.  Do not include the chapter number in the outline text.  ${json} {chapters: Array<{title: string, outline: string}>}`,
+
+    scenes: `${botId}  Your job is to help the user flesh out their story's chapters into scenes.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, and scenes, and outlines for subsequent acts, chapters, and scenes, create a list of scenes for the current chapter.  Do not include the scene number in the outline text.  ${json} {scenes: Array<{title: string, outline: string}>}`,
+
+    beats: `${botId}  Your job is to help the user flesh out their story's scenes into beats.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create a list of beats for the current scene.  Do not include the beat number in the outline text.  ${json} {beats: Array<{title: string, outline: string}>}`,
+
+    text: `${botId}  Your job is to help the user flesh out their story's beats into the story's final text.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create the final text for the current beat.  Write in the past tense.  Include new lines between paragraphs. Avoid purple prose. ${json} {text: string}`,
 
     sceneSummary: `${botId}  When the user gives you the text for a scene, create a detailed summary of the scene.`,
-
-    // Note: llama2 does note seem to understand this prompt.  Keeps returning scene outlines for the entire story.  Perhaps context is too short?
-    sceneBeats: `${botId}  Your job is to help the user generate the beats for a scene in the user's story.  When the user gives you an outline for the story, character descriptions, summaries of previous scenes, a short outline of the current scene, and short outlines for the following scenes, create a list of beats for the current scene.  Make sure the beats are ONLY for the current scene, and fully expand the short summary for the current scene into a complete list of beats.  Do not generate beats for previous or subsequent scenes.  ${json} {beats: string[]}`,
-
-    sceneText: `${botId}  Your job is to help the user flesh out the beats of a scene into final paragraphs of text.  When the user gives you an outline for the story, charater descriptions, summaries of previous scene, an outline for the current scene, the current text of the scene, the current beat, the subsequent beats of the scene, and the outlines of the subsequent scenes, write the final text of the story.`,
+    chapterSummary: `${botId}  When the user gives you the summaries for scenes in a chapter, create a detailed summary of the chapter.`,
+    actSummary: `${botId}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act.`,
 }
 
 export const userPrompts = {
@@ -59,5 +56,75 @@ export const userPrompts = {
         Time Period: ${story.setting.timePeriod}
         Themes: ${story.themes.join(", ")},
         Main Character(s): ${JSON.stringify(story.characters.filter(c => c.role === "main"))},
+    `,
+    acts: (story:IStoryOutline) => `
+        Title: ${story.title}
+        Genre: ${story.genre}
+        Time Period: ${story.setting.timePeriod}
+        Themes: ${story.themes.join(", ")},
+        Locations: ${JSON.stringify(story.setting.locations)},
+        Character(s): ${JSON.stringify(story.characters)},
+    `,
+    chapters: (story:IStoryOutline, actIndex: number) => `
+        Title: ${story.title}
+        Genre: ${story.genre}
+        Time Period: ${story.setting.timePeriod}
+        Themes: ${story.themes.join(", ")},
+        Locations: ${JSON.stringify(story.setting.locations)},
+        Character(s): ${JSON.stringify(story.characters)},
+        Summaries of previous acts: ${JSON.stringify(story.plot.acts.slice(0, actIndex).map(prop("summary")))},
+        Outline of the current act (Create chapters for this act): ${story.plot.acts[actIndex].outline},
+        Outlines of subsequent acts: ${JSON.stringify(story.plot.acts.slice(actIndex + 1).map(prop("outline")))}
+    `,
+    scenes: (story:IStoryOutline, actIndex: number, chapterIndex:number) => `
+        Title: ${story.title}
+        Genre: ${story.genre}
+        Time Period: ${story.setting.timePeriod}
+        Themes: ${story.themes.join(", ")},
+        Locations: ${JSON.stringify(story.setting.locations)},
+        Character(s): ${JSON.stringify(story.characters)},
+        Summaries of previous acts: ${JSON.stringify(story.plot.acts.slice(0, actIndex).map(prop("summary")))},
+        Outline of the current act: ${story.plot.acts[actIndex].outline},
+        Summaries of previous chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")))},
+        Outline of the current chapter (Create scenes for this chapter): ${story.plot.acts[actIndex].chapters[chapterIndex].outline},
+        Outlines of subsequent chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")))}
+        Outlines of subsequent acts: ${JSON.stringify(story.plot.acts.slice(actIndex + 1).map(prop("outline")))}
+    `,
+    beats: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number) => `
+        Title: ${story.title}
+        Genre: ${story.genre}
+        Time Period: ${story.setting.timePeriod}
+        Themes: ${story.themes.join(", ")},
+        Locations: ${JSON.stringify(story.setting.locations)},
+        Character(s): ${JSON.stringify(story.characters)},
+        Summaries of previous acts: ${JSON.stringify(story.plot.acts.slice(0, actIndex).map(prop("summary")))},
+        Outline of the current act: ${story.plot.acts[actIndex].outline},
+        Summaries of previous chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")))},
+        Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline},
+        Summaries of previous scenes in this chapter: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")))},
+        Outline of the current scene (Create beats for this scene): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline},
+        Outlines of subsequent scenes in this chapter: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")))}
+        Outlines of subsequent chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")))}
+        Outlines of subsequent acts: ${JSON.stringify(story.plot.acts.slice(actIndex + 1).map(prop("outline")))}
+    `,
+    text: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number, beatIndex: number) => `
+        Title: ${story.title}
+        Genre: ${story.genre}
+        Time Period: ${story.setting.timePeriod}
+        Themes: ${story.themes.join(", ")},
+        Locations: ${JSON.stringify(story.setting.locations)},
+        Character(s): ${JSON.stringify(story.characters)},
+        Summaries of previous acts: ${JSON.stringify(story.plot.acts.slice(0, actIndex).map(prop("summary")))},
+        Outline of the current act: ${story.plot.acts[actIndex].outline},
+        Summaries of previous chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")))},
+        Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline},
+        Summaries of previous scenes in this chapter: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")))},
+        Outline of the current scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline},
+        Text of the previous beats in this scene: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(0, beatIndex).map(prop("text")).join("\n"))},
+        Outline of the current beat in this scene (Write text for this beat): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats[beatIndex].outline},
+        Outlines of the subsequent beats in this scene: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(beatIndex + 1).map(prop("outline")))},
+        Outlines of subsequent scenes in this chapter: ${JSON.stringify(story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")))}
+        Outlines of subsequent chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")))}
+        Outlines of subsequent acts: ${JSON.stringify(story.plot.acts.slice(actIndex + 1).map(prop("outline")))}
     `,
 }

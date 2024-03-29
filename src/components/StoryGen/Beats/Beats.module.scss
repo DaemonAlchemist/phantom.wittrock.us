@@ -1,0 +1,18 @@
+@import "@styles/globals.scss";
+
+
+.beats {
+    > h2 {
+        button {float: right;}
+    }
+    .beat {
+        :global(.deleteBtn) {float: right;}
+        .text {
+            button {float: right;}
+        }
+    }
+    .summarize {
+        padding: $paddingLarge;
+        text-align: center;
+    }
+}
