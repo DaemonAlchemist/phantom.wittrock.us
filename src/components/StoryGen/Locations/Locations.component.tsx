@@ -17,7 +17,7 @@ export const LocationsComponent = ({}:LocationsProps) => {
         setting.locations.forEach(location => {update.location.add(location)()});
     }
 
-    const prompt = usePrompt(systemPrompts.locations, updateLocations);
+    const prompt = usePrompt(systemPrompts.locations(story.length), updateLocations);
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.locations}>

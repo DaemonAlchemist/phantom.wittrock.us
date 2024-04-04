@@ -1,8 +1,10 @@
 import { SendOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Row, Spin, Tag } from "antd";
+import { Button, Col, Collapse, Row, Spin } from "antd";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
+import { IsFinished } from "../../IsFinished";
+import { PartsDone } from "../../PartsDone";
 import { Chapters } from "../Chapters";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
@@ -14,15 +16,10 @@ export const ActsComponent = ({}:ActsProps) => {
     const {story, update} = useStory();
 
     const updateActs = (response:{acts: IAct[]}) => {
-        response.acts.forEach(act => {update.act.add({
-            ...act,
-            chapters: [],
-        })()});
+        update.act.set(response.acts);
     }
 
-    const prompt = usePrompt(systemPrompts.acts, updateActs);
-    const finishedChapters = (i:number) => (story.plot.acts[i].chapters || []).filter(c => !!c.summary).length;
-    const totalChapters = (i:number) => (story.plot.acts[i].chapters || []).length;
+    const prompt = usePrompt(systemPrompts.acts(story.length), updateActs);
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.acts}>
@@ -37,9 +34,8 @@ export const ActsComponent = ({}:ActsProps) => {
                     header={<>
                         Act {i+1}: {act.title}
                         &nbsp;&nbsp;
-                        <Tag color={finishedChapters(i) === 0 ? "red" : finishedChapters(i) < totalChapters(i) ? "gold" : "green"}>
-                            {finishedChapters(i)}/{totalChapters(i)}
-                        </Tag>
+                        <PartsDone entities={act.chapters || []} filter={c => !!c.summary} />
+                        <IsFinished value={act.summary} />
                         <DeleteBtn onClick={update.act.remove(i)} />
                     </>}
                     key={i}

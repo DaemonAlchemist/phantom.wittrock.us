@@ -1,14 +1,20 @@
 StoryGen ToDo
 =============
-outline
-    - add ending, audience, style, and type (short story, novella, novel) fields
-characters
-    - add gender identity and ethnicity fields
+Generator updates
+    - Generate acts and chapters in one prompt to better moderate story length and complexity
+    - have different prompts based on the story length
 act
     - add to prompt: traditional three act structure.  Each act should build towards the ending specified
 
 Nerdy Novelist 24 chapter novel structure:
 https://nerdynovelist.com/24-chapter-novel-outline/
 
-21 requests for 50788 tokens = 0.70
-22 requests for 55085 tokens = 0.75
+Style prompt
+============
+first/third PoV
+show, don't tell
+deep point of view
+realistic dialogue
+stronger verbs
+lots of conflict, drama, description
+avoid mushy descriptions/dialogue

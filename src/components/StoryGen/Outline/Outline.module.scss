@@ -25,7 +25,7 @@
         font-size: x-large;
         padding: $paddingSmall;
     }
-    .genre, .timePeriod {
+    .genre, .timePeriod, .audience, .length {
         width: calc(50% - $paddingSmall * 2 - 2px);
         display: inline-block;
         text-align: center;

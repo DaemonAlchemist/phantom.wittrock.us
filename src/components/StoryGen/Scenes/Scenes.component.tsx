@@ -1,8 +1,10 @@
 import { SendOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Row, Spin, Tag } from "antd";
+import { Button, Col, Collapse, Row, Spin } from "antd";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
+import { IsFinished } from "../../IsFinished";
+import { PartsDone } from "../../PartsDone";
 import { Beats } from "../Beats";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
@@ -20,10 +22,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
         })()});
     }
 
-    const prompt = usePrompt(systemPrompts.scenes, updateScenes);
-
-    const finishedBeats = (i:number) => (story.plot.acts[actIndex].chapters[chapterIndex].scenes[i].beats || []).filter(b => !!b.text).length;
-    const totalBeats = (i:number) => (story.plot.acts[actIndex].chapters[chapterIndex].scenes[i].beats || []).length;
+    const prompt = usePrompt(systemPrompts.scenes(story.length), updateScenes);
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.scenes}>
@@ -38,9 +37,8 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                     header={<>
                         Scene {i+1}: {scene.title}
                         &nbsp;&nbsp;
-                        <Tag color={finishedBeats(i) === 0 ? "red" : finishedBeats(i) < totalBeats(i) ? "gold" : "green"}>
-                            {finishedBeats(i)}/{totalBeats(i)}
-                        </Tag>
+                        <PartsDone entities={scene.beats || []} filter={b => !!b.text} />
+                        <IsFinished value={scene.summary} />
                         <DeleteBtn onClick={update.scene.remove(actIndex, chapterIndex, i)} />
                     </>}
                     key={i}

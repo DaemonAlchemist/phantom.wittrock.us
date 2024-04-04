@@ -1,15 +1,16 @@
-import { CheckOutlined, CloseOutlined, SendOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Row, Spin, Typography } from "antd";
+import { SendOutlined } from "@ant-design/icons";
+import { Button, Col, Collapse, Row, Spin } from "antd";
+import { prop } from "ts-functional";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
+import { IsFinished } from "../../IsFinished";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { Text } from "../Text";
 import { IBeat } from "../story";
 import { BeatsProps } from "./Beats";
 import styles from './Beats.module.scss';
-import { prop } from "ts-functional";
 
 export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) => {
     const {story, update} = useStory();
@@ -18,12 +19,17 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
         response.beats.forEach(beat => {update.beat.add(actIndex, chapterIndex, sceneIndex, beat)()});
     }
 
-    const prompt = usePrompt(systemPrompts.beats, updateBeats);
+    const prompt = usePrompt(systemPrompts.beats(story.length), updateBeats);
 
     const beats = story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats || [];
     const sceneComplete = beats.map(prop("text")).filter(summary => !summary).length === 0;
 
-    return <Spin spinning={prompt.isRunning}>
+    const updateSceneSummary = (response:{summary:string}) => {
+        update.scene.summary(actIndex, chapterIndex, sceneIndex)(response.summary);
+    }
+    const summarizePrompt = usePrompt(systemPrompts.sceneSummary(story.length), updateSceneSummary);
+
+    return <Spin spinning={prompt.isRunning || summarizePrompt.isRunning}>
         <div className={styles.beats}>
             <h2>
                 Beats
@@ -36,7 +42,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                     header={<>
                         Beat {i+1}: {beat.title}
                         &nbsp;&nbsp;
-                        <Typography.Text type={!beat.text ? "danger" : "success"}>{!!beat.text ? <CheckOutlined /> : <CloseOutlined />}</Typography.Text>
+                        <IsFinished value={beat.text} />
                         <DeleteBtn onClick={update.scene.remove(actIndex, chapterIndex, i)} />
                     </>}
                     key={i}
@@ -57,7 +63,9 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                 </Collapse.Panel>)}
             </Collapse>
             {sceneComplete && <div className={styles.summarize}>
-                <Button type="primary"><SendOutlined /> Summarize scene</Button>
+                <Button type="primary" onClick={summarizePrompt.run(userPrompts.summary.scene(story, actIndex, chapterIndex, sceneIndex))}>
+                    <SendOutlined /> Summarize scene
+                </Button>
             </div>}
         </div>
     </Spin>;

@@ -1,7 +1,7 @@
 import { prop } from "ts-functional";
-import { Index } from "ts-functional/dist/types";
+import { Func, Index } from "ts-functional/dist/types";
 import { useLocalStorage } from "unstateless";
-import { IStoryOutline } from "./story";
+import { IStoryOutline, StoryType } from "./story";
 
 export const useIdea = useLocalStorage.string("storyIdea", "");
 
@@ -9,31 +9,61 @@ const botId = "You are an expert fiction ghost writer.";
 
 const json = "Return the information in JSON with the format";
 
-const characterInterface = `{id: string, name: string, role: "main" | "supporting", physicalDescription: string, personality: string, backstory: string, storyArc: string, goals: string, motivations: string}`;
+const characterInterface = `{id: string, name: string, role: "main" | "supporting", physicalDescription: string, personality: string, genderIdentity: string, ethnicity: string, identifying marks: string, quirks: string, backstory: string, storyArc: string, goals: string, motivations: string}`;
 const charIdNotes = "The character's id should be a camel-cased id related to their name.";
 
-export const systemPrompts:Index<string> = {
-    outline: `${botId}  Your job is to help the user flesh out their story idea into a short story or novella.  When the user gives you a story idea, flesh it out into an more complete idea for a short story.  Do NOT include character details, or specific scene details.  The outline should focus more on a high level overview of the story as well as its themes rather than specific story and scene details.  ${json} {title: string, genre: string, themes: string[], plot: {outline: string}, setting: {timePeriod: string}}`,
+const styleGuide = `
+1. Show, Don’t Tell:
+Emphasize showing over telling. Convey emotions, settings, and character traits through actions, dialogue, and sensory details rather than direct statements. This method allows readers to infer and feel the story deeply.
 
-    locations: `${botId}  Your job is to help the user flesh out the locations for their story.  When the user gives you the details for their story and some optional existing locations, create some additional locations that would be relevant to the story. Include a name, description, and unique camel-cased id for each location.  ${json} {locations: Array<{id: string, name: string, description: string;}>}`,
+2. Sensory Details:
+Utilize all five senses to bring scenes to life. Beyond visual descriptions, include sounds, textures, smells, and tastes to create a rich atmosphere that readers can fully immerse themselves in.
 
-    mainCharacter: `${botId}  Your job is to help the user develop the main character for their story.  When the user gives you an outline for their story and optionally a basic description of the main character, flesh out the character's attributes, backstory, and story arc. ${json} ${characterInterface}. ${charIdNotes}`,
+3. Character Depth and Diversity:
+Provide depth to all characters, not just the protagonists. Even brief appearances can hint at larger stories, adding to the world's believability and richness.
+Reflect the character’s development through their reactions to their environment and interactions, showing how their experiences shape their perspectives and decisions.
 
-    supportingCharacters: `${botId}  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and description of the main character, create a list of supporting characters for the story.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc.  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
+4. Dynamic Descriptions:
+Ensure descriptions are active and dynamic. Describe environments as they change, noting how characters and their surroundings interact and affect each other. Use metaphor and simile effectively, choosing comparisons that enhance the reader's understanding and engagement.
 
-    acts: `${botId}  Your job is to help the user flesh out their story idea into a full story.  When the user gives you a story outline, locations, and character descriptions, create a list of acts for the story.  Do not include the act number in the outline text. ${json} {acts: Array<{title: string, outline: string}>}`,
+5. Pacing and Structure:
+Balance descriptive writing with narrative progression. Every segment should serve a purpose, whether it’s advancing the plot, deepening character understanding, or enriching the setting.
+Vary sentence and paragraph length to control the story’s rhythm. Use this variation to evoke different emotions and to maintain reader interest throughout.
 
-    chapters: `${botId}  Your job is to help the user flesh out their story's acts into chapters.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts and chapters, and outlines for subsequent acts and chapters, create a list of chapters for the current act.  Do not include the chapter number in the outline text.  ${json} {chapters: Array<{title: string, outline: string}>}`,
+6. Dialogue and Interaction:
+Craft dialogue that reflects the diversity of characters and their backgrounds. Pay attention to linguistic nuances and non-verbal cues to make conversations more realistic and engaging.
+Use character interactions to reveal social norms, personal values, and conflicts, providing insight without relying on direct exposition.
 
-    scenes: `${botId}  Your job is to help the user flesh out their story's chapters into scenes.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, and scenes, and outlines for subsequent acts, chapters, and scenes, create a list of scenes for the current chapter.  Do not include the scene number in the outline text.  ${json} {scenes: Array<{title: string, outline: string}>}`,
+7. Theme and Symbolism:
+Weave themes and symbolism organically into the narrative. Let these elements emerge through the storyline, character development, and setting, adding depth and layers of meaning to the story.
+Choose symbols that resonate with the themes and motifs of your story, using them to subtly reinforce the narrative’s underlying messages.
 
-    beats: `${botId}  Your job is to help the user flesh out their story's scenes into beats.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create a list of beats for the current scene.  Do not include the beat number in the outline text.  ${json} {beats: Array<{title: string, outline: string}>}`,
+8. Reflective Moments:
+Include reflective moments that allow characters to ponder their experiences, relationships, and personal growth. These introspections should deepen the reader's connection to the characters and enhance the thematic depth of the narrative.
+`;
 
-    text: `${botId}  Your job is to help the user flesh out their story's beats into the story's final text.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create the final text for the current beat.  Write in the past tense.  Include new lines between paragraphs. Avoid purple prose. ${json} {text: string}`,
+export const systemPrompts:Index<Func<StoryType, string>> = {
+    outline: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story idea into a short story, novella, or novel.  When the user gives you a story idea, flesh it out into an more complete idea for a story.  Do NOT include character details, or specific scene details.  The outline should focus more on a high level overview of the story as well as its themes rather than specific story and scene details.  The style field should include detailed notes on how to write the story similar to what a writing coach would tell a beginning writer in order to help them write better stories.  ${json} {title: string, genre: string, audience: string, style: string, length: "Short Story" | "Novella" | "Novel", ending: string, themes: string[], plot: {outline: string}, setting: {timePeriod: string}}`,
 
-    sceneSummary: `${botId}  When the user gives you the text for a scene, create a detailed summary of the scene.`,
-    chapterSummary: `${botId}  When the user gives you the summaries for scenes in a chapter, create a detailed summary of the chapter.`,
-    actSummary: `${botId}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act.`,
+    locations: (_type:StoryType) => `${botId}  Your job is to help the user flesh out the locations for their story.  When the user gives you the details for their story and some optional existing locations, create some additional locations that would be relevant to the story. Include a name, description, and unique camel-cased id for each location.  ${json} {locations: Array<{id: string, name: string, description: string;}>}`,
+
+    mainCharacter: (_type:StoryType) => `${botId}  Your job is to help the user develop the main character for their story.  When the user gives you an outline for their story and optionally a basic description of the main character, flesh out the character's attributes, backstory, and story arc. ${json} ${characterInterface}. ${charIdNotes}`,
+
+    supportingCharacters: (_type:StoryType) => `${botId}  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and description of the main character, create a list of supporting characters for the story.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc.  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
+
+    acts: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story idea into a full story.  When the user gives you a high level story outline, locations, and character descriptions, create a detailed outline of acts and chapters for the story.  Use an appropriate number of acts for the length of the story. Do not include the act number or chapter number in the outline texts. ${json} {acts: Array<{title: string, outline: string, chapters: Array<{title: string, outline: string}>}>}`,
+
+    chapters: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's acts into chapters.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts and chapters, and outlines for subsequent acts and chapters, create a list of chapters for the current act.  Use an appropriate number of chapters for the story length.  A novel should have several chapters per act, while a short story may only have a few or even one.  Do not include the chapter number in the outline text.  ${json} {chapters: Array<{title: string, outline: string}>}`,
+
+    scenes: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's chapters into scenes.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, and scenes, and outlines for subsequent acts, chapters, and scenes, create a list of scenes for the current chapter.  Use an appropriate number of scenes for the story length.  A novel may have several scenes per chapter, while a short story may only have a few or even one.  Do not include the scene number in the outline text.  ${json} {scenes: Array<{title: string, outline: string}>}`,
+
+    beats: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's scenes into beats.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create a list of beats for the current scene.  Do not include the beat number in the outline text.  ${json} {beats: Array<{title: string, outline: string}>}`,
+
+    text: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's beats into the story's final text.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create the final text for the current beat.  Write in the past tense.  Include new lines between paragraphs. Avoid purple prose.  ${styleGuide} ${json} {text: string}`,
+
+    sceneSummary: (_type:StoryType) => `${botId}  When the user gives you the text for a scene, create a detailed summary of the scene. ${json} {summary: string}`,
+    chapterSummary: (_type:StoryType) => `${botId}  When the user gives you the summaries for scenes in a chapter, create a detailed summary of the chapter. ${json} {summary: string}`,
+    actSummary: (_type:StoryType) => `${botId}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act. ${json} {summary: string}`,
 }
 
 export const userPrompts = {
@@ -127,4 +157,10 @@ export const userPrompts = {
         Outlines of subsequent chapters in this act: ${JSON.stringify(story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")))}
         Outlines of subsequent acts: ${JSON.stringify(story.plot.acts.slice(actIndex + 1).map(prop("outline")))}
     `,
+    summary: {
+        scene: (story:IStoryOutline, actIndex: number, chapterIndex: number, sceneIndex: number) => `
+            Please summarize this scene:
+            ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.map(prop("text")).join("\n\n")}
+        `
+    }
 }

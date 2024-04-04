@@ -4,6 +4,10 @@ import { IAct, IBeat, IChapter, ICharacter, ILocation, IRelation, IScene, IStory
 const emptyStory:IStoryOutline = {
     title: "",
     genre: "",
+    audience: "",
+    length: "Short Story",
+    style: "",
+    ending: "",
     setting: {
         timePeriod: "",
         locations: [],
@@ -21,8 +25,13 @@ export const useStory = () => {
     const [story, setStory] = useLocalStorage.object<IStoryOutline>("storyDetails", emptyStory)();
 
     // Basic information
-    const setTitle = (title:string)           => {setStory(old => ({...old, title}));}
-    const setGenre = (genre:string)           => {setStory(old => ({...old, genre}));}
+    const setAttribute = (field:string) => (value:string) => {setStory(old => ({...old, [field]: value}));}
+    const setTitle = setAttribute("title");
+    const setGenre = setAttribute("genre");
+    const setAudience = setAttribute("audience");
+    const setStyle = setAttribute("style");
+    const setLength = setAttribute("length");
+    const setEnding = setAttribute("ending");
     const setTimePeriod = (timePeriod:string) => {setStory(old => ({...old, setting: {...old.setting, timePeriod}}));}
 
     // Locations
@@ -68,6 +77,10 @@ export const useStory = () => {
     };
     const updateCharacterDescription = updateCharacterAttribute("description");
     const updateCharacterPersonality = updateCharacterAttribute("personality");
+    const updateCharacterGender      = updateCharacterAttribute("genderIdentity");
+    const updateCharacterEthnicity   = updateCharacterAttribute("ethnicity");
+    const updateCharacterMarks       = updateCharacterAttribute("identifyingMarks");
+    const updateCharacterQuirks      = updateCharacterAttribute("quirks");
     const updateCharacterBackstory   = updateCharacterAttribute("backstory");
     const updateCharacterArc         = updateCharacterAttribute("storyArc");
     const updateCharacterGoals       = updateCharacterAttribute("goals");
@@ -94,6 +107,7 @@ export const useStory = () => {
     const updatePlotSummary = (summary: string) => { setStory(old => ({ ...old, plot: { ...old.plot, summary } })); }
 
     // Acts
+    const setActs = (acts: IAct[]) => {setStory(old => ({...old, plot: {...old.plot, acts}}));}
     const addAct = (act: IAct) => () => { setStory(old => ({ ...old, plot: { ...old.plot, acts: [...old.plot.acts, act] } })); }
     const removeAct = (index: number) => () => { setStory(old => ({ ...old, plot: { ...old.plot, acts: old.plot.acts.filter((_, i) => i !== index) } })); }
     const updateActAttribute = (field:string) => (index: number) => (value: string) => { setStory(old => ({
@@ -194,6 +208,10 @@ export const useStory = () => {
         story: setStory,
         title: setTitle,
         genre: setGenre,
+        audience: setAudience,
+        style: setStyle,
+        length: setLength,
+        ending: setEnding,
         timePeriod: setTimePeriod,
         location: {
             add: addLocation,
@@ -214,6 +232,10 @@ export const useStory = () => {
             name: updateCharacterName,
             role: updateCharacterRole,
             description: updateCharacterDescription,
+            gender: updateCharacterGender,
+            ethnicity: updateCharacterEthnicity,
+            marks: updateCharacterMarks,
+            quirks: updateCharacterQuirks,
             personality: updateCharacterPersonality,
             backstory: updateCharacterBackstory,
             arc: updateCharacterArc,
@@ -231,6 +253,7 @@ export const useStory = () => {
             summary: updatePlotSummary,
         },
         act: {
+            set: setActs,
             add: addAct,
             remove: removeAct,
             title: updateActTitle,

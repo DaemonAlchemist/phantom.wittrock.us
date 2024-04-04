@@ -20,6 +20,10 @@ export const OutlineComponent = ({}:OutlineProps) => {
             title: details.title,
             genre: details.genre,
             themes: details.themes,
+            audience: details.audience,
+            style: details.style,
+            length: details.length,
+            ending: details.ending,
             setting: {
                 ...old.setting,
                 timePeriod: details.setting?.timePeriod,
@@ -31,7 +35,7 @@ export const OutlineComponent = ({}:OutlineProps) => {
         }));
     }
 
-    const prompt = usePrompt(systemPrompts.outline, updateStory);
+    const prompt = usePrompt(systemPrompts.outline(story.length), updateStory);
         
     return <div>
         <h2>Story Overview</h2>
@@ -54,11 +58,23 @@ export const OutlineComponent = ({}:OutlineProps) => {
                         <div className={styles.title}><Editable value={story.title} onChange={update.title} placeholder="Title Goes Here." /></div>
                         <div className={styles.genre}><Editable value={story.genre} onChange={update.genre} placeholder="Genre goes here." /></div>
                         <div className={styles.timePeriod}><Editable value={story.setting.timePeriod} onChange={update.timePeriod} placeholder="Time period goes here." /></div>
+                        <div className={styles.audience}><Editable value={story.audience} onChange={update.audience} placeholder="Audience goes here" /></div>
+                        <div className={styles.length}><Editable value={story.length} onChange={update.length} placeholder="Length goes here." /></div>
                     </div>
+
+                    <h2>Style</h2>
+                    <p className={styles.style}>
+                        <Editable value={story.style} onChange={update.style} placeholder="Style goes  here." textArea/>
+                    </p>
 
                     <h2>Story Outline</h2>
                     <p className={styles.plotOutline}>
                         <Editable value={story.plot.outline} onChange={update.plot.outline} placeholder="Story outline goes here." textArea/>
+                    </p>
+
+                    <h2>Ending</h2>
+                    <p className={styles.ending}>
+                        <Editable value={story.ending} onChange={update.ending} placeholder="Ending goes here." textArea />
                     </p>
 
                     <h2>Themes <PlusCircleOutlined onClick={update.theme.add("")}/></h2>

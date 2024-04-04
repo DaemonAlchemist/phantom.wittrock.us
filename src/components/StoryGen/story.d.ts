@@ -1,6 +1,12 @@
+export type StoryType = "Short Story" | "Novella" | "Novel";
+
 export declare interface IStoryOutline {
     title: string;
     genre: string;
+    audience: string;
+    style: string;
+    length: StoryType;
+    ending: string;
     setting: ISetting;
     themes: string[];
     characters: ICharacter[];
@@ -23,6 +29,10 @@ export declare interface ICharacter {
     name: string;
     role: "main" | "supporting";
     physicalDescription: string;
+    genderIdentity: string;
+    ethnicity: string;
+    identifyingMarks: string;
+    quirks: string;
     personality: string;
     backstory: string;
     storyArc: string;

@@ -14,7 +14,7 @@ export const TextComponent = ({actIndex, chapterIndex, sceneIndex, beatIndex}:Te
         update.beat.text(actIndex, chapterIndex, sceneIndex, beatIndex)(response.text);
     }
 
-    const prompt = usePrompt(systemPrompts.text, updateText);
+    const prompt = usePrompt(systemPrompts.text(story.length), updateText);
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.text}>

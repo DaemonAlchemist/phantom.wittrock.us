@@ -13,7 +13,7 @@ export const AppComponent = ({}:AppProps) => <div className={styles.app}>
         <Tabs.TabPane key="conversation" tabKey="conversation" tab={<><CommentOutlined /> Conversation</>}>
             <Conversation id="test" initialConversation={[]}/>; 
         </Tabs.TabPane>
-        <Tabs.TabPane key="shortStory" tabKey="shortStory" tab={<><FileTextOutlined /> Short Story</>}>
+        <Tabs.TabPane key="story" tabKey="story" tab={<><FileTextOutlined /> Ghost Writer</>}>
             <StoryGen />
         </Tabs.TabPane>
     </Tabs>

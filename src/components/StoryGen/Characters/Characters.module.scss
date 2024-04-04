@@ -12,17 +12,27 @@
         margin: $paddingSmall;
         .name {
             padding: $paddingSmall;
+            padding-right: 128px;
             margin: 0;
             background-color: $bgColor;
             position: relative;
             button {
                 position: absolute;
+                right: $paddingLarge;
+                top: 14px;
+            }
+            > span {
+                position: absolute;
                 right: $paddingSmall;
-                top: 16px;
+                top: 8px;
             }
         }
         .info {
             padding: $paddingSmall;
+            p {
+                border-bottom: solid 1px $lowLight;
+                margin-bottom: 0;
+            }
         }
         .id {
             padding: 0 $paddingSmall;
