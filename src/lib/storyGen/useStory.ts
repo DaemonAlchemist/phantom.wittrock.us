@@ -6,7 +6,6 @@ const emptyStory:IStoryOutline = {
     genre: "",
     audience: "",
     length: "Short Story",
-    style: "",
     ending: "",
     setting: {
         timePeriod: "",
@@ -29,7 +28,6 @@ export const useStory = () => {
     const setTitle = setAttribute("title");
     const setGenre = setAttribute("genre");
     const setAudience = setAttribute("audience");
-    const setStyle = setAttribute("style");
     const setLength = setAttribute("length");
     const setEnding = setAttribute("ending");
     const setTimePeriod = (timePeriod:string) => {setStory(old => ({...old, setting: {...old.setting, timePeriod}}));}
@@ -72,9 +70,7 @@ export const useStory = () => {
     })); }
     const updateCharacterId          = updateCharacterAttribute("id");
     const updateCharacterName        = updateCharacterAttribute("name");
-    const updateCharacterRole        = (index:number) => (checked:boolean) => {
-        updateCharacterAttribute("role")(index)(checked ? "main" : "supporting");
-    };
+    const updateCharacterRole        = updateCharacterAttribute("role");
     const updateCharacterDescription = updateCharacterAttribute("description");
     const updateCharacterPersonality = updateCharacterAttribute("personality");
     const updateCharacterGender      = updateCharacterAttribute("genderIdentity");
@@ -209,7 +205,6 @@ export const useStory = () => {
         title: setTitle,
         genre: setGenre,
         audience: setAudience,
-        style: setStyle,
         length: setLength,
         ending: setEnding,
         timePeriod: setTimePeriod,

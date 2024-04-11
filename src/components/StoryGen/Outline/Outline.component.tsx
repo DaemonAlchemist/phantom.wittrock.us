@@ -21,7 +21,6 @@ export const OutlineComponent = ({}:OutlineProps) => {
             genre: details.genre,
             themes: details.themes,
             audience: details.audience,
-            style: details.style,
             length: details.length,
             ending: details.ending,
             setting: {
@@ -61,11 +60,6 @@ export const OutlineComponent = ({}:OutlineProps) => {
                         <div className={styles.audience}><Editable value={story.audience} onChange={update.audience} placeholder="Audience goes here" /></div>
                         <div className={styles.length}><Editable value={story.length} onChange={update.length} placeholder="Length goes here." /></div>
                     </div>
-
-                    <h2>Style</h2>
-                    <p className={styles.style}>
-                        <Editable value={story.style} onChange={update.style} placeholder="Style goes  here." textArea/>
-                    </p>
 
                     <h2>Story Outline</h2>
                     <p className={styles.plotOutline}>

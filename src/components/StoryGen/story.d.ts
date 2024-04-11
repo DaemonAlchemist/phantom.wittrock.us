@@ -4,7 +4,6 @@ export declare interface IStoryOutline {
     title: string;
     genre: string;
     audience: string;
-    style: string;
     length: StoryType;
     ending: string;
     setting: ISetting;
@@ -27,9 +26,9 @@ export declare interface ILocation {
 export declare interface ICharacter {
     id: string;
     name: string;
-    role: "main" | "supporting";
+    role: "main" | "supporting" | "minor";
     physicalDescription: string;
-    genderIdentity: string;
+    genderIdentity: "Male" | "Female" | "Non-binary" | "Gender fluid";
     ethnicity: string;
     identifyingMarks: string;
     quirks: string;
@@ -73,6 +72,8 @@ export declare interface IChapter extends ISummarizable {
 export declare interface IScene extends ISummarizable {
     title: string;
     beats: IBeat[];
+    locationId: string;
+    characterIds: string[];
 }
 
 export declare interface IBeat extends ISummarizable {

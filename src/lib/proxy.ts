@@ -46,16 +46,29 @@ const openai = new OpenAI({
     dangerouslyAllowBrowser: true,
 });
 
+const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string> => anthropic.messages.create({
+    model: useLLMModel.getValue(),
+    max_tokens: 4096,
+    system: messages.filter(m => m.role === "system").map(prop("content")).join(" "),
+    messages: [
+        ...messages.filter(m => m.role !== "system") as MessageParam[],
+        {role: "assistant", content: prefixMsg}
+    ],
+  }).then(response => {
+    console.log(response);
+    const newMessage = prefixMsg + (response.content[0].text || "}");
+    if(response.stop_reason === "max_tokens") {
+        return callAnthropic(messages, newMessage)
+            .then(msg => {
+                return newMessage + msg;
+            });
+    } else {
+        return newMessage;
+    }
+  })
+
 export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string> => switchOn(useLLMEngine.getValue(), {
-    anthropic: () => anthropic.messages.create({
-        model: useLLMModel.getValue(),
-        max_tokens: 1024,
-        system: messages.filter(m => m.role === "system").map(prop("content")).join(" "),
-        messages: messages.filter(m => m.role !== "system") as MessageParam[],
-      }).then(response => {
-        console.log(response);
-        return "";
-      }),
+    anthropic: () => callAnthropic(messages, "{"),
     ollama: () => request.post("http://localhost:11434/api/chat")
         .send({
             model: useLLMModel.getValue(),

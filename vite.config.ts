@@ -9,7 +9,7 @@ export default defineConfig({
     server: {
         proxy: {
             '^/claude/.*': {
-                target: 'https://api.anthropic.com/v1',
+                target: 'https://api.anthropic.com',
                 changeOrigin: true,
                 rewrite: (path) => {
                     console.log(path);

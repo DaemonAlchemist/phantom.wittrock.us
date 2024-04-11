@@ -1,13 +1,14 @@
 import { SendOutlined } from "@ant-design/icons";
-import { Button, Spin, Switch, Tabs } from "antd";
+import { Button, Radio, Spin, Tabs } from "antd";
+import { onRadioChange } from "../../../lib/onInputChange";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
+import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { ICharacter } from "../story.d";
 import { CharactersProps } from "./Characters";
 import styles from "./Characters.module.scss";
-import { DeleteBtn } from "../../DeleteBtn";
 
 export const CharactersComponent = ({}:CharactersProps) => {
     const {story, update} = useStory();
@@ -36,7 +37,14 @@ export const CharactersComponent = ({}:CharactersProps) => {
             {story.characters.map((char, i) => <li key={i}>
                 <h2 className={styles.name}>
                     <Editable value={char.name} onChange={update.character.name(i)} placeholder="Character name here" />
-                    <Switch checkedChildren="Main" unCheckedChildren="Supporting" checked={char.role === "main"} onChange={update.character.role(i)}/>
+                    <Radio.Group
+                        value={char.role}
+                        options={["main", "supporting", "minor"]}
+                        onChange={onRadioChange(update.character.role(i))}
+                        optionType="button"
+                        buttonStyle="solid"
+                        size="small"
+                    />
                     <DeleteBtn onClick={update.character.remove(i)} />
                 </h2>
                 <div className={styles.info}>

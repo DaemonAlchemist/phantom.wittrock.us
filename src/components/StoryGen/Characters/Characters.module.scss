@@ -16,9 +16,9 @@
             margin: 0;
             background-color: $bgColor;
             position: relative;
-            button {
+            :global(.ant-radio-group) {
                 position: absolute;
-                right: $paddingLarge;
+                right: 36px;
                 top: 14px;
             }
             > span {
