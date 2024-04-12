@@ -41,7 +41,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                         &nbsp;&nbsp;
                         <PartsDone entities={scene.beats || []} filter={b => !!b.text} />
                         <IsFinished value={scene.summary} />
-                        <DeleteBtn onClick={update.scene.remove(actIndex, chapterIndex, i)} />
+                        <DeleteBtn onClick={update.scene.remove(actIndex, chapterIndex, i)} entityType="scene"/>
                     </>}
                     key={i}
                 >

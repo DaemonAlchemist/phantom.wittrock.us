@@ -9,7 +9,7 @@ import { Index } from "ts-functional/dist/types";
 import { useEffect } from "react";
 
 // LLM Engine hook
-const useLLMEngine = useLocalStorage.string("llmEngine", "llama2");
+const useLLMEngine = useLocalStorage.string("llmEngine", "anthropic");
 export const useEngine = ():[string, Setter<string>, string[]] => {
     const [engine, setEngine] = useLLMEngine();
     const options:string[] = ["ollama", "openai", "anthropic"];

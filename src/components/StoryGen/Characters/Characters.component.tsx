@@ -1,51 +1,50 @@
-import { SendOutlined } from "@ant-design/icons";
-import { Button, Radio, Spin, Tabs } from "antd";
-import { onRadioChange } from "../../../lib/onInputChange";
+import { Col, Row, Tabs } from "antd";
+import { useState } from "react";
 import { useStory } from "../../../lib/storyGen/useStory";
-import { usePrompt } from "../../../lib/usePrompt";
+import { CharacterTypeSelector } from "../../CharacterTypeSelector";
 import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
+import { PromptButton } from "../../PromptButton";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
-import { ICharacter } from "../story.d";
+import { CharacterType, ICharacter } from "../story.d";
 import { CharactersProps } from "./Characters";
 import styles from "./Characters.module.scss";
 
 export const CharactersComponent = ({}:CharactersProps) => {
     const {story, update} = useStory();
 
-    const updateMainCharacter = (char:ICharacter) => {
-        update.character.add(char)();
-    }
-
     const updateCharacters = (response:{characters:ICharacter[]}) => {
         response.characters.forEach(char => {update.character.add(char)()});
     }
 
-    const mcPrompt = usePrompt(systemPrompts.mainCharacter(story.length), updateMainCharacter);
-    const spPrompt = usePrompt(systemPrompts.supportingCharacters(story.length), updateCharacters);
+    const prompts = {
+        main:       systemPrompts.mainCharacter(story.length),
+        supporting: systemPrompts.supportingCharacters(story.length),
+        minor:      systemPrompts.minorCharacters(story.length),
+    }
 
-    return <Spin spinning={mcPrompt.isRunning || spPrompt.isRunning}>
-        <h2>Characters</h2>
-        <Button onClick={mcPrompt.run(userPrompts.mainCharacter(story))} type="primary">
-            <SendOutlined /> Generate main character
-        </Button>
-        <Button onClick={spPrompt.run(userPrompts.supportingCharacters(story))} type="primary">
-            <SendOutlined /> Generate supporting characters
-        </Button>
+    const [role, setRole] = useState<CharacterType>("main");
+
+    return <>
+        <Row>
+            <Col xs={4}><h2>Characters</h2></Col>
+            <Col xs={20}>
+                <PromptButton
+                    systemPrompt={prompts[role]}
+                    onUpdate={updateCharacters}
+                    entityTypes="characters"
+                    userPrompt={userPrompts.characters(story)}
+                    suffix={<CharacterTypeSelector role={role} onChange={setRole} />}
+                />
+            </Col>
+        </Row>
         <hr />
         <ul className={styles.characters}>
             {story.characters.map((char, i) => <li key={i}>
                 <h2 className={styles.name}>
                     <Editable value={char.name} onChange={update.character.name(i)} placeholder="Character name here" />
-                    <Radio.Group
-                        value={char.role}
-                        options={["main", "supporting", "minor"]}
-                        onChange={onRadioChange(update.character.role(i))}
-                        optionType="button"
-                        buttonStyle="solid"
-                        size="small"
-                    />
-                    <DeleteBtn onClick={update.character.remove(i)} />
+                    <CharacterTypeSelector role={char.role} onChange={update.character.role(i)} />
+                    <DeleteBtn onClick={update.character.remove(i)} entityType="character"/>
                 </h2>
                 <div className={styles.info}>
                     <Tabs tabPosition="left">
@@ -57,11 +56,11 @@ export const CharactersComponent = ({}:CharactersProps) => {
                             <Editable value={char.identifyingMarks} onChange={update.character.marks(i)} placeholder="Identifying marks go here." textArea />
 
                             <p>Ethnicity</p>
-                            <Editable value={char.ethnicity} onChange={update.character.ethnicity(i)} placeholder="Ethnicity goes here" />
+                            <Editable value={char.ethnicity} onChange={update.character.ethnicity(i)} placeholder="Ethnicity goes here" textArea/>
                         </Tabs.TabPane>
                         <Tabs.TabPane key="personality" tabKey="personality" tab="Personality">
                             <p>Gender Identity</p>
-                            <Editable value={char.genderIdentity} onChange={update.character.gender(i)} placeholder="Gender identity goes here" />
+                            <Editable value={char.genderIdentity} onChange={update.character.gender(i)} placeholder="Gender identity goes here" textArea/>
 
                             <p>Personality</p>
                             <Editable value={char.personality} onChange={update.character.personality(i)} placeholder="Personality goes here." textArea/>
@@ -89,5 +88,5 @@ export const CharactersComponent = ({}:CharactersProps) => {
                 </div>
             </li>)}
         </ul>
-    </Spin>
+    </>
 }

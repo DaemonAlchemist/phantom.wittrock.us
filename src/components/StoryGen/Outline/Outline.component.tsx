@@ -75,7 +75,7 @@ export const OutlineComponent = ({}:OutlineProps) => {
                     <ul className={styles.themes}>
                         {story.themes.map((theme, i) => <li key={i}>
                             <Editable key={i} value={theme} onChange={update.theme.update(i)} placeholder="Theme goes here."/>
-                            <DeleteBtn onClick={update.theme.remove(i)} />
+                            <DeleteBtn onClick={update.theme.remove(i)} entityType="theme"/>
                         </li>)}
                     </ul>
                 </Col>

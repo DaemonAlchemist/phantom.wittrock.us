@@ -36,7 +36,7 @@ export const ActsComponent = ({}:ActsProps) => {
                         &nbsp;&nbsp;
                         <PartsDone entities={act.chapters || []} filter={c => !!c.summary} />
                         <IsFinished value={act.summary} />
-                        <DeleteBtn onClick={update.act.remove(i)} />
+                        <DeleteBtn onClick={update.act.remove(i)} entityType="act"/>
                     </>}
                     key={i}
                 >

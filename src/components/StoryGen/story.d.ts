@@ -1,4 +1,6 @@
 export type StoryType = "Short Story" | "Novella" | "Novel";
+export type CharacterType = "main" | "supporting" | "minor";
+export type GenderIdentity = "Male" | "Female" | "Non-binary" | "Gender fluid";
 
 export declare interface IStoryOutline {
     title: string;
@@ -26,9 +28,9 @@ export declare interface ILocation {
 export declare interface ICharacter {
     id: string;
     name: string;
-    role: "main" | "supporting" | "minor";
+    role: CharacterType;
     physicalDescription: string;
-    genderIdentity: "Male" | "Female" | "Non-binary" | "Gender fluid";
+    genderIdentity: GenderIdentity;
     ethnicity: string;
     identifyingMarks: string;
     quirks: string;

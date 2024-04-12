@@ -1,8 +1,8 @@
 @import "@styles/globals.scss";
 
 .locations {
-    > h2 {
-        button {float: right;}
+    h2 {
+        margin: 0;
     }
     .locationList {
         padding: 0;

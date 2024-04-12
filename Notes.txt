@@ -1,15 +1,27 @@
 StoryGen ToDo
 =============
-Add chapter summary button
+Bugs
+    - Deleting a beat does not refresh the list
+Add PromptButton to:
+    acts
+    chapters
+    scenes
+    beats
+Add summary buttons
+    chapters
+    acts
+Save/load
+    - Add button to save story to file.
+    - Add button to load story from file.
+Read page
+    - Add chapter of contents
+    - make reading window fixed and scrollable
+Docs
+    - Write readme
+    - Create instructions for using the app
 Edit hierarchy
     - beat to scene
     - move entities up and down
-Bugs
-    - Deleting a beat does not refresh the list
-Generator updates
-    - have different prompts based on the story length
-act
-    - add to prompt: traditional three act structure.  Each act should build towards the ending specified
 
 Nerdy Novelist 24 chapter novel structure:
 https://nerdynovelist.com/24-chapter-novel-outline/

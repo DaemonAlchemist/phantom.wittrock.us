@@ -43,7 +43,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                         Beat {i+1}: {beat.title}
                         &nbsp;&nbsp;
                         <IsFinished value={beat.text} />
-                        <DeleteBtn onClick={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)} />
+                        <DeleteBtn onClick={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)} entityType="beat"/>
                     </>}
                     key={i}
                 >

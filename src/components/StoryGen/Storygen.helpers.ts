@@ -60,9 +60,11 @@ export const systemPrompts:Index<Func<StoryType, string>> = {
 
     locations: (_type:StoryType) => `${botId}  Your job is to help the user flesh out the locations for their story.  When the user gives you the details for their story and some optional existing locations, create some additional locations that would be relevant to the story. ${styleGuide} Include a name, description, and unique camel-cased id for each location.  ${json} {locations: Array<{id: string, name: string, description: string;}>}`,
 
-    mainCharacter: (_type:StoryType) => `${botId}  Your job is to help the user develop the main character for their story.  When the user gives you an outline for their story and optionally a basic description of the main character, flesh out the character's attributes, backstory, and story arc. ${styleGuide} ${json} ${characterInterface}. ${charIdNotes}`,
+    mainCharacter: (_type:StoryType) => `${botId}  Your job is to help the user develop the main character for their story.  When the user gives you an outline for their story and optionally a basic description of the main character, flesh out the character's attributes, backstory, and story arc. ${styleGuide} ${json}  {characters: Array<${characterInterface}>}. ${charIdNotes}`,
 
-    supportingCharacters: (_type:StoryType) => `${botId}  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and description of the main character, create a list of supporting characters for the story.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc. ${styleGuide}  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
+    supportingCharacters: (_type:StoryType) => `${botId}  Your job is to help the user develop some supporting characters for their story.  When the user gives you a story outline, and list of existing characters, create a list of supporting characters for the story.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc. ${styleGuide}  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
+
+    minorCharacters: (_type:StoryType) => `${botId}  Your job is to help the user develop some minor characters for their story.  When the user gives you a story outline, and list of existing characters, create a list of minor characters for the story.  These are characters that will only appear in a scene or two.  Include information on how the characters relate to each other and the main character and how they help drive the main character's story arc. ${styleGuide}  ${json} {characters: Array<${characterInterface}>}. ${charIdNotes}`,
 
     acts: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story idea into a full story.  When the user gives you a high level story outline, locations, and character descriptions, create a detailed outline of acts and chapters for the story.  Use an appropriate number of acts for the length of the story.  The acts and chapters should all have a purpose and should move the story along.  Acts and chapters should not be repetitive and should NOT rehash the same points.  The outlines should be factual.  Include what happens and explain how it moves the story and character arcs along.  Do not include the act number or chapter number in the outline texts. ${styleGuide} ${json} {acts: Array<{title: string, outline: string, chapters: Array<{title: string, outline: string}>}>}`,
 
@@ -87,18 +89,12 @@ export const userPrompts = {
         Themes: ${story.themes.join(", ")}
         Plot Outline: ${story.plot.outline}
     `,
-    mainCharacter: (story:IStoryOutline) => `
+    characters: (story:IStoryOutline) => `
         Title: ${story.title}
         Genre: ${story.genre}
         Time Period: ${story.setting.timePeriod}
         Themes: ${story.themes.join(", ")},
-    `,
-    supportingCharacters: (story:IStoryOutline) => `
-        Title: ${story.title}
-        Genre: ${story.genre}
-        Time Period: ${story.setting.timePeriod}
-        Themes: ${story.themes.join(", ")},
-        Main Character(s): ${JSON.stringify(story.characters.filter(c => c.role === "main"))},
+        Existing Character(s): ${JSON.stringify(story.characters)},
     `,
     acts: (story:IStoryOutline) => `
         Title: ${story.title}
