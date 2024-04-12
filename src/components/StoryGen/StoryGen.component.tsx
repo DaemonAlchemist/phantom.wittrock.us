@@ -1,14 +1,18 @@
 import { Tabs } from "antd";
+import { Overview } from "../Overview";
 import { Acts } from "./Acts";
 import { Characters } from "./Characters";
 import { Locations } from "./Locations";
 import { Outline } from "./Outline";
-import { StoryGenProps } from "./StoryGen.d";
 import { Read } from "./Read";
+import { StoryGenProps } from "./StoryGen.d";
 
 export const StoryGenComponent = ({}:StoryGenProps) => 
     <div>
         <Tabs tabPosition="left">
+            <Tabs.TabPane key="overview" tabKey="overview" tab="Overview">
+                <Overview />
+            </Tabs.TabPane>
             <Tabs.TabPane key="outline" tabKey="outline" tab="Outline">
                 <Outline />
             </Tabs.TabPane>

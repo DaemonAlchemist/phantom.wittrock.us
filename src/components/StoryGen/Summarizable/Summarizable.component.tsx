@@ -1,9 +1,10 @@
 import { Tabs } from "antd";
 import { Editable } from "../../Editable";
 import { SummarizableProps } from "./Summarizable";
+import styles from "./Summarizable.module.scss";
 
 export const SummarizableComponent = ({entity, updateOutline, updateSummary, hideSummary}:SummarizableProps) =>
-    <Tabs>
+    <Tabs className={styles.summarizable}>
         <Tabs.TabPane key="outline" tabKey="outline" tab="Outline">
             <Editable value={entity.outline} onChange={updateOutline} placeholder="Outline goes here." textArea/>
         </Tabs.TabPane>

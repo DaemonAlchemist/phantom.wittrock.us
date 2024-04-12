@@ -1,5 +1,19 @@
 @import "@styles/globals.scss";
 
-h1 {
+body {
     margin: 0;
+}
+
+.app {
+    min-height: 100vh;
+}
+
+h1 {
+    margin: 8px 0 0 84px;
+    img {
+        position: fixed;
+        width: 72px;
+        top: 0;
+        left: 0;
+    }
 }
