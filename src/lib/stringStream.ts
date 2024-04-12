@@ -1,5 +1,5 @@
 import { Func } from "ts-functional/dist/types";
-export declare type Func<A, B> = (obj:A) => B;
+
 export const stringStream = (process:Func<string, string>):Func<string, string> =>
     (str:string) => 
         str.split("").reduce((combined, char) => 

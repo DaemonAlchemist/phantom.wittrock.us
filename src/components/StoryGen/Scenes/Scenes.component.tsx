@@ -1,5 +1,5 @@
-import { SendOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Row, Spin, Tag } from "antd";
+import { ArrowUpOutlined, SendOutlined } from "@ant-design/icons";
+import { Button, Col, Collapse, Popconfirm, Row, Spin, Tag } from "antd";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
@@ -48,6 +48,10 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                     <div className={styles.sceneInfo}>
                         <Tag>{getLocation(story, scene.locationId)}</Tag>
                         {scene.characterIds.map(id => <Tag color="green">{getCharacter(story, id)}</Tag>)}
+                        &nbsp;&nbsp;
+                        <Popconfirm title="Are you sure you want to convert this scene into a chapter?" onConfirm={update.scene.toChapter(actIndex, chapterIndex, i)}>
+                            <Button className={styles.hoistBtn} type="default" size="small"><ArrowUpOutlined /> Convert to chapter</Button>
+                        </Popconfirm>
                     </div>
                     <Row>
                         <Col xs={6}>

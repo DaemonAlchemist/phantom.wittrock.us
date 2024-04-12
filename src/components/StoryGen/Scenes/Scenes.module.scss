@@ -4,6 +4,12 @@
     > h2 {
         button {float: right;}
     }
+    .sceneInfo {
+        .hoistBtn {
+            position: absolute;
+            right: 8px;
+        }
+    }
     .scenes {
         :global(.deleteBtn) {float: right;}
     }

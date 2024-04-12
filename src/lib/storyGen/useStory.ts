@@ -1,5 +1,5 @@
-import { useLocalStorage } from "unstateless"
-import { IAct, IBeat, IChapter, ICharacter, ILocation, IRelation, IScene, IStoryOutline } from "../../components/StoryGen/story"
+import { useLocalStorage } from "unstateless";
+import { IAct, IBeat, IChapter, ICharacter, ILocation, IRelation, IScene, IStoryOutline } from "../../components/StoryGen/story";
 
 const emptyStory:IStoryOutline = {
     title: "",
@@ -149,7 +149,9 @@ export const useStory = () => {
     const removeScene = (actIndex: number, chapterIndex: number, sceneIndex: number) => () => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
-                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? { ...chapter, scenes: chapter.scenes.filter((_, si) => si !== sceneIndex) } : chapter)
+                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
+                    ...chapter, scenes: chapter.scenes.filter((_, si) => si !== sceneIndex)
+                } : chapter)
             } : act)
         }
     })); }
@@ -166,6 +168,35 @@ export const useStory = () => {
     const updateSceneOutline = updateSceneAttribute("outline");
     const updateSceneSummary = updateSceneAttribute("summary");
 
+    const sceneToChapter = (actIndex: number, chapterIndex: number, sceneIndex:number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
+                ...act, chapters: [
+                    ...act.chapters.slice(0, chapterIndex),
+                    {
+                        ...act.chapters[chapterIndex],
+                        scenes: act.chapters[chapterIndex].scenes.filter((_, si) => si !== sceneIndex),
+                    },
+                    ((scene:IScene):IChapter => ({
+                        title: scene.title,
+                        outline: scene.outline,
+                        summary: scene.summary,
+                        scenes: scene.beats.map((b:IBeat):IScene => ({
+                            title: b.title,
+                            outline: b.outline,
+                            summary: "",
+                            locationId: scene.locationId,
+                            characterIds: scene.characterIds,
+                            beats: [],
+                        })),
+                    }))(act.chapters[chapterIndex].scenes[sceneIndex]),
+                    ...act.chapters.slice(chapterIndex+1)
+                ]
+            } : act)
+        }
+    }))
+    }
+
     // Beats
     const addBeat = (actIndex: number, chapterIndex: number, sceneIndex: number, beat: IBeat) => () => { setStory(old => ({
         ...old, plot: {
@@ -176,15 +207,17 @@ export const useStory = () => {
             } : act)
         }
     })); }
-    const removeBeat = (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => () => { setStory(old => ({
+    const removeBeat = (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => () => { setStory(old => {const updated = ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
                 ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
-                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? { ...scene, beats: scene.beats.filter((_, bi) => bi !== beatIndex) } : scene)
+                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? {
+                        ...scene, beats: scene.beats.filter((_, bi) => bi !== beatIndex)
+                    } : scene)
                 } : chapter)
             } : act)
         }
-    })); }
+    }); console.log(updated);return updated;}); }
     const updateBeatAttribute = (field:string) => (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => (value: string) => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
@@ -268,10 +301,11 @@ export const useStory = () => {
             title: updateSceneTitle,
             outline: updateSceneOutline,
             summary: updateSceneSummary,
+            toChapter: sceneToChapter,
         },
         beat: {
             add: addBeat,
-            removeBeat,
+            remove: removeBeat,
             outline: updateBeatOutline,
             summary: updateBeatSummary,
             text: updateBeatText,

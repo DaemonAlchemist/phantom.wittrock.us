@@ -1,7 +1,12 @@
 StoryGen ToDo
 =============
+Add chapter summary button
+Edit hierarchy
+    - beat to scene
+    - move entities up and down
+Bugs
+    - Deleting a beat does not refresh the list
 Generator updates
-    - Generate acts and chapters in one prompt to better moderate story length and complexity
     - have different prompts based on the story length
 act
     - add to prompt: traditional three act structure.  Each act should build towards the ending specified
