@@ -54,10 +54,10 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                         </Popconfirm>
                     </div>
                     <Row>
-                        <Col xs={6}>
+                        <Col xs={8}>
                             <Summarizable entity={scene} updateOutline={update.scene.outline(actIndex, chapterIndex, i)} updateSummary={update.scene.summary(actIndex, chapterIndex, i)}/>
                         </Col>
-                        <Col xs={18}>
+                        <Col xs={16}>
                             <Beats actIndex={actIndex} chapterIndex={chapterIndex} sceneIndex={i} />
                         </Col>
                     </Row>                    

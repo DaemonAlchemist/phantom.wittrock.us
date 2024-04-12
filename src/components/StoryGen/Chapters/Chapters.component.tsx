@@ -44,10 +44,10 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
                     key={i}
                 >
                     <Row>
-                        <Col xs={6}>
+                        <Col xs={4}>
                             <Summarizable entity={chapter} updateOutline={update.chapter.outline(actIndex, i)} updateSummary={update.chapter.summary(actIndex, i)}/>
                         </Col>
-                        <Col xs={18}>
+                        <Col xs={20}>
                             <Scenes actIndex={actIndex} chapterIndex={i}/>
                         </Col>
                     </Row>                    

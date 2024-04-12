@@ -26,7 +26,7 @@
         padding: $paddingSmall;
     }
     .genre, .timePeriod, .audience, .length {
-        width: calc(50% - $paddingSmall * 2 - 2px);
+        width: 50%;
         display: inline-block;
         text-align: center;
         border: solid 1px $bgColor;

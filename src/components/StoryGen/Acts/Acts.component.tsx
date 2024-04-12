@@ -41,10 +41,10 @@ export const ActsComponent = ({}:ActsProps) => {
                     key={i}
                 >
                     <Row>
-                        <Col xs={6}>
+                        <Col xs={4}>
                             <Summarizable entity={act} updateOutline={update.act.outline(i)} updateSummary={update.act.summary(i)}/>
                         </Col>
-                        <Col xs={18}>
+                        <Col xs={20}>
                             <Chapters actIndex={i} />
                         </Col>
                     </Row>                    
