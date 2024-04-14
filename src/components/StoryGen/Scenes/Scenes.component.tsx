@@ -1,17 +1,18 @@
-import { ArrowUpOutlined, SendOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined } from "@ant-design/icons";
 import { Button, Col, Collapse, Popconfirm, Row, Spin, Tag } from "antd";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PartsDone } from "../../PartsDone";
+import { PromptButton } from "../../PromptButton";
+import { SummarizeBtn } from "../../SummarizeBtn";
 import { Beats } from "../Beats";
 import { getCharacter, getLocation, systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { ICharacter, IScene } from "../story";
 import { ScenesProps } from "./Scenes";
 import styles from "./Scenes.module.scss";
-import { SummarizeBtn } from "../../SummarizeBtn";
 
 export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
     const {story, update} = useStory();
@@ -31,10 +32,17 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.scenes}>
-            <h2>
-                Scenes
-                <Button type="primary" onClick={prompt.run(userPrompts.scenes(story, actIndex, chapterIndex))}><SendOutlined /> Create scenes</Button>
-            </h2>
+            <Row>
+                <Col xs={4}><h2>Scenes</h2></Col>
+                <Col xs={20}>
+                    <PromptButton
+                        systemPrompt={systemPrompts.scenes(story.length)}
+                        onUpdate={updateScenes}
+                        entityTypes="scenes"
+                        userPrompt={userPrompts.scenes(story, actIndex, chapterIndex)}
+                    />
+                </Col>
+            </Row>
             <hr />
             <Collapse>
                 {scenes.map((scene, i) => <Collapse.Panel

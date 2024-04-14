@@ -1,9 +1,9 @@
-import { SendOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Row, Spin } from "antd";
+import { Col, Collapse, Row, Spin } from "antd";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
+import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
@@ -25,10 +25,17 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
 
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.beats}>
-            <h2>
-                Beats
-                <Button type="primary" onClick={prompt.run(userPrompts.beats(story, actIndex, chapterIndex, sceneIndex))}><SendOutlined /> Create beats</Button>
-            </h2>
+            <Row>
+                <Col xs={4}><h2>Beats</h2></Col>
+                <Col xs={20}>
+                    <PromptButton
+                        systemPrompt={systemPrompts.beats(story.length)}
+                        onUpdate={updateBeats}
+                        entityTypes="beats"
+                        userPrompt={userPrompts.beats(story, actIndex, chapterIndex, sceneIndex)}
+                    />
+                </Col>
+            </Row>
             <hr />
             <Collapse>
                 {beats.map((beat, i) => <Collapse.Panel

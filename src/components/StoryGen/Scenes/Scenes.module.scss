@@ -5,9 +5,11 @@
         button {float: right;}
     }
     .sceneInfo {
+        position: relative;
         .hoistBtn {
             position: absolute;
-            right: 8px;
+            right: 0px;
+            top: -10px;
         }
     }
     .scenes {

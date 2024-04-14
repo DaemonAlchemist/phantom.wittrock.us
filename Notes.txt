@@ -2,11 +2,6 @@ StoryGen ToDo
 =============
 Bugs
     - Deleting a beat does not refresh the list
-Add PromptButton to:
-    acts
-    chapters
-    scenes
-    beats
 Read page
     - Add chapter of contents
     - make reading window fixed and scrollable
