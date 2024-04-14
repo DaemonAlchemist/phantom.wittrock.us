@@ -11,6 +11,7 @@ export declare interface IPromptButtonInputProps {
     onUpdate: Func<any, void>;
     entityTypes: string;
     suffix?: string | JSX.Element;
+    btnText?: string;
 }
 
 export type PromptButtonProps = IPromptButtonInputProps & IPromptButtonProps;

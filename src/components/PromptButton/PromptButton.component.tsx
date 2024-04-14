@@ -1,11 +1,11 @@
-import { SendOutlined } from "@ant-design/icons";
+import { AimOutlined, SendOutlined } from "@ant-design/icons";
 import { Input, Spin } from "antd";
 import { useState } from "react";
 import { onInputChange } from "../../lib/onInputChange";
 import { usePrompt } from "../../lib/usePrompt";
 import { PromptButtonProps } from "./PromptButton.d";
 
-export const PromptButtonComponent = ({systemPrompt, userPrompt, onUpdate, entityTypes, suffix}:PromptButtonProps) => {
+export const PromptButtonComponent = ({systemPrompt, userPrompt, onUpdate, entityTypes, suffix, btnText}:PromptButtonProps) => {
     const [instructions, setInstructions] = useState("");
 
     const prompt = usePrompt(systemPrompt, onUpdate, true);
@@ -16,14 +16,14 @@ export const PromptButtonComponent = ({systemPrompt, userPrompt, onUpdate, entit
 
     return <Spin spinning={prompt.isRunning} tip={`Creating new ${entityTypes}`}>
         <Input.Search
-            addonBefore="Extra instructions"
+            addonBefore={<AimOutlined />}
             suffix={suffix}
             value={instructions}
             onChange={onInputChange(setInstructions)}
             onSearch={onPrompt}
-            placeholder={`Provide some extra instructions to guide the creation of new ${entityTypes}`}
+            placeholder={`Extra instructions for new ${entityTypes}`}
             enterButton={<>
-                <SendOutlined /> Create new {entityTypes}
+                <SendOutlined /> {btnText || `Create new ${entityTypes}`}
             </>}
         />
     </Spin>;
