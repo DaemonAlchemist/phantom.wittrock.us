@@ -7,12 +7,6 @@ Add PromptButton to:
     chapters
     scenes
     beats
-Add summary buttons
-    chapters
-    acts
-Save/load
-    - Add button to save story to file.
-    - Add button to load story from file.
 Read page
     - Add chapter of contents
     - make reading window fixed and scrollable

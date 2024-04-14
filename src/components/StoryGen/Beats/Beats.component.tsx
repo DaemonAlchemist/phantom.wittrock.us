@@ -1,10 +1,10 @@
 import { SendOutlined } from "@ant-design/icons";
 import { Button, Col, Collapse, Row, Spin } from "antd";
-import { prop } from "ts-functional";
 import { useStory } from "../../../lib/storyGen/useStory";
 import { usePrompt } from "../../../lib/usePrompt";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
+import { SummarizeBtn } from "../../SummarizeBtn";
 import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { Text } from "../Text";
@@ -22,14 +22,8 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
     const prompt = usePrompt(systemPrompts.beats(story.length), updateBeats);
 
     const beats = story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats || [];
-    const sceneComplete = beats.map(prop("text")).filter(summary => !summary).length === 0;
 
-    const updateSceneSummary = (response:{summary:string}) => {
-        update.scene.summary(actIndex, chapterIndex, sceneIndex)(response.summary);
-    }
-    const summarizePrompt = usePrompt(systemPrompts.sceneSummary(story.length), updateSceneSummary);
-
-    return <Spin spinning={prompt.isRunning || summarizePrompt.isRunning}>
+    return <Spin spinning={prompt.isRunning}>
         <div className={styles.beats}>
             <h2>
                 Beats
@@ -62,11 +56,14 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                     </Row>                    
                 </Collapse.Panel>)}
             </Collapse>
-            {sceneComplete && <div className={styles.summarize}>
-                <Button type="primary" onClick={summarizePrompt.run(userPrompts.summary.scene(story, actIndex, chapterIndex, sceneIndex))}>
-                    <SendOutlined /> Summarize scene
-                </Button>
-            </div>}
+            <SummarizeBtn
+                entities={beats}
+                field="text"
+                entityName="scene"
+                systemPrompt={systemPrompts.sceneSummary(story.length)}
+                userPrompt={userPrompts.summary.scene(story, actIndex, chapterIndex, sceneIndex)}
+                onUpdate={update.scene.summary(actIndex, chapterIndex, sceneIndex)}
+            />
         </div>
     </Spin>;
 }

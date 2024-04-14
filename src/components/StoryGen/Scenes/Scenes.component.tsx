@@ -11,6 +11,7 @@ import { Summarizable } from "../Summarizable";
 import { ICharacter, IScene } from "../story";
 import { ScenesProps } from "./Scenes";
 import styles from "./Scenes.module.scss";
+import { SummarizeBtn } from "../../SummarizeBtn";
 
 export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
     const {story, update} = useStory();
@@ -26,6 +27,8 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
 
     const prompt = usePrompt(systemPrompts.scenes(story.length), updateScenes);
 
+    const scenes = story.plot.acts[actIndex].chapters[chapterIndex].scenes || []; 
+
     return <Spin spinning={prompt.isRunning}>
         <div className={styles.scenes}>
             <h2>
@@ -34,7 +37,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
             </h2>
             <hr />
             <Collapse>
-                {(story.plot.acts[actIndex].chapters[chapterIndex].scenes || []).map((scene, i) => <Collapse.Panel
+                {scenes.map((scene, i) => <Collapse.Panel
                     className={styles.scene}
                     header={<>
                         Scene {i+1}: {scene.title}
@@ -63,6 +66,14 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                     </Row>                    
                 </Collapse.Panel>)}
             </Collapse>
+            <SummarizeBtn
+                entities={scenes}
+                field="summary"
+                entityName="chapter"
+                systemPrompt={systemPrompts.chapterSummary(story.length)}
+                userPrompt={userPrompts.summary.chapter(story, actIndex, chapterIndex)}
+                onUpdate={update.chapter.summary(actIndex, chapterIndex)}
+            />
         </div>
     </Spin>;
 }

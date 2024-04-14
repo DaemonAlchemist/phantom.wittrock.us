@@ -1,5 +1,5 @@
 
-export const saveStory = (fileName:string):Promise<void> => new Promise((resolve, reject) => {
+export const saveStory = (fileName:string):Promise<void> => new Promise((resolve, _reject) => {
     const data: Record<string, string> = {};
     
     // Extract specified fields from localStorage
@@ -32,7 +32,7 @@ export const saveStory = (fileName:string):Promise<void> => new Promise((resolve
     resolve();
 });
 
-export const loadStory = ():Promise<void> => new Promise((resolve, reject) => {
+export const loadStory = ():Promise<void> => new Promise((resolve, _reject) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';

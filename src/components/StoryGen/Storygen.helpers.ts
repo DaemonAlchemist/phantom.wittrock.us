@@ -170,7 +170,15 @@ export const userPrompts = {
         scene: (story:IStoryOutline, actIndex: number, chapterIndex: number, sceneIndex: number) => `
             Please summarize this scene:
             ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.map(prop("text")).join("\n\n")}
-        `
+        `,
+        chapter: (story:IStoryOutline, actIndex: number, chapterIndex: number) => `
+            Please summarize this chapter based on the scene outlines:
+            ${(story.plot.acts[actIndex].chapters[chapterIndex].scenes || []).filter(s => !!s.summary).map(prop("summary")).join("\n\n")}
+        `,
+        act: (story:IStoryOutline, actIndex: number) => `
+            Please summarize this act based on the chapter outlines:
+            ${(story.plot.acts[actIndex].chapters || []).map(prop("summary")).join("\n\n")}
+        `,
     }
 }
 
