@@ -17,6 +17,10 @@ export const useEngine = ():[string, Setter<string>, string[]] => {
     return [engine, setEngine, options];
 }
 
+export const needsApiKey = (engine:string) => engine !== "ollama";
+
+export const useApiKey = (engine:string) => useLocalStorage.string(`apiKey-${engine}`, '');
+
 const useLLMModel = useLocalStorage.string("llmModel", "llama2");
 export const useModel = ():[string, Setter<string>, string[]] => {
     const [engine] = useLLMEngine();
@@ -35,18 +39,18 @@ export const useModel = ():[string, Setter<string>, string[]] => {
 }
 
 // Setup Anthropic API
-const anthropic = new Anthropic({
-  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
+const anthropic = () => new Anthropic({
+  apiKey: useApiKey("anthropic").getValue(),
   baseURL: "http://localhost:5173/claude/",
 });
 
 // Setup OpenAI API
-const openai = new OpenAI({
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+const openai = () => new OpenAI({
+    apiKey: useApiKey("openai").getValue(),
     dangerouslyAllowBrowser: true,
 });
 
-const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string> => anthropic.messages.create({
+const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string> => anthropic().messages.create({
     model: useLLMModel.getValue(),
     max_tokens: 4096,
     system: messages.filter(m => m.role === "system").map(prop("content")).join(" "),
@@ -81,7 +85,7 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
         .then((msg:IChatResponse):string => {
             return msg.message.content;
         }),
-    openai: () => openai.chat.completions.create({
+    openai: () => openai().chat.completions.create({
         messages,
         model: useLLMModel.getValue(),
         response_format: { type: "json_object" },
