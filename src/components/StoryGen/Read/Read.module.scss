@@ -1,9 +1,26 @@
 @import "@styles/globals.scss";
 
+.ToC {
+    ul {
+        list-style-type: none;
+    }
+    li {
+        padding: $paddingSmall;
+        span {padding: $paddingSmall;}
+        > ul {display: none;}
+    }
+    li.highlighted {
+        > span {background-color: $bgColor;}
+        > ul {display: block;}
+    }
+}
+
 .read {
-    max-width: 512px;
-    margin: auto;
     h1 {text-align: center;}
+    height: calc(100vh - 150px);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: $lowLight $bgColor;
 
     .act {
         .chapters {
