@@ -2,9 +2,6 @@ StoryGen ToDo
 =============
 Bugs
     - Deleting a beat does not refresh the list
-Read page
-    - Add chapter of contents
-    - make reading window fixed and scrollable
 Docs
     - Write readme
     - Create instructions for using the app

@@ -6,7 +6,7 @@ import { SendOutlined } from "@ant-design/icons";
 import { usePrompt } from "../../lib/usePrompt";
 
 export const SummarizeBtnComponent = ({entities, field, systemPrompt, userPrompt, onUpdate, entityName}:SummarizeBtnProps) => {
-    const complete = entities.map(prop(field)).filter(value => !value).length === 0;
+    const complete = entities.map(prop(field)).filter(value => !value).length === 0 && entities.length !== 0;
 
     const updateSummary = (response:{summary:string}) => {
         onUpdate(response.summary);
