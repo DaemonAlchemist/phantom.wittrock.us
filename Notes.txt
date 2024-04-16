@@ -1,7 +1,8 @@
 StoryGen ToDo
 =============
 Bugs
-    - Deleting a beat does not refresh the list
+    - Need to refresh the page after loading a story.
+    - Deleting a beat does not refresh the list.
 Docs
     - Write readme
     - Create instructions for using the app

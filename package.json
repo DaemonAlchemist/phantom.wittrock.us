@@ -5,7 +5,10 @@
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
+    "deploy": "yarn build && yarn deploy-only && yarn refresh",
     "build": "tsc && vite build",
+    "deploy-only": "aws s3 sync ./dist s3://phantom.wittrock.us --acl public-read",
+    "refresh": "aws cloudfront create-invalidation --distribution-id E3QJ8J7TCRSWI3 --paths \"/*\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

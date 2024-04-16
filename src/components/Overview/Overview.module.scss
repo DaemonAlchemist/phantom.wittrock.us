@@ -4,3 +4,10 @@
     width: 100%;
     padding: $paddingLarge;
 }
+
+.overview {
+    pre {
+        background-color: $bgColor;
+        padding: $paddingSmall;
+    }
+}
