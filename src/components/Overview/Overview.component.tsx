@@ -73,6 +73,13 @@ export const OverviewComponent = ({}:OverviewProps) =>
                 </li>
             </ol>
 
+            <h2>Known Bugs:</h2>
+
+            <ul>
+                <li>Deleting a beat does not refresh the beat list.  You need to close and re-open the scene.</li>
+                <li>Loading a story does not refresh the interface.  You need to refresh the page.</li>
+            </ul>
+
             <h2>Local Setup</h2>
 
             <ol>
