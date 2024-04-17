@@ -1,6 +1,7 @@
-import { Alert, Col, Row } from "antd";
+import { Alert, Col, Row, Typography } from "antd";
 import {OverviewProps} from "./Overview.d";
 import styles from './Overview.module.scss';
+import { AlertOutlined } from "@ant-design/icons";
 
 export const OverviewComponent = ({}:OverviewProps) =>
     <Row className={styles.overview}>
@@ -14,9 +15,19 @@ export const OverviewComponent = ({}:OverviewProps) =>
                 <small>AI-Powered Ghost Writer</small>
             </h1>
 
-            <Alert type="info" message="Note:  This is a WIP PoC, so it will probably have bugs. You have been warned. :)" />
+            <Alert type="info" message={<>
+                <Typography.Text type="danger"><AlertOutlined /></Typography.Text>
+                &nbsp;Note:  This is a WIP PoC, so it will probably have bugs. You have been warned. :)
+            </>} />
 
-            <p>Unleash your creative spirit with <b>Phantom of the Author-a</b>, an AI-powered ghostwriting app designed to transform your thoughts into literary masterpieces.  Whether you're crafting your first novel, spinning a short story, or penning a powerful speech, Phantom of the Author-a is your silent partner in the writing process.  With cutting-edge AI technology, this app understands your voice and style, helping to articulate your ideas with clarity and flair.  Embrace the freedom to create with an intuitive interface that ensure your writing is always authentic and engaging. Turn the whisper of inspiration into the roar of published work with <b>Phantom of the Author-a</b>, where your ideas come to life.</p>
+            <h2>Known Bugs and Caveats:</h2>
+
+            <ul>
+                <li>The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode.  See below for how to setup PotA locally.</li>
+                <li>The Ollama engine requires a locally running Ollama server on the default port.  See the <a href="https://ollama.com/">Ollama</a> site for how to set one up.</li>
+                <li>Deleting a beat does not refresh the beat list.  You need to close and re-open the scene.</li>
+                <li>Loading a story does not refresh the interface.  You need to refresh the page.</li>
+            </ul>
 
             <h2>What is this?</h2>
 
@@ -74,14 +85,6 @@ export const OverviewComponent = ({}:OverviewProps) =>
                     </ol>
                 </li>
             </ol>
-
-            <h2>Known Bugs:</h2>
-
-            <ul>
-                <li>Deleting a beat does not refresh the beat list.  You need to close and re-open the scene.</li>
-                <li>Loading a story does not refresh the interface.  You need to refresh the page.</li>
-                <li>The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode.</li>
-            </ul>
 
             <h2>Local Setup</h2>
 

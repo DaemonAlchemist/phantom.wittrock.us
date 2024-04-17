@@ -1,9 +1,15 @@
+![Phantom of the Author-a](public/PotA-icon.webp)
 # Phantom of the Author-a
 ### AI-Powered Ghost Writer
 
 **Note:  This is a WIP PoC, so it will probably have bugs.  You have been warned. :)**
 
-Unleash your creative spirit with **Phantom of the Author-a**, an AI-powered ghostwriting app designed to transform your thoughts into literary masterpieces. Whether you're crafting your first novel, spinning a short story, or penning a powerful speech, Phantom of the Author-a is your silent partner in the writing process. With cutting-edge AI technology, this app understands your voice and style, helping to articulate your ideas with clarity and flair. Embrace the freedom to create with an intuitive interface that ensures your writing is always authentic and engaging. Turn the whisper of inspiration into the roar of published work with **Phantom of the Author-a**, where your ideas come to life.
+## Known Bugs:
+
+- The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode. See below for how to setup PotA locally.
+- The Ollama engine requires a locally running Ollama server on the default port.  See the [Ollama](https://ollama.com/) site for how to set one up.
+- Deleting a beat does not refresh the beat list. You need to close and re-open the scene.
+- Loading a story does not refresh the interface. You need to refresh the page.
 
 ## What is this?
 
@@ -39,12 +45,6 @@ Unleash your creative spirit with **Phantom of the Author-a**, an AI-powered gho
          6. Validate and edit the chapter summary to your liking.
       2. Summarize the act.
       3. Validate and edit the act summary to your liking.
-
-## Known Bugs:
-
-- Deleting a beat does not refresh the beat list. You need to close and re-open the scene.
-- Loading a story does not refresh the interface. You need to refresh the page.
-- The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode.
 
 ## Local Setup
 
