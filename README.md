@@ -44,6 +44,7 @@ Unleash your creative spirit with **Phantom of the Author-a**, an AI-powered gho
 
 - Deleting a beat does not refresh the beat list. You need to close and re-open the scene.
 - Loading a story does not refresh the interface. You need to refresh the page.
+- The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode.
 
 ## Local Setup
 
