@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Variables
+FUNCTION_NAME="ClaudeProxyFunction"
+HANDLER="claude-proxy.handler" # Ensure this matches the exports in your Node.js file
+ROLE_ARN="arn:aws:iam::042448312953:role/BasicLambdaExecutionRole" # Replace with your Lambda execution role ARN
+DISTRIBUTION_ID="E3QJ8J7TCRSWI3" # Replace with your CloudFront distribution ID
+REGION="us-east-1" # Lambda@Edge must be created in us-east-1
+ZIP_FILE="function.zip"
+
+# Navigate to the directory containing the Lambda function
+cd src/lib
+
+# Package the Lambda function
+zip -r $ZIP_FILE claude-proxy.js
+
+# Check if the Lambda function exists
+LAMBDA_EXISTS=$(aws lambda get-function --function-name $FUNCTION_NAME --region $REGION 2>&1)
+
+if echo "$LAMBDA_EXISTS" | grep -q 'ResourceNotFoundException'; then
+    # Create the Lambda function if it does not exist
+    aws lambda create-function \
+        --function-name $FUNCTION_NAME \
+        --runtime nodejs20.x \
+        --role $ROLE_ARN \
+        --handler $HANDLER \
+        --zip-file fileb://$ZIP_FILE \
+        --region $REGION
+    echo "Lambda function created."
+else
+    # Update the Lambda function code if it already exists
+    aws lambda update-function-code \
+        --function-name $FUNCTION_NAME \
+        --zip-file fileb://$ZIP_FILE \
+        --region $REGION
+    echo "Lambda function code updated."
+fi
+
+# Publish a new version of the Lambda function
+VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME --region $REGION --query 'Version' --output text)
+LAMBDA_ARN=$(aws lambda get-function --function-name $FUNCTION_NAME --query 'Configuration.FunctionArn' --output text --region $REGION):$VERSION
+echo "Lambda version $VERSION published."
+
+# Add permission to the Lambda function for CloudFront to invoke
+aws lambda add-permission \
+    --function-name $FUNCTION_NAME \
+    --statement-id "sid-$VERSION" \
+    --action "lambda:GetFunction" \
+    --principal "edgelambda.amazonaws.com" \
+    --source-arn "arn:aws:cloudfront::042448312953:distribution/${DISTRIBUTION_ID}" \
+    --region $REGION
+echo "Permission added for CloudFront to invoke Lambda."
+
+# Fetch the current CloudFront distribution configuration
+ETAG=$(aws cloudfront get-distribution-config --id $DISTRIBUTION_ID --region $REGION --query ETag --output text)
+CONFIG=$(aws cloudfront get-distribution-config --id $DISTRIBUTION_ID --region $REGION --query DistributionConfig --output json)
+
+# Modify the CloudFront configuration to include the Lambda@Edge function
+cd ../..
+UPDATED_CONFIG=$(echo $CONFIG | ./jq --arg arn "$LAMBDA_ARN" '.DefaultCacheBehavior.LambdaFunctionAssociations = {
+    "Quantity": 1,
+    "Items": [
+        {
+            "LambdaFunctionARN": $arn,
+            "EventType": "viewer-request",
+            "IncludeBody": false
+        }
+    ]
+}')
+
+# Save the updated configuration to a file
+echo $UPDATED_CONFIG > updated-config.json
+
+# Update the CloudFront distribution with the new configuration
+aws cloudfront update-distribution \
+    --id $DISTRIBUTION_ID \
+    --distribution-config file://updated-config.json \
+    --if-match $ETAG \
+    --region $REGION
+
+echo "CloudFront distribution updated successfully."

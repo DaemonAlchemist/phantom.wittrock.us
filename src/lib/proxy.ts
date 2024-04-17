@@ -39,11 +39,16 @@ export const useModel = ():[string, Setter<string>, string[]] => {
 }
 
 // Setup Anthropic API
-const anthropic = () => new Anthropic({
-  apiKey: useApiKey("anthropic").getValue(),
-  baseURL: "http://localhost:5173/claude/",
-});
-
+const anthropic = () => {
+    const { protocol, hostname, port } = window.location;
+    const baseURL = `${protocol}//${hostname}${port ? `:${port}` : ''}/claude/`;
+  
+    return new Anthropic({
+      apiKey: useApiKey("anthropic").getValue(),
+      baseURL: baseURL,
+    });
+  };
+  
 // Setup OpenAI API
 const openai = () => new OpenAI({
     apiKey: useApiKey("openai").getValue(),

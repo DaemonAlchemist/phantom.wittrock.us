@@ -1,6 +1,8 @@
 # Phantom of the Author-a
 ### AI-Powered Ghost Writer
 
+**Note:  This is a WIP PoC, so it will probably have bugs.  You have been warned. :)**
+
 Unleash your creative spirit with **Phantom of the Author-a**, an AI-powered ghostwriting app designed to transform your thoughts into literary masterpieces. Whether you're crafting your first novel, spinning a short story, or penning a powerful speech, Phantom of the Author-a is your silent partner in the writing process. With cutting-edge AI technology, this app understands your voice and style, helping to articulate your ideas with clarity and flair. Embrace the freedom to create with an intuitive interface that ensures your writing is always authentic and engaging. Turn the whisper of inspiration into the roar of published work with **Phantom of the Author-a**, where your ideas come to life.
 
 ## What is this?
