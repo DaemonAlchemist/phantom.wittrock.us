@@ -4,7 +4,7 @@
 
 **Note:  This is a WIP PoC, so it will probably have bugs.  You have been warned. :)**
 
-## Known Bugs:
+## Known Bugs and Caveats:
 
 - The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode. See below for how to setup PotA locally.
 - The Ollama engine requires a locally running Ollama server on the default port.  See the [Ollama](https://ollama.com/) site for how to set one up.
