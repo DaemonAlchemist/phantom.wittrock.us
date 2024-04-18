@@ -3,6 +3,9 @@ StoryGen ToDo
 Bugs
     - Need to refresh the page after loading a story.
     - Deleting a beat does not refresh the list.
+Models
+    - Add support for OpenRouter
+    - Add default model and override models for specific prompt types
 Docs
     - Write readme
     - Create instructions for using the app

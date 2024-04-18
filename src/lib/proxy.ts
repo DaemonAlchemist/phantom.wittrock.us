@@ -1,18 +1,18 @@
-import { prop, switchOn } from "ts-functional";
-import { Conversation, IChatResponse } from "./conversation";
-import request from 'superagent';
-import OpenAI from 'openai';
-import { Setter, useLocalStorage } from "unstateless";
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
-import { Index } from "ts-functional/dist/types";
+import OpenAI from 'openai';
 import { useEffect } from "react";
+import request from 'superagent';
+import { prop, switchOn } from "ts-functional";
+import { Setter, useLocalStorage } from "unstateless";
+import { engines, models } from "../config";
+import { Conversation, IChatResponse } from "./conversation";
 
 // LLM Engine hook
-const useLLMEngine = useLocalStorage.string("llmEngine", "anthropic");
+const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(models)[0]);
 export const useEngine = ():[string, Setter<string>, string[]] => {
     const [engine, setEngine] = useLLMEngine();
-    const options:string[] = ["ollama", "openai", "anthropic"];
+    const options:string[] = engines;
 
     return [engine, setEngine, options];
 }
@@ -21,21 +21,16 @@ export const needsApiKey = (engine:string) => engine !== "ollama";
 
 export const useApiKey = (engine:string) => useLocalStorage.string(`apiKey-${engine}`, '');
 
-const useLLMModel = useLocalStorage.string("llmModel", "llama2");
+const useLLMModel = useLocalStorage.string("llmModel", models[Object.keys(models)[0]][0]);
 export const useModel = ():[string, Setter<string>, string[]] => {
     const [engine] = useLLMEngine();
     const [model, setModel] = useLLMModel();
-    const options:Index<string[]> = {
-        ollama:    ["gemma",                  "llama2", "mistral",        "mixtral"                ],
-        openai:    ["gpt-4-0125-preview",     "gpt-4-1106-preview",       "gpt-3.5-turbo-0125"     ],
-        anthropic: ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
-    }
 
     useEffect(() => {
-        setModel(options[engine][0]);
+        setModel(models[engine][0]);
     }, [engine]);
 
-    return [model, setModel, options[engine]];
+    return [model, setModel, models[engine]];
 }
 
 // Setup Anthropic API
