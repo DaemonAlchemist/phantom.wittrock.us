@@ -18,10 +18,14 @@ export const StoryGenComponent = ({}:StoryGenProps) => {
         saveStory(story.title);
     }
 
+    const load = () => {
+        loadStory().then(() => window.location.reload());
+    }
+
     return <div>
         <div className={styles.controls}>
             <Button type="link" onClick={save}><SaveOutlined /> Save story</Button>
-            <Popconfirm title={`This will overwrite ${story.title}.  Are you sure you want to continue?`} onConfirm={loadStory}>
+            <Popconfirm title={`This will overwrite ${story.title}.  Are you sure you want to continue?`} onConfirm={load}>
                 <Button type="link"><FolderOpenOutlined /> Load story</Button>
             </Popconfirm>
         </div>
