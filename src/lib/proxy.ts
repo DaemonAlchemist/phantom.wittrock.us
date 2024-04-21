@@ -7,6 +7,7 @@ import { prop, switchOn } from "ts-functional";
 import { Setter, useLocalStorage } from "unstateless";
 import { engines, models } from "../config";
 import { Conversation, IChatResponse } from "./conversation";
+import { useModelId } from '../components/ModelSelect/ModelSelect.helpers';
 
 // LLM Engine hook
 const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(models)[0]);
@@ -95,3 +96,49 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
       }),
     default: () => Promise.resolve(`Invalid LLM engine: ${useLLMEngine.getValue()}`),
 }) || Promise.resolve("");
+
+// TODO: Test this
+export const promptOpenRouter = (messages:Conversation, jsonOnly?:boolean):Promise<string> =>
+    request.post("https://openrouter.ai/api/v1/chat/completions")
+        .set('Authorization', useApiKey("openRouter").getValue())
+        .set('ContentType', 'application/json')
+        .send({
+            model: useModelId.getValue(),
+            messages,
+            ...(jsonOnly ? {response_format: {type: "json_object"}} : {})
+        }).then((response:any) => {
+            const msg = response.choices[0].message.content || "";
+            console.log("OpenRouter response");
+            console.log(msg);
+            return msg;
+        })
+
+export declare interface IOpenRouterModelResponse {
+    data: IOpenRouterModel[];
+}
+
+export declare interface IOpenRouterModel {
+    id: string;
+    name: string;
+    description: string;
+    pricing: {
+        prompt: string;
+        completion: string;
+        request: string;
+        image: string;
+    };
+    context_length: number;
+    architecture: {
+        modality: string;
+        tokenizer: string;
+        instruct_type: string | null;
+    };
+    top_provider: {
+        max_completion_tokens: number | null;
+        is_moderated: boolean;
+    };
+    per_request_limits: {
+        prompt_tokens: string;
+        completion_tokens: string;
+    } | null;
+}
