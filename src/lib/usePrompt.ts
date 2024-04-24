@@ -10,7 +10,7 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
     const loader = useLoader();
     const [message, setMessage] = useState("");
 
-    const run = (message:string, instructions?: string, starter:string = "{") => () => {
+    const run = (message:string, instructions?: string, starter:string = "") => () => {
         const messages:Conversation = [{
             role: "system",
             content: systemMessage,

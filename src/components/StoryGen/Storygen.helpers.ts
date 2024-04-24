@@ -71,9 +71,9 @@ export const systemPrompts:Index<Func<StoryType, string>> = {
 
     chapters: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's acts into chapters.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts and chapters, and outlines for subsequent acts and chapters, create a list of chapters for the current act.  Use an appropriate number of chapters for the story length.  A novel should have several chapters per act, while a short story may only have a few or even one.  The chapter outlines should fully develop the act's outline, and transition well from previous chapters and into subsequent chapters.  Do not include the chapter number in the outline text. ${json} {chapters: Array<{title: string, outline: string}>}`,
 
-    scenes: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's chapters into scenes.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, and scenes, and outlines for subsequent acts, chapters, and scenes, create a list of scenes for the current chapter.  Use an appropriate number of scenes for the story length.  A novel may have several scenes per chapter, while a short story may only have a few or even one.  The scenes should include all of the elements of the chapter, but should NOT include elements or previous or subsequent chapters.  If needed, create new minor characters for the scene. The scenes should all have a purpose and should move the story along.  Scenes should not be repetitive and should NOT rehash the same points.  The outlines should be factual.  Include what happens and explain how it moves the story and character arcs along.  Do not include the scene number in the outline text. ${json} {newCharacters: Array<${characterInterface}>, scenes: Array<{title: string, outline: string, locationId: string, characterIds: string[]}>}`,
+    scenes: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's chapters into scenes.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, and scenes, and outlines for subsequent acts, chapters, and scenes, create a list of scenes for the current chapter.  Use an appropriate number of scenes for the story length.  A novel may have several scenes per chapter, while a short story may only have a few or even one.  The scenes should include all of the elements of the chapter, but should NOT include elements or previous or subsequent chapters.  The scenes should all have a purpose and should move the story along.  Scenes should not be repetitive and should NOT rehash the same points.  The outlines should be factual.  Include what happens and explain how it moves the story and character arcs along.  Do not include the scene number in the outline text. ${json} {scenes: Array<{title: string, outline: string, locationId: string, characterIds: string[]}>}`,
 
-    beats: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's scenes into beats.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create a list of beats for the current scene.  The beats should all have a purpose and should move the scene along.  Beats should not be repetitive and should NOT rehash the same points.  The beats should include all of the elements of the scene, but should NOT include elements of previous or subsequent scenes.  Make sure the beats of a scene flow into each other without abrupt transitions.  Beats should be short, and consist of a single thought.  Do not include the beat number in the outline text. ${json} {beats: Array<{title: string, outline: string}>}`,
+    beats: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's scenes into beats.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create a list of beats for the current scene.  The beats should all have a purpose and should move the scene along.  Beats should not be repetitive and should NOT rehash the same points.  The beats should include all of the elements of the scene, but should NOT include elements of previous or subsequent scenes.  Make sure the beats of a scene flow into each other without abrupt transitions.  Beats should be short, and consist of a single thought.  The first beats should setup the scene and/or transition smoothly from the previous scene.  The last beats should wrap up the current scene and/or provide a transition into the next scene.  Do not include the beat number in the outline text. ${json} {beats: Array<{title: string, outline: string}>}`,
 
     text: (_type:StoryType) => `${botId}  Your job is to help the user flesh out their story's beats into the story's final text.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create the final text for the current beat. Include text ONLY for the current beat, and not any previous or subsequent beats.  Make sure the text for the beat flows naturally from the previous beat and into the next beat without abrupt transitions.  ${styleGuide} ${json} {text: string}`,
 
@@ -134,54 +134,58 @@ Outline of the current chapter (Create scenes for this chapter): ${story.plot.ac
 Outlines of subsequent chapters in this act: ${story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")).join(" ")}
 
 Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("outline")).join(" ")}
+
+Create scenes for the specified chapter.  Return the JSON with the format {scenes: Array<{title: string, outline: string, locationId: string, characterIds: string[]}>}
 `,
-    beats: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number) => `
-        ${fullStoryInfo(story)}
+    beats: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number) => `${fullStoryInfo(story)}
 
-        Summaries of previous acts: ${story.plot.acts.slice(0, actIndex).map(prop("summary")).join(" ")}
+Summaries of previous acts: ${story.plot.acts.slice(0, actIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current act: ${story.plot.acts[actIndex].outline}
+Outline of the current act: ${story.plot.acts[actIndex].outline}
 
-        Summaries of previous chapters in this act: ${story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")).join(" ")}
+Summaries of previous chapters in this act: ${story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline}
+Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline}
 
-        Summaries of previous scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")).join(" ")}
+Summaries of previous scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current scene (Create beats for this scene): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline}
+Outline of the current scene (Create beats for this scene): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline}
 
-        Outlines of subsequent scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")).join(" ")}
 
-        Outlines of subsequent chapters in this act: ${story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent chapters in this act: ${story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")).join(" ")}
 
-        Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("outline")).join(" ")}
+
+Create beats for the specified scene.  Return the JSON with the format {beats: Array<{title: string, outline: string}>}
     `,
-    text: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number, beatIndex: number) => `
-        ${fullStoryInfo(story)}
+    text: (story:IStoryOutline, actIndex: number, chapterIndex:number, sceneIndex:number, beatIndex: number) => `${fullStoryInfo(story)}
 
-        Summaries of previous acts: ${story.plot.acts.slice(0, actIndex).map(prop("summary")).join(" ")}
+Summaries of previous acts: ${story.plot.acts.slice(0, actIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current act: ${story.plot.acts[actIndex].outline}
+Outline of the current act: ${story.plot.acts[actIndex].outline}
 
-        Summaries of previous chapters in this act: ${story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")).join(" ")}
+Summaries of previous chapters in this act: ${story.plot.acts[actIndex].chapters.slice(0, chapterIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline}
+Outline of the current chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].outline}
 
-        Summaries of previous scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")).join(" ")}
+Summaries of previous scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(0, sceneIndex).map(prop("summary")).join(" ")}
 
-        Outline of the current scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline}
+Outline of the current scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].outline}
 
-        Text of the previous beats in this scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(0, beatIndex).map(prop("text")).join(" ")}
+Text of the previous beats in this scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(0, beatIndex).map(prop("text")).join(" ")}
 
-        Outline of the current beat in this scene (Write text for this beat): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats[beatIndex].outline}
+Outline of the current beat in this scene (Write text for this beat): ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats[beatIndex].outline}
 
-        Outlines of the subsequent beats in this scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(beatIndex + 1).map(prop("outline")).join(" ")}
+Outlines of the subsequent beats in this scene: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(beatIndex + 1).map(prop("outline")).join(" ")}
 
-        Outlines of subsequent scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent scenes in this chapter: ${story.plot.acts[actIndex].chapters[chapterIndex].scenes.slice(sceneIndex + 1).map(prop("outline")).join(" ")}
 
-        Outlines of subsequent chapters in this act: ${story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent chapters in this act: ${story.plot.acts[actIndex].chapters.slice(chapterIndex + 1).map(prop("outline")).join(" ")}
 
-        Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("outline")).join(" ")}
+Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("outline")).join(" ")}
+
+Write the prose for the specified beat.  Return the JSON with the format {text: string}
     `,
     summary: {
         scene: (story:IStoryOutline, actIndex: number, chapterIndex: number, sceneIndex: number) => `
@@ -203,7 +207,7 @@ Outlines of subsequent acts: ${story.plot.acts.slice(actIndex + 1).map(prop("out
 }
 
 export const getLocation = (story:IStoryOutline, locationId:string) =>
-    story.setting.locations.filter(l => l.id === locationId)[0].name;
+    story.setting.locations.filter(l => l.id === locationId)[0]?.name || locationId;
 
 export const getCharacter = (story:IStoryOutline, characterId:string) =>
-    story.characters.filter(c => c.id === characterId)[0].name;
+    story.characters.filter(c => c.id === characterId)[0]?.name || characterId;
