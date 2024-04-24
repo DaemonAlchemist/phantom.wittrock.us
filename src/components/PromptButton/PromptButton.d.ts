@@ -12,6 +12,7 @@ export declare interface IPromptButtonInputProps {
     entityTypes: string;
     suffix?: string | JSX.Element;
     btnText?: string;
+    starter?:string;
 }
 
 export type PromptButtonProps = IPromptButtonInputProps & IPromptButtonProps;

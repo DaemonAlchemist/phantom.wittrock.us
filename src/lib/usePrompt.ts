@@ -4,12 +4,13 @@ import { Conversation } from "./conversation";
 import { prompt } from "./proxy";
 import { useLoader } from "./userLoader";
 import { encodeControlCharactersInJsonStringLiterals } from "./stringStream";
+import { notification } from "antd";
 
 export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, jsonOnly?: boolean) => {
     const loader = useLoader();
     const [message, setMessage] = useState("");
 
-    const run = (message:string, instructions?: string) => () => {
+    const run = (message:string, instructions?: string, starter:string = "{") => () => {
         const messages:Conversation = [{
             role: "system",
             content: systemMessage,
@@ -18,11 +19,14 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
             content: !!instructions
                 ? `${message}\n\nExtra instructions:  ${instructions}`
                 : message,
+        }, {
+            role: "assistant",
+            content: starter,
         }]
         loader.start();
         setMessage("");
         prompt(messages, jsonOnly)
-            .then(setMessage)
+            .then(m => setMessage(starter + m))
             .finally(loader.done);
     }
 
@@ -33,9 +37,11 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
             // console.log(message);
             // console.log(fixedMessage);
             try {
+                console.log(fixedMessage);
                 onUpdate(JSON.parse(fixedMessage));
             } catch(e) {
                 console.log(e);
+                notification.error({message: `${e}`});
             }
             setMessage("");
         }

@@ -5,13 +5,13 @@ import { onInputChange } from "../../lib/onInputChange";
 import { usePrompt } from "../../lib/usePrompt";
 import { PromptButtonProps } from "./PromptButton.d";
 
-export const PromptButtonComponent = ({systemPrompt, userPrompt, onUpdate, entityTypes, suffix, btnText}:PromptButtonProps) => {
+export const PromptButtonComponent = ({systemPrompt, userPrompt, onUpdate, entityTypes, suffix, btnText, starter}:PromptButtonProps) => {
     const [instructions, setInstructions] = useState("");
 
     const prompt = usePrompt(systemPrompt, onUpdate, true);
 
     const onPrompt = () => {
-        prompt.run(userPrompt, instructions)();
+        prompt.run(userPrompt, instructions, starter)();
     }
 
     return <Spin spinning={prompt.isRunning} tip={`Creating new ${entityTypes}`}>

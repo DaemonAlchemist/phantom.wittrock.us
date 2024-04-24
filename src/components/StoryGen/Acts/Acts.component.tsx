@@ -27,12 +27,13 @@ export const ActsComponent = ({}:ActsProps) => {
                     onUpdate={updateActs}
                     entityTypes="acts"
                     userPrompt={userPrompts.acts(story)}
+                    starter=""
                 />
             </Col>
         </Row>
         <hr />
         <Collapse>
-            {story.plot.acts.map((act, i) => <Collapse.Panel
+            {(story.plot.acts || []).map((act, i) => <Collapse.Panel
                 className={styles.act}
                 header={<>
                     Act {i+1}: {act.title}

@@ -23,32 +23,33 @@ export const StoryGenComponent = ({}:StoryGenProps) => {
     }
 
     return <div>
-        <div className={styles.controls}>
-            <Button type="link" onClick={save}><SaveOutlined /> Save story</Button>
-            <Popconfirm title={`This will overwrite ${story.title}.  Are you sure you want to continue?`} onConfirm={load}>
-                <Button type="link"><FolderOpenOutlined /> Load story</Button>
-            </Popconfirm>
+        <div className={styles.content}>
+            <Tabs tabBarExtraContent={<div className={styles.controls}>
+                <Button type="link" onClick={save}><SaveOutlined /> Save story</Button>
+                {!!story.title && <Popconfirm title={`This will overwrite ${story.title}.  Are you sure you want to continue?`} onConfirm={load}>
+                    <Button type="link"><FolderOpenOutlined /> Load story</Button>
+                </Popconfirm>}
+                {!story.title && <Button type="link" onClick={load}><FolderOpenOutlined /> Load story</Button>}
+            </div>}>
+                <Tabs.TabPane key="overview" tabKey="overview" tab={<><QuestionCircleOutlined /> What is this?</>}>
+                    <Overview />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="outline" tabKey="outline" tab={<><InfoCircleOutlined /> Story Overview</>}>
+                    <Outline />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="locations" tabKey="locations" tab={<><BankOutlined /> Locations</>}>
+                    <Locations />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="characters" tabKey="characters" tab={<><TeamOutlined /> Characters</>}>
+                    <Characters />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="acts" tabKey="acts" tab={<><BookOutlined /> Write</>}>
+                    <Acts />
+                </Tabs.TabPane>
+                <Tabs.TabPane key="read" tabKey="read" tab={<><ReadOutlined /> Read</>}>
+                    <Read />
+                </Tabs.TabPane>
+            </Tabs>
         </div>
-        <hr/>
-        <Tabs tabPosition="left">
-            <Tabs.TabPane key="overview" tabKey="overview" tab={<><QuestionCircleOutlined /> What is this?</>}>
-                <Overview />
-            </Tabs.TabPane>
-            <Tabs.TabPane key="outline" tabKey="outline" tab={<><InfoCircleOutlined /> Story Overview</>}>
-                <Outline />
-            </Tabs.TabPane>
-            <Tabs.TabPane key="locations" tabKey="locations" tab={<><BankOutlined /> Locations</>}>
-                <Locations />
-            </Tabs.TabPane>
-            <Tabs.TabPane key="characters" tabKey="characters" tab={<><TeamOutlined /> Characters</>}>
-                <Characters />
-            </Tabs.TabPane>
-            <Tabs.TabPane key="acts" tabKey="acts" tab={<><BookOutlined /> Write</>}>
-                <Acts />
-            </Tabs.TabPane>
-            <Tabs.TabPane key="read" tabKey="read" tab={<><ReadOutlined /> Read</>}>
-                <Read />
-            </Tabs.TabPane>
-        </Tabs>
     </div>;
 }

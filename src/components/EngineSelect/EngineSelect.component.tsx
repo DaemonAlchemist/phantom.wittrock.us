@@ -1,13 +1,13 @@
-import { Input, Select } from "antd";
-import { needsApiKey, useApiKey, useEngine, useModel } from "../../lib/proxy";
+import { CarOutlined, KeyOutlined } from "@ant-design/icons";
+import { Input, Popover, Select, Typography } from "antd";
+import { onInputChange } from "../../lib/onInputChange";
+import { needsApiKey, useApiKey, useEngine } from "../../lib/proxy";
+import { ModelSelect } from "../ModelSelect";
 import { EngineSelectProps } from "./EngineSelect.d";
 import styles from './EngineSelect.module.scss';
-import { CarOutlined, SlidersOutlined } from "@ant-design/icons";
-import { onInputChange } from "../../lib/onInputChange";
 
 export const EngineSelectComponent = ({}:EngineSelectProps) => {
     const [engine, setEngine, engineOptions] = useEngine();
-    const [model, setModel, modelOptions] = useModel();
     const [apiKey, setApiKey] = useApiKey(engine)();
 
     return <div className={styles.engineSelect}>
@@ -15,10 +15,17 @@ export const EngineSelectComponent = ({}:EngineSelectProps) => {
             <span><CarOutlined /> Engine</span>
             <Select value={engine} onChange={setEngine} options={engineOptions.map(v => ({value: v, text: v}))} />
         </div>
+        {needsApiKey(engine) && <Typography.Text type={!apiKey ? "danger" : "success"}>
+            <Popover trigger="click" title={<div className={styles.keyPopover}>
+                <Input addonBefore="API Key" value={apiKey} onChange={onInputChange(setApiKey)} />
+            </div>}>
+                <KeyOutlined />
+            </Popover>
+        </Typography.Text>}
+        {!needsApiKey(engine) && <Typography.Text type="secondary"><KeyOutlined /></Typography.Text>}
+        &nbsp;&nbsp;
         <div className={styles.labeledSelect}>
-            <span><SlidersOutlined /> Model</span>
-            <Select value={model} onChange={setModel} options={modelOptions.map(v => ({value: v, text: v}))} />
+            <ModelSelect />
         </div>
-        {needsApiKey(engine) && <Input addonBefore="API Key" value={apiKey} onChange={onInputChange(setApiKey)} />}
     </div>;
 }

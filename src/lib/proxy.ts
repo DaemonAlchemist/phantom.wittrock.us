@@ -1,37 +1,37 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
-import OpenAI from 'openai';
-import { useEffect } from "react";
 import request from 'superagent';
 import { prop, switchOn } from "ts-functional";
+import { Func, Index } from 'ts-functional/dist/types';
 import { Setter, useLocalStorage } from "unstateless";
-import { engines, models } from "../config";
+import { IOllamaModel, IOpenRouterModel, availableModels, engines } from "../config";
 import { Conversation, IChatResponse } from "./conversation";
-import { useModelId } from '../components/ModelSelect/ModelSelect.helpers';
 
 // LLM Engine hook
-const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(models)[0]);
+const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(availableModels)[0]);
 export const useEngine = ():[string, Setter<string>, string[]] => {
     const [engine, setEngine] = useLLMEngine();
+    const [, setModel] = useLLMModelId();
     const options:string[] = engines;
 
-    return [engine, setEngine, options];
+    const updateEngine = (newEngine:string | Func<string, string>) => {
+        setEngine(newEngine);
+        setModel("");
+    }
+
+    return [engine, updateEngine, options];
 }
 
-export const needsApiKey = (engine:string) => engine !== "ollama";
+export const needsApiKey = (engine:string) => engine !== "Ollama";
 
 export const useApiKey = (engine:string) => useLocalStorage.string(`apiKey-${engine}`, '');
 
-const useLLMModel = useLocalStorage.string("llmModel", models[Object.keys(models)[0]][0]);
-export const useModel = ():[string, Setter<string>, string[]] => {
+const useLLMModelId = useLocalStorage.object<string>("llmModel", "");
+export const useModel = ():[string, Setter<string>, Promise<Index<IOllamaModel[] | IOpenRouterModel[]>>] => {
     const [engine] = useLLMEngine();
-    const [model, setModel] = useLLMModel();
+    const [modelId, setModelId] = useLLMModelId();
 
-    useEffect(() => {
-        setModel(models[engine][0]);
-    }, [engine]);
-
-    return [model, setModel, models[engine]];
+    return [modelId, setModelId, availableModels[engine]()];
 }
 
 // Setup Anthropic API
@@ -45,14 +45,8 @@ const anthropic = () => {
     });
   };
   
-// Setup OpenAI API
-const openai = () => new OpenAI({
-    apiKey: useApiKey("openai").getValue(),
-    dangerouslyAllowBrowser: true,
-});
-
 const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string> => anthropic().messages.create({
-    model: useLLMModel.getValue(),
+    model: useLLMModelId.getValue(),
     max_tokens: 4096,
     system: messages.filter(m => m.role === "system").map(prop("content")).join(" "),
     messages: [
@@ -74,9 +68,9 @@ const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string>
 
 export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string> => switchOn(useLLMEngine.getValue(), {
     anthropic: () => callAnthropic(messages, "{"),
-    ollama: () => request.post("http://localhost:11434/api/chat")
+    Ollama: () => request.post("http://localhost:11434/api/chat")
         .send({
-            model: useLLMModel.getValue(),
+            model: useLLMModelId.getValue(),
             messages,
             format: jsonOnly ? "json" : undefined,
             stream: false,
@@ -86,24 +80,11 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
         .then((msg:IChatResponse):string => {
             return msg.message.content;
         }),
-    openai: () => openai().chat.completions.create({
-        messages,
-        model: useLLMModel.getValue(),
-        response_format: { type: "json_object" },
-      }).then(response => {
-        console.log(response);
-        return response.choices[0].message.content || "";
-      }),
-    default: () => Promise.resolve(`Invalid LLM engine: ${useLLMEngine.getValue()}`),
-}) || Promise.resolve("");
-
-// TODO: Test this
-export const promptOpenRouter = (messages:Conversation, jsonOnly?:boolean):Promise<string> =>
-    request.post("https://openrouter.ai/api/v1/chat/completions")
+    OpenRouter: () => request.post("https://openrouter.ai/api/v1/chat/completions")
         .set('Authorization', useApiKey("openRouter").getValue())
         .set('ContentType', 'application/json')
         .send({
-            model: useModelId.getValue(),
+            model: useLLMModelId.getValue(),
             messages,
             ...(jsonOnly ? {response_format: {type: "json_object"}} : {})
         }).then((response:any) => {
@@ -111,34 +92,6 @@ export const promptOpenRouter = (messages:Conversation, jsonOnly?:boolean):Promi
             console.log("OpenRouter response");
             console.log(msg);
             return msg;
-        })
-
-export declare interface IOpenRouterModelResponse {
-    data: IOpenRouterModel[];
-}
-
-export declare interface IOpenRouterModel {
-    id: string;
-    name: string;
-    description: string;
-    pricing: {
-        prompt: string;
-        completion: string;
-        request: string;
-        image: string;
-    };
-    context_length: number;
-    architecture: {
-        modality: string;
-        tokenizer: string;
-        instruct_type: string | null;
-    };
-    top_provider: {
-        max_completion_tokens: number | null;
-        is_moderated: boolean;
-    };
-    per_request_limits: {
-        prompt_tokens: string;
-        completion_tokens: string;
-    } | null;
-}
+        }),
+    default: () => Promise.resolve(`Invalid LLM engine: ${useLLMEngine.getValue()}`),
+}) || Promise.resolve("");
