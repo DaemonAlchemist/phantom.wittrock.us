@@ -1,7 +1,7 @@
 import { useLocalStorage } from "unstateless";
 import { IAct, IBeat, IChapter, ICharacter, ILocation, IRelation, IScene, IStoryOutline } from "../../components/StoryGen/story";
 
-const emptyStory:IStoryOutline = {
+export const emptyStory:IStoryOutline = {
     title: "",
     genre: "",
     audience: "",

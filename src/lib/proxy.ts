@@ -6,6 +6,7 @@ import { Func, Index } from 'ts-functional/dist/types';
 import { Setter, useLocalStorage } from "unstateless";
 import { IOllamaModel, IOpenRouterModel, availableModels, engines } from "../config";
 import { Conversation, IChatResponse } from "./conversation";
+import { notification } from 'antd';
 
 // LLM Engine hook
 const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(availableModels)[0]);
@@ -81,17 +82,20 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
             return msg.message.content;
         }),
     OpenRouter: () => request.post("https://openrouter.ai/api/v1/chat/completions")
-        .set('Authorization', useApiKey("openRouter").getValue())
-        .set('ContentType', 'application/json')
+        .set('Authorization', `Bearer ${useApiKey("OpenRouter").getValue()}`)
         .send({
             model: useLLMModelId.getValue(),
             messages,
             ...(jsonOnly ? {response_format: {type: "json_object"}} : {})
-        }).then((response:any) => {
-            const msg = response.choices[0].message.content || "";
-            console.log("OpenRouter response");
-            console.log(msg);
-            return msg;
+        }).then((response:any) => 
+            (response.body.choices[0].message.content || "")
+                .replace("```json", "")
+                .replace("```", "")
+        ).catch(e => {
+            console.log("Error");
+            const message = JSON.parse(JSON.stringify(e)).response.body.error.message;
+            notification.error({message});
+            return "";
         }),
     default: () => Promise.resolve(`Invalid LLM engine: ${useLLMEngine.getValue()}`),
 }) || Promise.resolve("");

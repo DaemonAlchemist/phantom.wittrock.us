@@ -2,4 +2,7 @@
 
 .content {
     padding: 0 $paddingMedium;
+    .clearBtn {
+        margin-right: $paddingLarge;
+    }
 }

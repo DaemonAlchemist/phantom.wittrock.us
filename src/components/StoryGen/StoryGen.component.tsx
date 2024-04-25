@@ -1,7 +1,7 @@
-import { BankOutlined, BookOutlined, FolderOpenOutlined, InfoCircleOutlined, QuestionCircleOutlined, ReadOutlined, SaveOutlined, TeamOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Tabs } from "antd";
+import { BankOutlined, BookOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, QuestionCircleOutlined, ReadOutlined, SaveOutlined, TeamOutlined } from "@ant-design/icons";
+import { Button, Popconfirm, Tabs, Typography } from "antd";
 import { loadStory, saveStory } from "../../lib/save";
-import { useStory } from "../../lib/storyGen/useStory";
+import { emptyStory, useStory } from "../../lib/storyGen/useStory";
 import { Overview } from "../Overview";
 import { Acts } from "./Acts";
 import { Characters } from "./Characters";
@@ -12,7 +12,11 @@ import { StoryGenProps } from "./StoryGen.d";
 import styles from "./StoryGen.module.scss";
 
 export const StoryGenComponent = ({}:StoryGenProps) => {
-    const {story} = useStory();
+    const {story, update} = useStory();
+
+    const clear = () => {
+        update.story(emptyStory);
+    }
 
     const save = () => {
         saveStory(story.title);
@@ -25,6 +29,11 @@ export const StoryGenComponent = ({}:StoryGenProps) => {
     return <div>
         <div className={styles.content}>
             <Tabs tabBarExtraContent={<div className={styles.controls}>
+                <Popconfirm title="This will delete the entire story.  Are you sure you want to continue?">
+                    <Button type="link" onClick={clear} className={styles.clearBtn}>
+                        <Typography.Text type="danger"><DeleteOutlined /> Clear story</Typography.Text>
+                    </Button>
+                </Popconfirm>
                 <Button type="link" onClick={save}><SaveOutlined /> Save story</Button>
                 {!!story.title && <Popconfirm title={`This will overwrite ${story.title}.  Are you sure you want to continue?`} onConfirm={load}>
                     <Button type="link"><FolderOpenOutlined /> Load story</Button>
