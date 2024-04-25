@@ -4,16 +4,14 @@
 
 **Note:  This is a WIP PoC, so it will probably have bugs.  You have been warned. :)**
 
-## Known Bugs and Caveats:
-
-- The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode. See below for how to setup PotA locally.
-- The Ollama engine requires a locally running Ollama server on the default port.  See the [Ollama](https://ollama.com/) site for how to set one up.
-- Deleting a beat does not refresh the beat list. You need to close and re-open the scene.
-- Loading a story does not refresh the interface. You need to refresh the page.
-
 ## What is this?
 
 **Phantom of the Author-a** is an AI-powered ghostwriting app. It maintains information about your story outline, themes, locations, and characters, and uses that information to flesh out your story. You can use as much or as little AI help as you want. PotA currently has support for several engines and models: Ollama (Llama2, Gemma, Mistral, Mixtral), Anthropic (Claude3), and OpenAI (GPT4, GPT3.5).
+
+## Getting Started
+
+**Phantom of the Author-a** supports [Ollama](https://ollama.com/) and [OpenRouter](https://openrouter.ai) as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.
+
 
 ## Process
 
@@ -57,5 +55,3 @@
    ```
    > yarn dev
    ```
-4. Enter your API key(s) for the Anthropic and OpenAI engines
-5. Download and install the [Ollama](https://ollama.com/) server if you want to run local models.

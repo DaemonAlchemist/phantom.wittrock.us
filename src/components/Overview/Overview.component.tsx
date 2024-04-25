@@ -20,18 +20,13 @@ export const OverviewComponent = ({}:OverviewProps) =>
                 &nbsp;Note:  This is a WIP PoC, so it will probably have bugs. You have been warned. :)
             </>} />
 
-            <h2>Known Bugs and Caveats:</h2>
-
-            <ul>
-                <li>The Anthropic API requires a proxy due to CORS, so it will only work when running in development mode.  See below for how to setup PotA locally.</li>
-                <li>The Ollama engine requires a locally running Ollama server on the default port.  See the <a href="https://ollama.com/">Ollama</a> site for how to set one up.</li>
-                <li>Deleting a beat does not refresh the beat list.  You need to close and re-open the scene.</li>
-                <li>Loading a story does not refresh the interface.  You need to refresh the page.</li>
-            </ul>
-
             <h2>What is this?</h2>
 
-            <p><b>Phantom of the Author-a</b> is an AI-powered ghost writing app.  It maintains information about your story outline, themes, locations, and characters, and uses that information to flesh out your story.  You can use as much or as little AI help as you want.  PotA currently has support for several engines and models:  Ollama (Llama2, Gemma, Mistral, Mixtral), Anthropic (Claude3), and OpenAI (GPT4, GPT3.5).</p>
+            <p><b>Phantom of the Author-a</b> is an AI-powered ghost writing app.  It maintains information about your story outline, themes, locations, and characters, and uses that information to flesh out your story.  You can use as much or as little AI help as you want.</p>
+
+            <h2>Getting Started</h2>
+
+            <p><b>Phantom of the Author-a</b> supports <a href="https://ollama.com/">Ollama</a> and <a href="https://openrouter.ai">OpenRouter</a> as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.</p>
 
             <h2>Process</h2>
 
@@ -98,8 +93,6 @@ export const OverviewComponent = ({}:OverviewProps) =>
                     Start the development server:
                     <pre>&gt; yarn dev</pre>
                 </li>
-                <li>Enter your API key(s) for the Anthropic and OpenAI engines</li>
-                <li>Download and install the <a href="https://ollama.com/">Ollama</a> server if you want to run local models.</li>
             </ol>
         </Col>
     </Row>;

@@ -1,9 +1,6 @@
 StoryGen ToDo
 =============
-Bugs
-    - Deleting a beat does not refresh the list.
 Models
-    - Need to test OpenRouter
     - Add default model and override models for specific prompt types
 Docs
     - Write readme
