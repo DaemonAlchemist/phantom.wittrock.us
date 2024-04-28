@@ -5,7 +5,6 @@ import { CharacterTypeSelector } from "../../CharacterTypeSelector";
 import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
 import { PromptButton } from "../../PromptButton";
-import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { CharacterType, ICharacter } from "../story.d";
 import { CharactersProps } from "./Characters";
 import styles from "./Characters.module.scss";
@@ -17,12 +16,6 @@ export const CharactersComponent = ({}:CharactersProps) => {
         response.characters.forEach(char => {update.character.add(char)()});
     }
 
-    const prompts = {
-        main:       systemPrompts.mainCharacter(story.length),
-        supporting: systemPrompts.supportingCharacters(story.length),
-        minor:      systemPrompts.minorCharacters(story.length),
-    }
-
     const [role, setRole] = useState<CharacterType>("main");
 
     return <>
@@ -30,11 +23,12 @@ export const CharactersComponent = ({}:CharactersProps) => {
             <Col xs={4}><h2>Characters</h2></Col>
             <Col xs={20}>
                 <PromptButton
-                    systemPrompt={prompts[role]}
+                    promptId={`characters.${role}`}
                     onUpdate={updateCharacters}
+                    finishMsg="has finished creating characters"
                     entityTypes="characters"
-                    userPrompt={userPrompts.characters(story)}
                     suffix={<CharacterTypeSelector role={role} onChange={setRole} />}
+                    promptParams={{}}
                 />
             </Col>
         </Row>

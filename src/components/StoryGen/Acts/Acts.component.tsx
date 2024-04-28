@@ -5,7 +5,6 @@ import { IsFinished } from "../../IsFinished";
 import { PartsDone } from "../../PartsDone";
 import { PromptButton } from "../../PromptButton";
 import { Chapters } from "../Chapters";
-import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { IAct } from "../story";
 import { ActsProps } from "./Acts";
@@ -23,11 +22,12 @@ export const ActsComponent = ({}:ActsProps) => {
             <Col xs={4}><h2>Acts</h2></Col>
             <Col xs={20}>
                 <PromptButton
-                    systemPrompt={systemPrompts.acts(story.length)}
+                    promptId="acts"
                     onUpdate={updateActs}
+                    finishMsg="has finished creating acts for your story"
                     entityTypes="acts"
-                    userPrompt={userPrompts.acts(story)}
                     starter=""
+                    promptParams={{}}
                 />
             </Col>
         </Row>

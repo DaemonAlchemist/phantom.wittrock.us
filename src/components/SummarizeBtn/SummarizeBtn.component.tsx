@@ -12,7 +12,7 @@ export const SummarizeBtnComponent = ({entities, field, systemPrompt, userPrompt
         onUpdate(response.summary);
     }
 
-    const prompt = usePrompt(systemPrompt, updateSummary);
+    const prompt = usePrompt(systemPrompt, updateSummary, true, `has finished summarizing your ${entityName}`);
 
     return <Spin spinning={prompt.isRunning} tip={`Summarizing ${entityName}`}>
         {complete && <div className={styles.summarizeBtn}>

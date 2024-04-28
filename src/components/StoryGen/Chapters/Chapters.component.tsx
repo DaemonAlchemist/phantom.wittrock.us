@@ -29,10 +29,11 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
             <Col xs={4}><h2>Chapters</h2></Col>
             <Col xs={20}>
                 <PromptButton
-                    systemPrompt={systemPrompts.chapters(story.length)}
+                    promptId="chapters"
                     onUpdate={updateChapters}
+                    finishMsg="has finished creating chapters for your act"
                     entityTypes="chapters"
-                    userPrompt={userPrompts.chapters(story, actIndex)}
+                    promptParams={{actIndex}}
                 />
             </Col>
         </Row>

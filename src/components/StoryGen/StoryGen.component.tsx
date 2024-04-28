@@ -29,8 +29,8 @@ export const StoryGenComponent = ({}:StoryGenProps) => {
     return <div>
         <div className={styles.content}>
             <Tabs tabBarExtraContent={<div className={styles.controls}>
-                <Popconfirm title="This will delete the entire story.  Are you sure you want to continue?">
-                    <Button type="link" onClick={clear} className={styles.clearBtn}>
+                <Popconfirm title="This will delete the entire story.  Are you sure you want to continue?" onConfirm={clear}>
+                    <Button type="link" className={styles.clearBtn}>
                         <Typography.Text type="danger"><DeleteOutlined /> Clear story</Typography.Text>
                     </Button>
                 </Popconfirm>

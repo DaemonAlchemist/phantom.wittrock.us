@@ -1,5 +1,9 @@
 StoryGen ToDo
 =============
+Bugs
+    - Handle incomplete messages
+UX
+    - Finish updating prompt buttons:  summaries
 Models
     - Add default model and override models for specific prompt types
 Docs

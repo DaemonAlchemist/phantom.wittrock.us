@@ -3,6 +3,7 @@ import { EngineSelect } from "../EngineSelect";
 import { StoryGen } from "../StoryGen";
 import { AppProps } from "./App.d";
 import styles from "./App.module.scss";
+import { NotificationButton } from "../NotificationButton";
 
 export const AppComponent = ({}:AppProps) => <div className={styles.app}>
     <Typography.Text><h1 className={styles.mainHeader}>
@@ -13,4 +14,5 @@ export const AppComponent = ({}:AppProps) => <div className={styles.app}>
     <EngineSelect />
     <hr/>
     <StoryGen />
+    <NotificationButton />
 </div>;

@@ -3,7 +3,6 @@ import { useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
 import { PromptButton } from "../../PromptButton";
-import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { ISetting } from "../story";
 import { LocationsProps } from "./Locations";
 import styles from './Locations.module.scss';
@@ -21,10 +20,11 @@ export const LocationsComponent = ({}:LocationsProps) => {
             <Col xs={4}><h2>Locations</h2></Col>
             <Col xs={20}>
                 <PromptButton
-                    systemPrompt={systemPrompts.locations(story.length)}
-                    userPrompt={userPrompts.locations(story)}
+                    promptId="locations"
                     entityTypes="locations"
                     onUpdate={updateLocations}
+                    finishMsg="has finished creating locations"
+                    promptParams={{}}
                 />
             </Col>
         </Row>
