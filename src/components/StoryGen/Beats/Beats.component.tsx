@@ -4,7 +4,6 @@ import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
-import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { Text } from "../Text";
 import { IBeat } from "../story";

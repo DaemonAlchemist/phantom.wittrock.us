@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-**Phantom of the Author-a** supports [Ollama](https://ollama.com/) and [OpenRouter](https://openrouter.ai) as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.
+**Phantom of the Author-a** supports [Ollama](https://ollama.com/) and [OpenRouter](https://openrouter.ai) as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.  If you are using Ollama, install the Ollama server and then follow the instructions [here](https://medium.com/dcoderai/how-to-handle-cors-settings-in-ollama-a-comprehensive-guide-ee2a5a1beef0) to update Ollama's CORS settings.
 
 
 ## Process

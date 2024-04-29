@@ -26,7 +26,7 @@ export const OverviewComponent = ({}:OverviewProps) =>
 
             <h2>Getting Started</h2>
 
-            <p><b>Phantom of the Author-a</b> supports <a href="https://ollama.com/">Ollama</a> and <a href="https://openrouter.ai">OpenRouter</a> as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.</p>
+            <p><b>Phantom of the Author-a</b> supports <a href="https://ollama.com/">Ollama</a> and <a href="https://openrouter.ai">OpenRouter</a> as sources for language models.  To use PotA, you will need a locally running instance of Ollama and/or an account at OpenRouter.  If you are using OpenRouter, select it as the engine and then click on the key icon to enter your API key.  If you are using Ollama, install the Ollama server and then follow the instructions <a href="https://medium.com/dcoderai/how-to-handle-cors-settings-in-ollama-a-comprehensive-guide-ee2a5a1beef0">here</a> to update Ollama's CORS settings.</p>
 
             <h2>Process</h2>
 

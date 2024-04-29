@@ -7,7 +7,7 @@ import { PartsDone } from "../../PartsDone";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Beats } from "../Beats";
-import { getCharacter, getLocation, systemPrompts, userPrompts } from "../Storygen.helpers";
+import { getCharacter, getLocation } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { ICharacter, IScene } from "../story";
 import { ScenesProps } from "./Scenes";
