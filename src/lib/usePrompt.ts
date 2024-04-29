@@ -8,7 +8,7 @@ import { notification } from "antd";
 import { notify } from "./notifications";
 import { useLocalStorage } from "unstateless";
 import { IStoryOutline } from "../components/StoryGen/story";
-import { characterInfo, currentActOutline, currentBeatOutline, currentChapterOutline, currentSceneOutline, locationInfo, nextActsOutline, nextBeatsOutline, nextChaptersOutline, nextScenesOutline, previousActsSummary, previousBeatsSummary, previousChaptersSummary, previousScenesSummary, storyInfo } from "../components/StoryGen/Storygen.helpers";
+import { characterInfo, currentActDetails, currentActOutline, currentBeatOutline, currentChapterDetails, currentChapterOutline, currentSceneDetails, currentSceneOutline, locationInfo, nextActsOutline, nextBeatsOutline, nextChaptersOutline, nextScenesOutline, previousActsSummary, previousBeatsSummary, previousChaptersSummary, previousScenesSummary, storyInfo } from "../components/StoryGen/Storygen.helpers";
 
 export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, jsonOnly?: boolean, finishMsg?: string) => {
     const loader = useLoader();
@@ -131,6 +131,18 @@ export const defaultPrompts:Index<string> = {
     "prose.system": "{{botId}}  Your job is to help the user flesh out their story's beats into the story's final text.  When the user gives you a story outline, locations, character descriptions, summaries of previous acts, chapters, scenes, and beats, and outlines for subsequent acts, chapters, scenes and beats, create the final text for the current beat. Include text ONLY for the current beat, and not any previous or subsequent beats.  Make sure the text for the beat flows naturally from the previous beat and into the next beat without abrupt transitions. {{json}} {{prose.interface}}",
 
     "prose.user": "{{story.details.full}}\nSummaries of previous acts: {{previousActs}}\nOutline of the current act: {{currentAct}}\nSummaries of previous chapters in this act: {{previousChapters}}\nOutline of the current chapter: {{currentChapter}}\nSummaries of previous scenes in this chapter: {{previousScenes}}\nOutline of the current scene: {{currentScene}}\nText of the previous beats in this scene: {{previousBeats}}\nOutline of the current beat in this scene (Write text for this beat): {{currentBeat}}\nOutlines of the subsequent beats in this scene: {{nextBeats}}\nOutlines of subsequent scenes in this chapter:{{nextScenes}}\nOutlines of subsequent chapters in this act: {{nextChapters}}\nOutlines of subsequent acts: {{nextActs}}\nWrite the prose for the specified beat.\nStyle guide: {{styleGuide}}\nIf this is the first beat in the scene, so be sure it properly sets up the scene and/or provides a proper transition from the previous scene. If this is the last beat in the scnee, so be sure it provides a proper transition into the next scene. Return the JSON with the format {{prose.interface}}",
+
+    // Summarize prompt fragments
+    "summary.interface": "{summary: string}",
+
+    "scene.summary.system": "{{botId}}  When the user gives you the text for a scene, create a detailed summary of the scene. {{json}} {{summary.interface}}",
+    "scene.summary.user": "Please summarize this scene: {{currentSceneDetails}}",
+
+    "chapter.summary.system": "{{botId}}  When the user gives you the summaries for scenes in a chapter, create a detailed summary of the chapter. {{json}} {{summary.interface}}",
+    "chapter.summary.user": "Please summarize this chapter based on the scene summaries: {{currentChapterDetails}}",
+
+    "act.summary.system": "{{botId}}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act. {{json}} {{summary.interface}}",
+    "act.summary.user": "Please summarize this act based on the chapter summaries: {{currentActDetails}}",
 }
 
 export const useRawPrompts = useLocalStorage.object<Index<string>>("userDefinedPrompts", defaultPrompts);
@@ -189,14 +201,17 @@ export const finalPrompt = (fullId:string, story:IStoryOutline, params:IPromptPa
         if(typeof actIndex !== "undefined") {
             curPrompt = curPrompt.replace("{{previousActs}}", previousActsSummary(story, actIndex));
             curPrompt = curPrompt.replace("{{currentAct}}", currentActOutline(story, actIndex));
+            curPrompt = curPrompt.replace("{{currentActDetails}}", currentActDetails(story, actIndex));
             curPrompt = curPrompt.replace("{{nextActs}}", nextActsOutline(story, actIndex));
             if(typeof chapterIndex !== "undefined") {
                 curPrompt = curPrompt.replace("{{previousChapters}}", previousChaptersSummary(story, actIndex, chapterIndex));
                 curPrompt = curPrompt.replace("{{currentChapter}}", currentChapterOutline(story, actIndex, chapterIndex));
+                curPrompt = curPrompt.replace("{{currentChapterDetails}}", currentChapterDetails(story, actIndex, chapterIndex));
                 curPrompt = curPrompt.replace("{{nextChapters}}", nextChaptersOutline(story, actIndex, chapterIndex));
                 if(typeof sceneIndex !== "undefined") {
                     curPrompt = curPrompt.replace("{{previousScenes}}", previousScenesSummary(story, actIndex, chapterIndex, sceneIndex));
                     curPrompt = curPrompt.replace("{{currentScene}}", currentSceneOutline(story, actIndex, chapterIndex, sceneIndex));
+                    curPrompt = curPrompt.replace("{{currentSceneDetails", currentSceneDetails(story, actIndex, chapterIndex, sceneIndex));
                     curPrompt = curPrompt.replace("{{nextScenes}}", nextScenesOutline(story, actIndex, chapterIndex, sceneIndex));
                     if(typeof beatIndex !== "undefined") {
                         curPrompt = curPrompt.replace("{{previousBeats}}", previousBeatsSummary(story, actIndex, chapterIndex, sceneIndex, beatIndex));

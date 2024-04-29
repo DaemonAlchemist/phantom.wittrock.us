@@ -6,7 +6,6 @@ import { PartsDone } from "../../PartsDone";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Scenes } from "../Scenes";
-import { systemPrompts, userPrompts } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { IChapter } from "../story";
 import { ChaptersProps } from "./Chapters";
@@ -64,8 +63,7 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
             entities={chapters}
             field="summary"
             entityName="act"
-            systemPrompt={systemPrompts.actSummary(story.length)}
-            userPrompt={userPrompts.summary.act(story, actIndex)}
+            promptId="act.summary"
             onUpdate={update.act.summary(actIndex)}
         />
     </div>;

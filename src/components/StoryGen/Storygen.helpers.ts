@@ -1,19 +1,8 @@
 import { prop } from "ts-functional";
-import { Func, Index } from "ts-functional/dist/types";
 import { useLocalStorage } from "unstateless";
-import { IStoryOutline, StoryType } from "./story";
+import { IStoryOutline } from "./story";
 
 export const useIdea = useLocalStorage.string("storyIdea", "");
-
-const botId = "You are an expert fiction ghost writer.";
-
-const json = "Return the information in JSON.  Do NOT include any text other than the JSON response.  Do not include unneccessary whitespace.  Make sure that any control characters in string literals are properly encoded.  Return the JSON with the format ";
-
-export const systemPrompts:Index<Func<StoryType, string>> = {
-    sceneSummary: (_type:StoryType) => `${botId}  When the user gives you the text for a scene, create a detailed summary of the scene. ${json} {summary: string}`,
-    chapterSummary: (_type:StoryType) => `${botId}  When the user gives you the summaries for scenes in a chapter, create a detailed summary of the chapter. ${json} {summary: string}`,
-    actSummary: (_type:StoryType) => `${botId}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act. ${json} {summary: string}`,
-}
 
 // Story info
 export const storyInfo = (story:IStoryOutline) =>
@@ -60,26 +49,6 @@ export const currentBeatOutline = (story:IStoryOutline, actIndex: number, chapte
     story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats[beatIndex].outline;
 export const nextBeatsOutline = (story:IStoryOutline, actIndex: number, chapterIndex: number, sceneIndex:number, beatIndex:number) =>
     story.plot.acts[actIndex].chapters[chapterIndex].scenes[sceneIndex].beats.slice(beatIndex + 1).map(prop("outline")).join(" ");
-
-export const userPrompts = {
-    summary: {
-        scene: (story:IStoryOutline, actIndex: number, chapterIndex: number, sceneIndex: number) => `
-            Please summarize this scene:
-
-            ${currentSceneDetails(story, actIndex, chapterIndex, sceneIndex)}
-        `,
-        chapter: (story:IStoryOutline, actIndex: number, chapterIndex: number) => `
-            Please summarize this chapter based on the scene summaries:
-
-            ${currentChapterDetails(story, actIndex, chapterIndex)}
-        `,
-        act: (story:IStoryOutline, actIndex: number) => `
-            Please summarize this act based on the chapter summaries:
-
-            ${currentActDetails(story, actIndex)}
-        `,
-    }
-}
 
 export const getLocation = (story:IStoryOutline, locationId:string) =>
     story.setting.locations.filter(l => l.id === locationId)[0]?.name || locationId;

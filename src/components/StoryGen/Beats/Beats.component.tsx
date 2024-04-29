@@ -64,8 +64,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
             entities={beats}
             field="text"
             entityName="scene"
-            systemPrompt={systemPrompts.sceneSummary(story.length)}
-            userPrompt={userPrompts.summary.scene(story, actIndex, chapterIndex, sceneIndex)}
+            promptId="scene.summary"
             onUpdate={update.scene.summary(actIndex, chapterIndex, sceneIndex)}
         />
     </div>;

@@ -7,9 +7,7 @@ export declare interface IPromptButtonProps {
 
 // What gets passed into the component from the parent as attributes
 export declare interface IPromptButtonInputProps {
-    systemPrompt?: string;
-    promptId?: string;
-    userPrompt?: string;
+    promptId: string;
     onUpdate: Func<any, void>;
     finishMsg?: string;
     entityTypes: string;

@@ -75,8 +75,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
             entities={scenes}
             field="summary"
             entityName="chapter"
-            systemPrompt={systemPrompts.chapterSummary(story.length)}
-            userPrompt={userPrompts.summary.chapter(story, actIndex, chapterIndex)}
+            promptId="chapter.summary"
             onUpdate={update.chapter.summary(actIndex, chapterIndex)}
         />
     </div>;

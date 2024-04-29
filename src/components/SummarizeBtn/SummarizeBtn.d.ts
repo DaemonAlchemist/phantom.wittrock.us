@@ -7,8 +7,7 @@ export declare interface ISummarizeBtnInputProps {
     entities: any[];
     field: string;
     entityName: string;
-    systemPrompt: string;
-    userPrompt: string;
+    promptId: string;
     onUpdate: (summary: string) => void;
 }
 

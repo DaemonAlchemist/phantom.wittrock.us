@@ -1,25 +1,24 @@
-import { SendOutlined, SettingOutlined } from "@ant-design/icons";
-import { Input, Modal, Spin } from "antd";
+import { SendOutlined } from "@ant-design/icons";
+import { Input, Spin } from "antd";
 import { useState } from "react";
 import { onInputChange } from "../../lib/onInputChange";
-import { finalPrompt, usePrompt, usePrompts } from "../../lib/usePrompt";
-import { PromptButtonProps } from "./PromptButton.d";
-import { useModal } from "../../lib/useModal";
 import { useStory } from "../../lib/storyGen/useStory";
+import { finalPrompt, usePrompt } from "../../lib/usePrompt";
+import { PromptEditor } from "../PromptEditor";
+import { PromptButtonProps } from "./PromptButton.d";
 
 export const PromptButtonComponent = ({
-    systemPrompt, promptId, userPrompt,
+    promptId,
     onUpdate, entityTypes, suffix,
     btnText, starter, finishMsg,
     promptParams
 }:PromptButtonProps) => {
     const [instructions, setInstructions] = useState("");
-    const {prompts, update} = usePrompts(promptId);
 
     const {story} = useStory();
 
     const prompt = usePrompt(
-        promptId ? finalPrompt(`${promptId}.system`, story, promptParams) : (systemPrompt || ""),
+        finalPrompt(`${promptId}.system`, story, promptParams),
         onUpdate,
         true,
         finishMsg
@@ -27,26 +26,15 @@ export const PromptButtonComponent = ({
 
     const onPrompt = () => {
         prompt.run(
-            promptId ? finalPrompt(`${promptId}.user`, story, promptParams) : (userPrompt || ""),
+            finalPrompt(`${promptId}.user`, story, promptParams),
             instructions,
             starter
         )();
     }
 
-    const modal = useModal();
-
     return <Spin spinning={prompt.isRunning} tip={`Creating new ${entityTypes}`}>
         <Input.Search
-            addonBefore={!!promptId ? <>
-                <SettingOutlined onClick={modal.open} />
-                <Modal title="Edit Prompts" open={modal.isOpen} onCancel={modal.close} footer={null}>
-                    <label>System</label>
-                    <Input.TextArea value={prompts.system} onChange={onInputChange(update.system)} autoSize />
-
-                    <label>User</label>
-                    <Input.TextArea value={prompts.user} onChange={onInputChange(update.user)} autoSize />
-                </Modal>
-            </> : undefined}
+            addonBefore={<PromptEditor promptId={promptId} />}
             suffix={suffix}
             value={instructions}
             onChange={onInputChange(setInstructions)}

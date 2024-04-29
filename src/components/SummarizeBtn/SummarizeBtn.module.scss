@@ -3,4 +3,12 @@
 .summarizeBtn {
     text-align: center;
     margin: $paddingLarge;
+    .editorBtn {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .summaryBtn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }
