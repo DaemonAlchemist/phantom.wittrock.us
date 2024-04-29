@@ -64,6 +64,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
             field="text"
             entityName="scene"
             promptId="scene.summary"
+            params={{actIndex, chapterIndex, sceneIndex}}
             onUpdate={update.scene.summary(actIndex, chapterIndex, sceneIndex)}
         />
     </div>;

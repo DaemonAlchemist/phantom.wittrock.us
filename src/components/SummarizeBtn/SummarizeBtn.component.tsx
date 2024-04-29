@@ -7,7 +7,7 @@ import { finalPrompt, usePrompt } from "../../lib/usePrompt";
 import { useStory } from "../../lib/storyGen/useStory";
 import { PromptEditor } from "../PromptEditor";
 
-export const SummarizeBtnComponent = ({entities, field, promptId, onUpdate, entityName}:SummarizeBtnProps) => {
+export const SummarizeBtnComponent = ({entities, field, promptId, onUpdate, entityName, params}:SummarizeBtnProps) => {
     const complete = entities.map(prop(field)).filter(value => !value).length === 0 && entities.length !== 0;
 
     const updateSummary = (response:{summary:string}) => {
@@ -17,7 +17,7 @@ export const SummarizeBtnComponent = ({entities, field, promptId, onUpdate, enti
     const {story} = useStory();
 
     const systemPrompt = finalPrompt(`${promptId}.system`, story, {});
-    const userPrompt = finalPrompt(`${promptId}.user`, story, {});
+    const userPrompt = finalPrompt(`${promptId}.user`, story, params);
 
     const prompt = usePrompt(systemPrompt, updateSummary, true, `has finished summarizing your ${entityName}`);
 

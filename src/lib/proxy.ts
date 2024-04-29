@@ -78,6 +78,9 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
             messages,
             format: jsonOnly ? "json" : undefined,
             stream: false,
+            options: {
+                num_ctx: 16000,
+            }
         })
         .set('accept', 'application/json')
         .then(prop("body"))

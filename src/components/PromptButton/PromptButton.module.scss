@@ -1,1 +1,10 @@
 @import "@styles/globals.scss";
+
+.lastPromptModal {
+    :global(.ant-modal-content) {
+        width: 1024px;
+        pre {
+            white-space: pre-wrap;
+        }
+    }
+}

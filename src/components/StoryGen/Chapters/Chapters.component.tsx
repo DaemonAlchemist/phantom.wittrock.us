@@ -64,6 +64,7 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
             field="summary"
             entityName="act"
             promptId="act.summary"
+            params={{actIndex}}
             onUpdate={update.act.summary(actIndex)}
         />
     </div>;

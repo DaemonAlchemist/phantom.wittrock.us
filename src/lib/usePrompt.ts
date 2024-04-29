@@ -211,7 +211,7 @@ export const finalPrompt = (fullId:string, story:IStoryOutline, params:IPromptPa
                 if(typeof sceneIndex !== "undefined") {
                     curPrompt = curPrompt.replace("{{previousScenes}}", previousScenesSummary(story, actIndex, chapterIndex, sceneIndex));
                     curPrompt = curPrompt.replace("{{currentScene}}", currentSceneOutline(story, actIndex, chapterIndex, sceneIndex));
-                    curPrompt = curPrompt.replace("{{currentSceneDetails", currentSceneDetails(story, actIndex, chapterIndex, sceneIndex));
+                    curPrompt = curPrompt.replace("{{currentSceneDetails}}", currentSceneDetails(story, actIndex, chapterIndex, sceneIndex));
                     curPrompt = curPrompt.replace("{{nextScenes}}", nextScenesOutline(story, actIndex, chapterIndex, sceneIndex));
                     if(typeof beatIndex !== "undefined") {
                         curPrompt = curPrompt.replace("{{previousBeats}}", previousBeatsSummary(story, actIndex, chapterIndex, sceneIndex, beatIndex));

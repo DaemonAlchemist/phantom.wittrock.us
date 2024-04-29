@@ -1,3 +1,5 @@
+import { IPromptParams } from "../../lib/usePrompt";
+
 export declare interface ISummarizeBtnProps {
 
 }
@@ -8,6 +10,7 @@ export declare interface ISummarizeBtnInputProps {
     field: string;
     entityName: string;
     promptId: string;
+    params:IPromptParams;
     onUpdate: (summary: string) => void;
 }
 
