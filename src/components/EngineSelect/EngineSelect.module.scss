@@ -31,3 +31,22 @@
 .keyPopover {
     width: 1024px;
 }
+
+.hostPopover {
+    .host {
+        width: 512px;
+        input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
+    .port {
+        width: 128px;
+        :global(.ant-input-group-addon) {
+            border-left: none;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            padding: 4px;
+        }
+    }
+}

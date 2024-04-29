@@ -15,19 +15,13 @@ export const systemPrompts:Index<Func<StoryType, string>> = {
     actSummary: (_type:StoryType) => `${botId}  When the user gives you the summaries for chapters in an act, create a detailed summary of the act. ${json} {summary: string}`,
 }
 
-export const storyInfo = (story:IStoryOutline) => `Title: ${story.title}
-Genre: ${story.genre}
-Time Period: ${story.setting.timePeriod}
-Themes: ${story.themes.join(", ")}
-Plot Outline: ${story.plot.outline}
-`;
-
-export const locationInfo = (story:IStoryOutline) => `${story.setting.locations.map(location => `${location.name}: ${location.description}
-`).join("")}
-`;
-
-export const characterInfo = (story:IStoryOutline) => `${story.characters.map(char => `${Object.keys(char).map(att => `${att}: ${(char as any)[att]}`).join("\n")}
-`).join("\n\n")}`;
+// Story info
+export const storyInfo = (story:IStoryOutline) =>
+    `Title: ${story.title}\nGenre: ${story.genre}\nTime Period: ${story.setting.timePeriod}\nThemes: ${story.themes.join(", ")}\nPlot Outline: ${story.plot.outline}\n`;
+export const locationInfo = (story:IStoryOutline) =>
+    `${story.setting.locations.map(location => `${location.name}: ${location.description}\n`).join("")}\n`;
+export const characterInfo = (story:IStoryOutline) =>
+    `${story.characters.map(char => `${Object.keys(char).map(att => `${att}: ${(char as any)[att]}`).join("\n")}\n`).join("\n\n")}`;
 
 // Act outlines and summaries
 export const previousActsSummary = (story:IStoryOutline, actIndex:number) =>

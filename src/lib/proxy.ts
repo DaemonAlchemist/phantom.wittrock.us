@@ -1,12 +1,15 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam } from "@anthropic-ai/sdk/resources/messages.mjs";
+import { notification } from 'antd';
 import request from 'superagent';
 import { prop, switchOn } from "ts-functional";
 import { Func, Index } from 'ts-functional/dist/types';
 import { Setter, useLocalStorage } from "unstateless";
 import { IOllamaModel, IOpenRouterModel, availableModels, engines } from "../config";
 import { Conversation, IChatResponse } from "./conversation";
-import { notification } from 'antd';
+
+export const useOllamaHost = useLocalStorage.string("ollamaHost", "localhost");
+export const useOllamaPort = useLocalStorage.string("ollamaPort", "11434");
 
 // LLM Engine hook
 const useLLMEngine = useLocalStorage.string("llmEngine", Object.keys(availableModels)[0]);
@@ -69,7 +72,7 @@ const callAnthropic = (messages:Conversation, prefixMsg: string):Promise<string>
 
 export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string> => switchOn(useLLMEngine.getValue(), {
     anthropic: () => callAnthropic(messages, "{"),
-    Ollama: () => request.post("http://localhost:11434/api/chat")
+    Ollama: () => request.post(`http://${useOllamaHost.getValue()}:${useOllamaPort.getValue()}/api/chat`)
         .send({
             model: useLLMModelId.getValue(),
             messages,

@@ -1,0 +1,8 @@
+@import "@styles/globals.scss";
+
+.templateModal {
+    :global(.ant-modal-content){
+        width: 768px;
+        textarea {margin-bottom: $paddingMedium !important;}
+    }
+}

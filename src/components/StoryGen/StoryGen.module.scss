@@ -1,8 +1,6 @@
 @import "@styles/globals.scss";
 
 .content {
+    .controls {width: 300px;}
     padding: 0 $paddingMedium;
-    .clearBtn {
-        margin-right: $paddingLarge;
-    }
 }

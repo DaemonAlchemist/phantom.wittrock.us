@@ -1,9 +1,8 @@
 
-export const saveStory = (fileName:string):Promise<void> => new Promise((resolve, _reject) => {
+export const saveData = (fields:string[]) => (fileName:string):Promise<void> => new Promise((resolve, _reject) => {
     const data: Record<string, string> = {};
     
     // Extract specified fields from localStorage
-    const fields = ["storyDetails", "storyIdea", "llmEngin", "llmModel"];
     fields.forEach(field => {
         const value = localStorage.getItem(field);
         if (value !== null) {
@@ -32,7 +31,7 @@ export const saveStory = (fileName:string):Promise<void> => new Promise((resolve
     resolve();
 });
 
-export const loadStory = ():Promise<void> => new Promise((resolve, _reject) => {
+export const loadData = ():Promise<Record<string, any>> => new Promise((resolve, _reject) => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.json';
@@ -43,8 +42,9 @@ export const loadStory = ():Promise<void> => new Promise((resolve, _reject) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
                 const text = ev.target?.result;
+                let data: Record<string, any> = {};
                 if (typeof text === 'string') {
-                    const data: Record<string, string> = JSON.parse(text);
+                    data = JSON.parse(text);
                     
                     // Store each value back to localStorage
                     Object.keys(data).forEach(key => {
@@ -52,7 +52,7 @@ export const loadStory = ():Promise<void> => new Promise((resolve, _reject) => {
                     });
                 }
 
-                resolve();
+                resolve(data);
             };
             reader.readAsText(file);
         }

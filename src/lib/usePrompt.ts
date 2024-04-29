@@ -54,7 +54,7 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
     return {message, run, isRunning: loader.isLoading};
 }
 
-const defaultPrompts:Index<string> = {
+export const defaultPrompts:Index<string> = {
     // System prompt fragments
     "idea": "",
 
@@ -133,7 +133,7 @@ const defaultPrompts:Index<string> = {
     "prose.user": "{{story.details.full}}\nSummaries of previous acts: {{previousActs}}\nOutline of the current act: {{currentAct}}\nSummaries of previous chapters in this act: {{previousChapters}}\nOutline of the current chapter: {{currentChapter}}\nSummaries of previous scenes in this chapter: {{previousScenes}}\nOutline of the current scene: {{currentScene}}\nText of the previous beats in this scene: {{previousBeats}}\nOutline of the current beat in this scene (Write text for this beat): {{currentBeat}}\nOutlines of the subsequent beats in this scene: {{nextBeats}}\nOutlines of subsequent scenes in this chapter:{{nextScenes}}\nOutlines of subsequent chapters in this act: {{nextChapters}}\nOutlines of subsequent acts: {{nextActs}}\nWrite the prose for the specified beat.\nStyle guide: {{styleGuide}}\nIf this is the first beat in the scene, so be sure it properly sets up the scene and/or provides a proper transition from the previous scene. If this is the last beat in the scnee, so be sure it provides a proper transition into the next scene. Return the JSON with the format {{prose.interface}}",
 }
 
-const useRawPrompts = useLocalStorage.object<Index<string>>("userDefinedPrompts", defaultPrompts);
+export const useRawPrompts = useLocalStorage.object<Index<string>>("userDefinedPrompts", defaultPrompts);
 export const usePrompts = (id?:string) => {
     const [rawPrompts, setRawPrompts] = useRawPrompts();
 
