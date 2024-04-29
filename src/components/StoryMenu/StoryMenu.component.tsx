@@ -120,6 +120,7 @@ export const StoryMenuComponent = ({}:StoryMenuProps) => {
         {id: "nextChapters", description: "Outlines of the subsequent chapters in the current act.  Can only be used in scene, beat, and prose user prompts."},
         {id: "nextScenes", description: "Outlines of the subsequent scenes in the current chapter.  Can only be used in beat, and prose user prompts."},
         {id: "nextBeats", description: "Outlines of the subsequent beats in the current scene.  Can only be used in prose user prompts."},
+        {id: "summary.interface", description: "How the bot should structure its summary data.  DO NOT ALTER THIS, and make sure it is included in the summary prompt templates."}
     ]
 
     return <>
