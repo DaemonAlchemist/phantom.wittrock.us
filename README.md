@@ -44,6 +44,32 @@
       2. Summarize the act.
       3. Validate and edit the act summary to your liking.
 
+## Prompt Editing
+
+The **Prompt Editor** allows you to customize the prompts used by the AI to generate content. This feature is crucial for tailoring the AI's output to better fit your story's needs. Here's how you can use the Prompt Editor:
+
+1. Click on the **Settings** icon next to any prompt in the app.
+2. In the modal that appears, you'll see two sections: **System** and **User**.
+3. The **System** section allows you to view and edit the prompt that the AI uses internally.
+4. The **User** section is where you can input your custom instructions or modifications to the prompt.
+5. After making your changes, simply close the modal. Your edits will be automatically saved and used for future AI generations.
+
+This feature empowers you to guide the AI in a direction that aligns with your creative vision, ensuring the generated content is as relevant and engaging as possible.
+
+**Note:** Almost all prompts require the `json` and an interface template included as part of the prompt. Removing or changing these will almost always result in the app breaking.
+
+## Common Prompt Templates
+
+PotA also has several prompt templates that can be included in your system and/or user prompts. Click on the **Prompt Templates** menu, and then the **Common Templates** menu item. You can edit several of the commonly used templates. The dialog also shows you what templates are available. Include them in your prompts by enclosing the tag id inside double curly braces (ex. `{{story.details.full}}`).
+
+## Saving and Loading
+
+Under the **Story** menu, you have options for saving, loading, or clearing your current story.
+
+Under the **Prompt Templates** menu, you have options for saving and loading your user-defined prompt templates. This can be useful if you want to define different styles for different stories and/or provide different prompt strategies for the various models.
+
+Both stories and prompt templates will be saved as JSON files.
+
 ## Local Setup
 
 1. Checkout the code: [https://github.com/daemonalchemist/phantom.wittrock.us/](https://github.com/daemonalchemist/phantom.wittrock.us/)
