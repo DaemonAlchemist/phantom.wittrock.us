@@ -93,11 +93,17 @@ export const prompt = (messages:Conversation, jsonOnly?:boolean):Promise<string>
             model: useLLMModelId.getValue(),
             messages,
             ...(jsonOnly ? {response_format: {type: "json_object"}} : {})
-        }).then((response:any) => 
-            (response.body.choices[0].message.content || "")
+        }).then((response:any) => {
+            if(!!response.body.error) {
+                const message = JSON.parse(response.body.error.message).error.message;
+                console.log(`LLM Error: ${message}`);
+                notification.error({message});
+                return  "";
+            }
+            return (response.body.choices[0].message.content || "")
                 .replace("```json", "")
-                .replace("```", "")
-        ).catch(e => {
+                .replace("```", "");
+        }).catch(e => {
             console.log("Error");
             const message = JSON.parse(JSON.stringify(e)).response.body.error.message;
             notification.error({message});

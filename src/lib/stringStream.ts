@@ -7,19 +7,29 @@ export const stringStream = (process:Func<string, string>):Func<string, string> 
     , "");
 
 type StringDelim = '"' | "'" | null;
-export const encodeControlCharactersInJsonStringLiterals = (json:string) => {
-    let inString:'"' | "'" | null = null;
-    let escaped = false;
-    return stringStream((char:string) => {
-        if(!escaped && !inString && ['"', "'"].includes(char)) {inString = char as StringDelim;}
-        if(!escaped &&  inString && ['"', "'"].includes(char)) {inString = null;}
+const processChar = (char: string): string => {
+    let inString: StringDelim = null;
+    let result = '';
 
-        if(!!inString && char === "\n") {char = "\\n";}
-        if(!!inString && char === "\r") {char = "\\r";}
-        if(!!inString && char === "\t") {char = "\\t";}
+    if (!!inString && ['"', "'"].includes(char)) {
+        inString = null;
+    } else if (!inString && ['"', "'"].includes(char)) {
+        inString = char as StringDelim;
+    }
 
-        escaped = char === "\\" && !escaped;
+    if (!!inString && char === "\n") {
+        result += "\\n";
+    } else if (!!inString && char === "\r") {
+        result += "\\r";
+    } else if (!!inString && char === "\t") {
+        result += "\\t";
+    } else if (char === "\\") {
+        result += "\\\\";
+    } else {
+        result += char;
+    }
 
-        return char;
-    })(json);
-}
+    return result;
+};
+
+export const encodeControlCharactersInJsonStringLiterals = stringStream(processChar);

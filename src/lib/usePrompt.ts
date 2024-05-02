@@ -1,14 +1,13 @@
+import { notification } from "antd";
 import { useEffect, useState } from "react";
 import { Func, Index } from "ts-functional/dist/types";
+import { useLocalStorage } from "unstateless";
+import { characterInfo, currentActDetails, currentActOutline, currentBeatOutline, currentChapterDetails, currentChapterOutline, currentSceneDetails, currentSceneOutline, locationInfo, nextActsOutline, nextBeatsOutline, nextChaptersOutline, nextScenesOutline, previousActsSummary, previousBeatsSummary, previousChaptersSummary, previousScenesSummary, storyInfo } from "../components/StoryGen/Storygen.helpers";
+import { IStoryOutline } from "../components/StoryGen/story";
 import { Conversation } from "./conversation";
+import { notify } from "./notifications";
 import { prompt } from "./proxy";
 import { useLoader } from "./userLoader";
-import { encodeControlCharactersInJsonStringLiterals } from "./stringStream";
-import { notification } from "antd";
-import { notify } from "./notifications";
-import { useLocalStorage } from "unstateless";
-import { IStoryOutline } from "../components/StoryGen/story";
-import { characterInfo, currentActDetails, currentActOutline, currentBeatOutline, currentChapterDetails, currentChapterOutline, currentSceneDetails, currentSceneOutline, locationInfo, nextActsOutline, nextBeatsOutline, nextChaptersOutline, nextScenesOutline, previousActsSummary, previousBeatsSummary, previousChaptersSummary, previousScenesSummary, storyInfo } from "../components/StoryGen/Storygen.helpers";
 
 export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, jsonOnly?: boolean, finishMsg?: string) => {
     const loader = useLoader();
@@ -36,16 +35,24 @@ export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, json
 
     useEffect(() => {
         if(!!message) {
-            const fixedMessage = encodeControlCharactersInJsonStringLiterals(message);
-            // console.log("Final message");
-            // console.log(message);
-            // console.log(fixedMessage);
+            let fixedMessage:string = "";
+            // Remove text before the start of the JSON
+            const index = message.indexOf('{');
+            fixedMessage = index !== -1 ? message.substring(index) : message;
+
+            // Encode control characters in string literals
+            const regex = /("[^"\\]*(\\.[^"\\]*)*"|'[^'\\]*(\\.[^'\\]*)*')/g;
+            fixedMessage = fixedMessage.replace(regex, (match) => {
+                return match.replace(/\n/g, "\\n");
+            });
+
             try {
                 notify(finishMsg || 'has completed its task.')
-                onUpdate(JSON.parse(fixedMessage));
+                onUpdate(JSON.parse(fixedMessage.trim()));
             } catch(e) {
                 notification.error({message: `${e}`});
                 console.log(e);
+                console.log(fixedMessage);
             }
             setMessage("");
         }
@@ -184,8 +191,6 @@ export const finalPrompt = (fullId:string, story:IStoryOutline, params:IPromptPa
     let curPrompt = useRawPrompts.getValue()[fullId] || defaultPrompts[fullId];
     let oldPrompt = "";
 
-    console.log(`Generating final prompt for ${fullId}`);
-    console.log(curPrompt);
     do {
         // Do prompt fragment replacements
         oldPrompt = curPrompt;
@@ -223,6 +228,5 @@ export const finalPrompt = (fullId:string, story:IStoryOutline, params:IPromptPa
         }
     } while(curPrompt !== oldPrompt);
 
-    console.log(curPrompt);
     return curPrompt;
 }
