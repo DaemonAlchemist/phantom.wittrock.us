@@ -1,9 +1,7 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row } from "antd";
 import { emptyChapter, useStory } from "../../../lib/storyGen/useStory";
-import { DeleteBtn } from "../../DeleteBtn";
-import { IsFinished } from "../../IsFinished";
-import { PartsDone } from "../../PartsDone";
+import { EntityHeader } from "../../EntityHeader";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Scenes } from "../Scenes";
@@ -41,13 +39,15 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
         <Collapse>
             {chapters.map((chapter, i) => <Collapse.Panel
                 className={styles.chapter}
-                header={<>
-                    Chapter {i+1}: {chapter.title}
-                    &nbsp;&nbsp;
-                    <PartsDone entities={chapter.scenes || []} filter={s => !!s.summary} />
-                    <IsFinished value={chapter.summary} />
-                    <DeleteBtn onClick={update.chapter.remove(actIndex, i)} entityType="chapter"/>
-                </>}
+                header={<EntityHeader
+                    type="Chapter"
+                    index={i}
+                    title={chapter.title}
+                    subEntities={chapter.scenes}
+                    subEntityFilter={s => !!s.summary}
+                    isFinished={chapter.summary}
+                    onDelete={update.chapter.remove(actIndex, i)}
+                />}
                 key={i}
             >
                 <Row>

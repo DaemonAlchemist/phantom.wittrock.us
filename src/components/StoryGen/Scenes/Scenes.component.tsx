@@ -1,9 +1,7 @@
 import { ArrowUpOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Col, Collapse, Popconfirm, Row, Tag } from "antd";
 import { emptyScene, useStory } from "../../../lib/storyGen/useStory";
-import { DeleteBtn } from "../../DeleteBtn";
-import { IsFinished } from "../../IsFinished";
-import { PartsDone } from "../../PartsDone";
+import { EntityHeader } from "../../EntityHeader";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Beats } from "../Beats";
@@ -44,13 +42,15 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
         <Collapse>
             {scenes.map((scene, i) => <Collapse.Panel
                 className={styles.scene}
-                header={<>
-                    Scene {i+1}: {scene.title}
-                    &nbsp;&nbsp;
-                    <PartsDone entities={scene.beats || []} filter={b => !!b.text} />
-                    <IsFinished value={scene.summary} />
-                    <DeleteBtn onClick={update.scene.remove(actIndex, chapterIndex, i)} entityType="scene"/>
-                </>}
+                header={<EntityHeader
+                    type="Scene"
+                    index={i}
+                    title={scene.title}
+                    subEntities={scene.beats}
+                    subEntityFilter={b => !!b.text}
+                    isFinished={scene.summary}
+                    onDelete={update.scene.remove(actIndex, chapterIndex, i)}
+                />}
                 key={i}
             >
                 <div className={styles.sceneInfo}>

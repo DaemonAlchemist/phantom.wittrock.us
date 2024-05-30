@@ -1,8 +1,7 @@
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row } from "antd";
 import { emptyBeat, useStory } from "../../../lib/storyGen/useStory";
-import { DeleteBtn } from "../../DeleteBtn";
-import { IsFinished } from "../../IsFinished";
+import { EntityHeader } from "../../EntityHeader";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Summarizable } from "../Summarizable";
@@ -37,12 +36,13 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
         <Collapse>
             {beats.map((beat, i) => <Collapse.Panel
                 className={styles.beat}
-                header={<>
-                    Beat {i+1}: {beat.title}
-                    &nbsp;&nbsp;
-                    <IsFinished value={beat.text} />
-                    <DeleteBtn onClick={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)} entityType="beat"/>
-                </>}
+                header={<EntityHeader
+                    type="Beat"
+                    index={i}
+                    title={beat.title}
+                    isFinished={beat.text}
+                    onDelete={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)}
+                />}
                 key={i}
             >
                 <Row>
