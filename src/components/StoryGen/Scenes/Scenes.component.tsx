@@ -1,6 +1,6 @@
-import { ArrowUpOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Col, Collapse, Popconfirm, Row, Tag } from "antd";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyScene, useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PartsDone } from "../../PartsDone";
@@ -29,7 +29,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
 
     return <div className={styles.scenes}>
         <Row>
-            <Col xs={4}><h2>Scenes</h2></Col>
+            <Col xs={4}><h2>Scenes <PlusCircleOutlined onClick={update.scene.add(actIndex, chapterIndex, emptyScene)}/></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId="scenes"

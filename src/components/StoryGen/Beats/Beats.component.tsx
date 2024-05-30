@@ -1,5 +1,6 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row } from "antd";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyBeat, useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PromptButton } from "../../PromptButton";
@@ -21,7 +22,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
 
     return <div className={styles.beats}>
         <Row>
-            <Col xs={4}><h2>Beats</h2></Col>
+            <Col xs={4}><h2>Beats <PlusCircleOutlined onClick={update.beat.add(actIndex, chapterIndex, sceneIndex, emptyBeat)}/></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId="beats"

@@ -20,6 +20,57 @@ export const emptyStory:IStoryOutline = {
     }
 }
 
+export const emptyLocation:ILocation = {
+    id: "",
+    name: "",
+    description: "",
+}
+
+const summarizable = {
+    title: "",
+    outline: "",
+    summary: "",
+}
+
+export const emptyAct:IAct = {
+    ...summarizable,
+    chapters: [],
+}
+
+export const emptyChapter:IChapter = {
+    ...summarizable,
+    scenes: [],
+}
+
+export const emptyScene:IScene = {
+    ...summarizable,
+    beats: [],
+    locationId: "",
+    characterIds: [],
+}
+
+export const emptyBeat:IBeat = {
+    ...summarizable,
+    text: "",
+}
+
+export const emptyCharacter:ICharacter = {
+    id: "",
+    name: "",
+    role: "main",
+    physicalDescription: "",
+    personality: "",
+    genderIdentity: "Male",
+    ethnicity: "",
+    identifyingMarks: "",
+    quirks: "",
+    backstory: "",
+    storyArc: "",
+    goals: "",
+    motivations: "",
+    relationships: [],
+}
+
 export const useStory = () => {
     const [story, setStory] = useLocalStorage.object<IStoryOutline>("storyDetails", emptyStory)();
 

@@ -1,5 +1,6 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyLocation, useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
 import { PromptButton } from "../../PromptButton";
@@ -17,7 +18,7 @@ export const LocationsComponent = ({}:LocationsProps) => {
 
     return <div className={styles.locations}>
         <Row>
-            <Col xs={4}><h2>Locations</h2></Col>
+            <Col xs={4}><h2>Locations <PlusCircleOutlined onClick={update.location.add(emptyLocation)}/></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId="locations"

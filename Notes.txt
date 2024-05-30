@@ -8,6 +8,11 @@ Models
 Edit hierarchy
     - beat to scene
     - move entities up and down
+Allow edits
+    - act title
+    - chapter title
+    - scene title
+    - beat title
 
 Nerdy Novelist 24 chapter novel structure:
 https://nerdynovelist.com/24-chapter-novel-outline/

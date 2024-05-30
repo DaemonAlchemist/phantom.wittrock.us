@@ -1,6 +1,7 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Row, Tabs } from "antd";
 import { useState } from "react";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyCharacter, useStory } from "../../../lib/storyGen/useStory";
 import { CharacterTypeSelector } from "../../CharacterTypeSelector";
 import { DeleteBtn } from "../../DeleteBtn";
 import { Editable } from "../../Editable";
@@ -20,7 +21,7 @@ export const CharactersComponent = ({}:CharactersProps) => {
 
     return <>
         <Row>
-            <Col xs={4}><h2>Characters</h2></Col>
+            <Col xs={4}><h2>Characters <PlusCircleOutlined onClick={update.character.add(emptyCharacter)} /></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId={`characters.${role}`}

@@ -1,5 +1,6 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row } from "antd";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyChapter, useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PartsDone } from "../../PartsDone";
@@ -25,7 +26,7 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
 
     return<div className={styles.chapters}>
         <Row>
-            <Col xs={4}><h2>Chapters</h2></Col>
+            <Col xs={4}><h2>Chapters <PlusCircleOutlined onClick={update.chapter.add(actIndex, emptyChapter)}/></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId="chapters"

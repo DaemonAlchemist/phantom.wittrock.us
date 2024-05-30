@@ -1,5 +1,6 @@
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Col, Collapse, Row } from "antd";
-import { useStory } from "../../../lib/storyGen/useStory";
+import { emptyAct, useStory } from "../../../lib/storyGen/useStory";
 import { DeleteBtn } from "../../DeleteBtn";
 import { IsFinished } from "../../IsFinished";
 import { PartsDone } from "../../PartsDone";
@@ -19,7 +20,7 @@ export const ActsComponent = ({}:ActsProps) => {
 
     return <div className={styles.acts}>
         <Row>
-            <Col xs={4}><h2>Acts</h2></Col>
+            <Col xs={4}><h2>Acts <PlusCircleOutlined onClick={update.act.add(emptyAct)} /></h2></Col>
             <Col xs={20}>
                 <PromptButton
                     promptId="acts"
