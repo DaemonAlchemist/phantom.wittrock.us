@@ -72,7 +72,13 @@ export const emptyCharacter:ICharacter = {
 }
 
 export const useStory = () => {
-    const [story, setStory] = useLocalStorage.object<IStoryOutline>("storyDetails", emptyStory)();
+    const [storyRaw, setStory] = useLocalStorage.object<IStoryOutline>("storyDetails", emptyStory)();
+
+    // Hacky patch.  Not sure why loading a story saves it to localStorage as an escaped string rather than JSON string.
+    const story = typeof storyRaw === 'string' ? JSON.parse(storyRaw as unknown as string) :storyRaw;
+    if(typeof storyRaw === 'string') {
+        setStory(story);
+    }
 
     // Basic information
     const setAttribute = (field:string) => (value:string) => {setStory(old => ({...old, [field]: value}));}
@@ -153,14 +159,39 @@ export const useStory = () => {
     const updatePlotOutline = (outline: string) => { setStory(old => ({ ...old, plot: { ...old.plot, outline } })); }
     const updatePlotSummary = (summary: string) => { setStory(old => ({ ...old, plot: { ...old.plot, summary } })); }
 
+    // Entity moving helpers
+    const moveUp = (entities:any[], index:number) => [
+        ...entities.filter((_, i) => i < index - 1),
+        entities[index],
+        ...entities.filter((_, i) => i >= index - 1 && i !== index),
+    ];
+    const moveDown = (entities:any[], index:number) => [
+        ...entities.filter((_, i) => i <= index + 1 && i !== index),
+        entities[index],
+        ...entities.filter((_, i) => i > index + 1),
+    ];
+
     // Acts
     const setActs = (acts: IAct[]) => {setStory(old => ({...old, plot: {...old.plot, acts}}));}
     const addAct = (act: IAct) => () => { setStory(old => ({ ...old, plot: { ...old.plot, acts: [...old.plot.acts, act] } })); }
     const removeAct = (index: number) => () => { setStory(old => ({ ...old, plot: { ...old.plot, acts: old.plot.acts.filter((_, i) => i !== index) } })); }
     const updateActAttribute = (field:string) => (index: number) => (value: string) => { setStory(old => ({
         ...old, plot: {
-        ...old.plot, acts: old.plot.acts.map((act, i) => i === index ? { ...act, [field]: value } : act)
-    }
+            ...old.plot,
+            acts: old.plot.acts.map((act, i) => i === index ? { ...act, [field]: value } : act)
+        }
+    })); }
+    const moveActUp = (index:number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot,
+            acts: moveUp(old.plot.acts, index),
+        }
+    })); }
+    const moveActDown = (index:number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot,
+            acts: moveDown(old.plot.acts, index),
+        }
     })); }
     const updateActTitle   = updateActAttribute("title");
     const updateActOutline = updateActAttribute("outline");
@@ -181,6 +212,20 @@ export const useStory = () => {
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, i) => i === actIndex ? {
                 ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? { ...chapter, [field]: value } : chapter)
+            } : act)
+        }
+    })); }
+    const moveChapterUp = (actIndex: number) => (chapterIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, i) => i === actIndex ? {
+                ...act, chapters: moveUp(act.chapters, chapterIndex),
+            } : act)
+        }
+    })); }
+    const moveChapterDown = (actIndex: number) => (chapterIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, i) => i === actIndex ? {
+                ...act, chapters: moveDown(act.chapters, chapterIndex),
             } : act)
         }
     })); }
@@ -335,6 +380,10 @@ export const useStory = () => {
             set: setActs,
             add: addAct,
             remove: removeAct,
+            move: {
+                up: moveActUp,
+                down: moveActDown,
+            },
             title: updateActTitle,
             outline: updateActOutline,
             summary: updateActSummary,
@@ -342,6 +391,10 @@ export const useStory = () => {
         chapter: {
             add: addChapter,
             remove: removeChapter,
+            move: (actIndex:number) => ({
+                up: moveChapterUp(actIndex),
+                down: moveChapterDown(actIndex),
+            }),
             title: updateChapterTitle,
             outline: updateChapterOutline,
             summary: updateChapterSummary,
