@@ -6,13 +6,16 @@ Bugs
 Models
     - Add default model and override models for specific prompt types
 Edit hierarchy
+    - chapter to act
     - beat to scene
-    - move entities up and down
 Allow edits
     - act title
     - chapter title
-    - scene title
+    - scene title, location, and characters
     - beat title
+Unsolved bugs
+    - loading scene does not parse JSON data properly (patched by re-parsing and resaving data if needed in useStory hook)
+    - adding chapter move buttons wiped out the chapters (can't replicate. newly loaded story works fine)
 
 Nerdy Novelist 24 chapter novel structure:
 https://nerdynovelist.com/24-chapter-novel-outline/

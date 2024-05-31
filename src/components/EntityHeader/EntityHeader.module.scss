@@ -1,6 +1,18 @@
 @import "@styles/globals.scss";
 
 .entityHeader {
+    &:hover {
+        .moveBtns {display: block;}
+    }
+    .moveBtns {
+        display: none;
+        position: absolute;
+        left: 32px;
+        top: 2px;
+    }
+    .details {
+        margin-left: 12px;
+    }
     :global(.deleteBtn) {
         float: right;
     }

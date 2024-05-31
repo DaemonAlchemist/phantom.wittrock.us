@@ -260,6 +260,25 @@ export const useStory = () => {
             } : act)
         }
     })); }
+    const moveSceneUp = (actIndex: number, chapterIndex: number) => (sceneIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
+               ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
+                    ...chapter, scenes: moveUp(chapter.scenes, sceneIndex),
+                } : chapter)
+            } : act)
+        }
+    })); }
+    const moveSceneDown = (actIndex: number, chapterIndex: number) => (sceneIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
+               ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
+                    ...chapter, scenes: moveDown(chapter.scenes, sceneIndex),
+                } : chapter)
+            } : act)
+        }
+    })); }
+
     const updateSceneTitle   = updateSceneAttribute("title");
     const updateSceneOutline = updateSceneAttribute("outline");
     const updateSceneSummary = updateSceneAttribute("summary");
@@ -303,7 +322,7 @@ export const useStory = () => {
             } : act)
         }
     })); }
-    const removeBeat = (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => () => { setStory(old => {const updated = ({
+    const removeBeat = (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => () => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
                 ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
@@ -313,7 +332,7 @@ export const useStory = () => {
                 } : chapter)
             } : act)
         }
-    }); console.log(updated);return updated;}); }
+    }));}
     const updateBeatAttribute = (field:string) => (actIndex: number, chapterIndex: number, sceneIndex: number, beatIndex: number) => (value: string) => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
@@ -325,6 +344,29 @@ export const useStory = () => {
             } : act)
         }
     })); }        
+    const moveBeatUp = (actIndex: number, chapterIndex: number, sceneIndex: number) => (beatIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
+                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
+                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? {
+                        ...scene, beats: moveUp(scene.beats, beatIndex),
+                    } : scene)
+                } : chapter)
+            } : act)
+        }
+    })); }        
+    const moveBeatDown = (actIndex: number, chapterIndex: number, sceneIndex: number) => (beatIndex: number) => () => { setStory(old => ({
+        ...old, plot: {
+            ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
+                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
+                    ...chapter, scenes: chapter.scenes.map((scene, si) => si === sceneIndex ? {
+                        ...scene, beats: moveDown(scene.beats, beatIndex),
+                    } : scene)
+                } : chapter)
+            } : act)
+        }
+    })); }        
+
     const updateBeatOutline = updateBeatAttribute("outline");
     const updateBeatSummary = updateBeatAttribute("summary");
     const updateBeatText    = updateBeatAttribute("text");
@@ -402,6 +444,10 @@ export const useStory = () => {
         scene: {
             add: addScene,
             remove: removeScene,
+            move: (actIndex:number, chapterIndex:number) => ({
+                up: moveSceneUp(actIndex, chapterIndex),
+                down: moveSceneDown(actIndex, chapterIndex),
+            }),
             title: updateSceneTitle,
             outline: updateSceneOutline,
             summary: updateSceneSummary,
@@ -410,6 +456,10 @@ export const useStory = () => {
         beat: {
             add: addBeat,
             remove: removeBeat,
+            move: (actIndex:number, chapterIndex: number, sceneIndex: number) => ({
+                up: moveBeatUp(actIndex, chapterIndex, sceneIndex),
+                down: moveBeatDown(actIndex, chapterIndex, sceneIndex),
+            }),
             outline: updateBeatOutline,
             summary: updateBeatSummary,
             text: updateBeatText,

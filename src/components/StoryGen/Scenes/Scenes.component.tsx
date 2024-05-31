@@ -40,7 +40,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
         </Row>
         <hr />
         <Collapse>
-            {scenes.map((scene, i) => <Collapse.Panel
+            {scenes.map((scene:IScene, i:number) => <Collapse.Panel
                 className={styles.scene}
                 header={<EntityHeader
                     type="Scene"
@@ -50,6 +50,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                     subEntityFilter={b => !!b.text}
                     isFinished={scene.summary}
                     onDelete={update.scene.remove(actIndex, chapterIndex, i)}
+                    move={update.scene.move(actIndex, chapterIndex)}
                 />}
                 key={i}
             >

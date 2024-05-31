@@ -37,9 +37,9 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
         </Row>
         <hr />
         <Collapse>
-            {chapters.map((chapter, i) => <Collapse.Panel
+            {chapters.map((chapter:IChapter, i:number) => <Collapse.Panel
                 className={styles.chapter}
-                header={<EntityHeader
+                header={!!chapter ? <EntityHeader
                     type="Chapter"
                     index={i}
                     title={chapter.title}
@@ -47,17 +47,18 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
                     subEntityFilter={s => !!s.summary}
                     isFinished={chapter.summary}
                     onDelete={update.chapter.remove(actIndex, i)}
-                />}
+                    move={update.chapter.move(actIndex)}
+                /> : <></>}
                 key={i}
             >
-                <Row>
+                {!!chapter && <Row>
                     <Col xs={4}>
                         <Summarizable entity={chapter} updateOutline={update.chapter.outline(actIndex, i)} updateSummary={update.chapter.summary(actIndex, i)}/>
                     </Col>
                     <Col xs={20}>
                         <Scenes actIndex={actIndex} chapterIndex={i}/>
                     </Col>
-                </Row>                    
+                </Row>}
             </Collapse.Panel>)}
         </Collapse>
         <SummarizeBtn

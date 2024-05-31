@@ -34,7 +34,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
         </Row>
         <hr />
         <Collapse>
-            {beats.map((beat, i) => <Collapse.Panel
+            {beats.map((beat:IBeat, i:number) => <Collapse.Panel
                 className={styles.beat}
                 header={<EntityHeader
                     type="Beat"
@@ -42,6 +42,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                     title={beat.title}
                     isFinished={beat.text}
                     onDelete={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)}
+                    move={update.beat.move(actIndex, chapterIndex, sceneIndex)}
                 />}
                 key={i}
             >
