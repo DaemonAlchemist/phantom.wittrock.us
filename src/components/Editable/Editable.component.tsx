@@ -34,6 +34,7 @@ export const EditableComponent = ({value, onChange, placeholder, textArea}:Edita
         value={curValue}
         className={clsx([styles.editable, hasChanges && styles.hasChanges])}
         onChange={onInputChange(setCurValue)}
+        onClick={e => {e.stopPropagation();}}
         placeholder={placeholder}
         autoSize
     />;
