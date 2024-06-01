@@ -3,7 +3,7 @@ import { Func } from "ts-functional/dist/types";
 import { useLocalStorage } from 'unstateless';
 import { Conversation, IChatResponse, IMessage } from "./conversation";
 import { processStream } from './processStream';
-import { useLoader } from "./userLoader";
+import { useLoader } from "./useLoader";
 
 export const useConversation = (id:string, initialMessages:Conversation = []):[Conversation, Func<string, Promise<any>>, () => void, boolean] => {
     const [conversation, setConversation] = useLocalStorage.object<Conversation>(id, initialMessages)();

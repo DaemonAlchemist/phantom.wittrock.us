@@ -75,7 +75,7 @@ export const useStory = () => {
     const [storyRaw, setStory] = useLocalStorage.object<IStoryOutline>("storyDetails", emptyStory)();
 
     // Hacky patch.  Not sure why loading a story saves it to localStorage as an escaped string rather than JSON string.
-    const story = typeof storyRaw === 'string' ? JSON.parse(storyRaw as unknown as string) :storyRaw;
+    const story:IStoryOutline = typeof storyRaw === 'string' ? JSON.parse(storyRaw as unknown as string) :storyRaw;
     if(typeof storyRaw === 'string') {
         setStory(story);
     }
@@ -279,9 +279,10 @@ export const useStory = () => {
         }
     })); }
 
-    const updateSceneTitle   = updateSceneAttribute("title");
-    const updateSceneOutline = updateSceneAttribute("outline");
-    const updateSceneSummary = updateSceneAttribute("summary");
+    const updateSceneTitle    = updateSceneAttribute("title");
+    const updateSceneOutline  = updateSceneAttribute("outline");
+    const updateSceneSummary  = updateSceneAttribute("summary");
+    const updateSceneLocation = updateSceneAttribute("locationId");
 
     const sceneToChapter = (actIndex: number, chapterIndex: number, sceneIndex:number) => () => { setStory(old => ({
         ...old, plot: {
@@ -452,6 +453,7 @@ export const useStory = () => {
             title: updateSceneTitle,
             outline: updateSceneOutline,
             summary: updateSceneSummary,
+            location: updateSceneLocation,
             toChapter: sceneToChapter,
         },
         beat: {

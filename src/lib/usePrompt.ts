@@ -7,7 +7,7 @@ import { IStoryOutline } from "../components/StoryGen/story";
 import { Conversation } from "./conversation";
 import { notify } from "./notifications";
 import { prompt } from "./proxy";
-import { useLoader } from "./userLoader";
+import { useLoader } from "./useLoader";
 
 export const usePrompt = <T>(systemMessage: string, onUpdate:Func<T, void>, jsonOnly?: boolean, finishMsg?: string) => {
     const loader = useLoader();

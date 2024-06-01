@@ -1,0 +1,23 @@
+@import "@styles/globals.scss";
+
+.locationSelect {
+    position: relative;
+    .locationModal {
+        display: none;
+        position: absolute;
+        z-index: 999;
+        left: 0;
+        top: 32px;
+        border: solid 1px $lowLight;
+        background-color: $bgColor;
+        border-radius: $borderRadius;
+        width: 512px;
+        padding: $paddingSmall;
+        &.open {
+            display: block;
+        }
+        > * {
+            margin: $paddingXSmall;
+        }
+    }
+}
