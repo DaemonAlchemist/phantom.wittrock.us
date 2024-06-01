@@ -1,6 +1,8 @@
 StoryGen ToDo
 =============
 Bugs
+    - fix formatting issue with entity header title editor
+    - stop propagation on Editable focus clicks
     - Handle incomplete messages
     - previousScenesSummary not working(?)
 Models
@@ -9,10 +11,7 @@ Edit hierarchy
     - chapter to act
     - beat to scene
 Allow edits
-    - act title
-    - chapter title
-    - scene title, location, and characters
-    - beat title
+    - scene location and characters
 Unsolved bugs
     - loading scene does not parse JSON data properly (patched by re-parsing and resaving data if needed in useStory hook)
     - adding chapter move buttons wiped out the chapters (can't replicate. newly loaded story works fine)

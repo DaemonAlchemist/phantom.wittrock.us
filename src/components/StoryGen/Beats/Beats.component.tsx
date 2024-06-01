@@ -43,6 +43,7 @@ export const BeatsComponent = ({actIndex, chapterIndex, sceneIndex}:BeatsProps) 
                     isFinished={beat.text}
                     onDelete={update.beat.remove(actIndex, chapterIndex, sceneIndex, i)}
                     move={update.beat.move(actIndex, chapterIndex, sceneIndex)}
+                    onUpdateTitle={update.beat.title(actIndex, chapterIndex, sceneIndex, i)}
                 />}
                 key={i}
             >

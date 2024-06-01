@@ -39,7 +39,7 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
         <Collapse>
             {chapters.map((chapter:IChapter, i:number) => <Collapse.Panel
                 className={styles.chapter}
-                header={!!chapter ? <EntityHeader
+                header={<EntityHeader
                     type="Chapter"
                     index={i}
                     title={chapter.title}
@@ -48,7 +48,8 @@ export const ChaptersComponent = ({actIndex}:ChaptersProps) => {
                     isFinished={chapter.summary}
                     onDelete={update.chapter.remove(actIndex, i)}
                     move={update.chapter.move(actIndex)}
-                /> : <></>}
+                    onUpdateTitle={update.chapter.title(actIndex, i)}
+                />}
                 key={i}
             >
                 {!!chapter && <Row>

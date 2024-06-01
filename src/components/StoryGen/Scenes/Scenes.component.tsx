@@ -51,6 +51,7 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                     isFinished={scene.summary}
                     onDelete={update.scene.remove(actIndex, chapterIndex, i)}
                     move={update.scene.move(actIndex, chapterIndex)}
+                    onUpdateTitle={update.scene.title(actIndex, chapterIndex, i)}
                 />}
                 key={i}
             >

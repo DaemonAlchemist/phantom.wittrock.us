@@ -5,11 +5,12 @@ import { PartsDone } from "../PartsDone";
 import { EntityHeaderProps } from "./EntityHeader.d";
 import styles from './EntityHeader.module.scss';
 import { stopPropagation } from "../../lib/stopPropagation";
+import { Editable } from "../Editable";
 
 export const EntityHeaderComponent = ({
     type, index, title, isFinished,
     subEntities, subEntityFilter,
-    onDelete, move,
+    onDelete, move, onUpdateTitle,
 }:EntityHeaderProps) =>
     <div className={styles.entityHeader}>
         {!!move && <span className={styles.moveBtns}>
@@ -17,7 +18,7 @@ export const EntityHeaderComponent = ({
             <ArrowDownOutlined onClick={stopPropagation(move.down(index))} />
         </span>}
         <span className={styles.details}>
-            {type} {index + 1}: {title}&nbsp;&nbsp;
+            {type} {index + 1}: <Editable value={title} onChange={onUpdateTitle}/>&nbsp;&nbsp;
             {!!subEntities && !!subEntityFilter && <PartsDone entities={subEntities || []} filter={e => !!e && subEntityFilter(e)} />}
             <IsFinished value={isFinished} />
         </span>

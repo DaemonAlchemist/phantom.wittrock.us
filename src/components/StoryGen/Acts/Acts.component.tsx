@@ -43,6 +43,7 @@ export const ActsComponent = ({}:ActsProps) => {
                     isFinished={act.summary}
                     onDelete={update.act.remove(i)}
                     move={update.act.move}
+                    onUpdateTitle={update.act.title(i)}
                 />}
                 key={i}
             >

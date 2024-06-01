@@ -370,6 +370,7 @@ export const useStory = () => {
     const updateBeatOutline = updateBeatAttribute("outline");
     const updateBeatSummary = updateBeatAttribute("summary");
     const updateBeatText    = updateBeatAttribute("text");
+    const updateBeatTitle   = updateBeatAttribute("title");
 
     const updateStory = {
         story: setStory,
@@ -463,6 +464,7 @@ export const useStory = () => {
             outline: updateBeatOutline,
             summary: updateBeatSummary,
             text: updateBeatText,
+            title: updateBeatTitle,
         }
     }
 

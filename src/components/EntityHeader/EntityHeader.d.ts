@@ -13,10 +13,11 @@ export declare interface IEntityHeaderInputProps {
     subEntityFilter?: Func<any, boolean>;
     isFinished: string;
     onDelete: () => void;
-    move?: {
+    move: {
         up: Func<number, () => void>,
         down: Func<number, () => void>,
     }
+    onUpdateTitle: Func<string, void>;
 }
 
 export type EntityHeaderProps = IEntityHeaderInputProps & IEntityHeaderProps;

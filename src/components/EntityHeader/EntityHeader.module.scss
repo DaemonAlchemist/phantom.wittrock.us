@@ -12,6 +12,10 @@
     }
     .details {
         margin-left: 12px;
+        input {
+            display: inline-block;
+            width: auto;
+        }
     }
     :global(.deleteBtn) {
         float: right;
