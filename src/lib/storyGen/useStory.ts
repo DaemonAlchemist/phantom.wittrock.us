@@ -251,7 +251,7 @@ export const useStory = () => {
             } : act)
         }
     })); }
-    const updateSceneAttribute = (field:string) => (actIndex: number, chapterIndex: number, sceneIndex: number) => (value: string) => { setStory(old => ({
+    const updateSceneAttribute = <T>(field:string) => (actIndex: number, chapterIndex: number, sceneIndex: number) => (value: T) => { setStory(old => ({
         ...old, plot: {
             ...old.plot, acts: old.plot.acts.map((act, ai) => ai === actIndex ? {
                ...act, chapters: act.chapters.map((chapter, ci) => ci === chapterIndex ? {
@@ -279,10 +279,11 @@ export const useStory = () => {
         }
     })); }
 
-    const updateSceneTitle    = updateSceneAttribute("title");
-    const updateSceneOutline  = updateSceneAttribute("outline");
-    const updateSceneSummary  = updateSceneAttribute("summary");
-    const updateSceneLocation = updateSceneAttribute("locationId");
+    const updateSceneTitle      = updateSceneAttribute<string  >("title");
+    const updateSceneOutline    = updateSceneAttribute<string  >("outline");
+    const updateSceneSummary    = updateSceneAttribute<string  >("summary");
+    const updateSceneLocation   = updateSceneAttribute<string  >("locationId");
+    const updateSceneCharacters = updateSceneAttribute<string[]>("characterIds");
 
     const sceneToChapter = (actIndex: number, chapterIndex: number, sceneIndex:number) => () => { setStory(old => ({
         ...old, plot: {
@@ -454,6 +455,7 @@ export const useStory = () => {
             outline: updateSceneOutline,
             summary: updateSceneSummary,
             location: updateSceneLocation,
+            characters: updateSceneCharacters,
             toChapter: sceneToChapter,
         },
         beat: {

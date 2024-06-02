@@ -1,12 +1,12 @@
 import { ArrowUpOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Collapse, Popconfirm, Row, Tag } from "antd";
+import { Button, Col, Collapse, Popconfirm, Row } from "antd";
 import { emptyScene, useStory } from "../../../lib/storyGen/useStory";
+import { CharacterSelect } from "../../CharacterSelect";
 import { EntityHeader } from "../../EntityHeader";
 import { LocationSelect } from "../../LocationSelect";
 import { PromptButton } from "../../PromptButton";
 import { SummarizeBtn } from "../../SummarizeBtn";
 import { Beats } from "../Beats";
-import { getCharacter } from "../Storygen.helpers";
 import { Summarizable } from "../Summarizable";
 import { ICharacter, IScene } from "../story";
 import { ScenesProps } from "./Scenes";
@@ -58,7 +58,8 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
             >
                 <div className={styles.sceneInfo}>
                     <LocationSelect locationId={scene.locationId} onChange={update.scene.location(actIndex, chapterIndex, i)} />
-                    {scene.characterIds.map(id => <Tag color="green">{getCharacter(story, id)}</Tag>)}
+                    &nbsp;
+                    <CharacterSelect characterIds={scene.characterIds} onChange={update.scene.characters(actIndex, chapterIndex, i)}/>
                     &nbsp;&nbsp;
                     <Popconfirm title="Are you sure you want to convert this scene into a chapter?" onConfirm={update.scene.toChapter(actIndex, chapterIndex, i)}>
                         <Button className={styles.hoistBtn} type="default" size="small"><ArrowUpOutlined /> Convert to chapter</Button>
