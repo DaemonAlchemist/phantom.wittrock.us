@@ -1,4 +1,4 @@
-import { ArrowUpOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, BankOutlined, PlusCircleOutlined, TeamOutlined } from "@ant-design/icons";
 import { Button, Col, Collapse, Popconfirm, Row } from "antd";
 import { emptyScene, useStory } from "../../../lib/storyGen/useStory";
 import { CharacterSelect } from "../../CharacterSelect";
@@ -57,9 +57,9 @@ export const ScenesComponent = ({actIndex, chapterIndex}:ScenesProps) => {
                 key={i}
             >
                 <div className={styles.sceneInfo}>
-                    <LocationSelect locationId={scene.locationId} onChange={update.scene.location(actIndex, chapterIndex, i)} />
-                    &nbsp;
-                    <CharacterSelect characterIds={scene.characterIds} onChange={update.scene.characters(actIndex, chapterIndex, i)}/>
+                    <BankOutlined /> <LocationSelect locationId={scene.locationId} onChange={update.scene.location(actIndex, chapterIndex, i)} />
+                    &nbsp;&nbsp;&nbsp;
+                    <TeamOutlined /> <CharacterSelect characterIds={scene.characterIds} onChange={update.scene.characters(actIndex, chapterIndex, i)}/>
                     &nbsp;&nbsp;
                     <Popconfirm title="Are you sure you want to convert this scene into a chapter?" onConfirm={update.scene.toChapter(actIndex, chapterIndex, i)}>
                         <Button className={styles.hoistBtn} type="default" size="small"><ArrowUpOutlined /> Convert to chapter</Button>

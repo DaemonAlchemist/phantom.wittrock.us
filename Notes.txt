@@ -3,6 +3,8 @@ StoryGen ToDo
 Bugs
     - Handle incomplete messages
     - previousScenesSummary not working(?)
+Documentation
+    - new features: moving, editing
 Models
     - Add default model and override models for specific prompt types
 Edit hierarchy
