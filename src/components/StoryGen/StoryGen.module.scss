@@ -3,4 +3,11 @@
 .content {
     .controls {width: 300px;}
     padding: 0 $paddingMedium;
+    > :global(.ant-tabs) > :global(.ant-tabs-nav) {
+        position: sticky;
+        width: calc(100% + 16px);
+        top: 72px;
+        z-index: 999;
+        background-color: $bgColorLow;
+    }
 }

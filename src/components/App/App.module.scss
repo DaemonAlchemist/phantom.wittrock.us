@@ -6,14 +6,25 @@ body {
 
 .app {
     min-height: 100vh;
-}
-
-.mainHeader {
-    margin: 8px 0 0 84px;
-    img {
-        position: absolute;
-        width: 72px;
-        top: 0;
-        left: 0;
+    position: relative;
+    .header {
+        position: sticky;
+        top: 0px;
+        background-color: $bgColor;
+        height: 72px;
+        padding: 0;
+        z-index: 999;
+        .mainHeader {
+            margin: 0 0 0 64px;
+            padding: 12px;
+            img {
+                position: absolute;
+                width: 72px;
+                top: 0;
+                left: 0;
+            }
+        }
+        hr {margin: 0;}
     }
 }
+
