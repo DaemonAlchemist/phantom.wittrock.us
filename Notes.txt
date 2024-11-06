@@ -1,6 +1,7 @@
 StoryGen ToDo
 =============
 Bugs
+    - locations not being sent with character generation
     - Handle incomplete messages
     - previousScenesSummary not working(?)
 Models

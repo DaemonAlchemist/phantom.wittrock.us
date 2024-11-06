@@ -3,10 +3,11 @@ import { Input, Menu, MenuProps, Modal, Table, Tabs, Tag } from "antd";
 import { loadData, saveData } from "../../lib/save";
 import { emptyStory, useStory } from "../../lib/storyGen/useStory";
 import { StoryMenuProps } from "./StoryMenu.d";
-import { defaultPrompts, useRawPrompts } from "../../lib/usePrompt";
+import { useRawPrompts } from "../../lib/usePrompt";
 import { useModal } from "../../lib/useModal";
 import { onInputChange } from "../../lib/onInputChange";
 import styles from "./StoryMenu.module.scss";
+import { defaultPrompts } from "../../config/defaultPrompts";
 
 export const StoryMenuComponent = ({}:StoryMenuProps) => {
     const {story, update} = useStory();

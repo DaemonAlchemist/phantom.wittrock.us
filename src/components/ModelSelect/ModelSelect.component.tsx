@@ -44,8 +44,8 @@ export const ModelSelectComponent = ({label}:ModelSelectProps) => {
         <span><SlidersOutlined /> {label || "Model"}</span>
         <Select<string> value={modelId} onChange={setModelId} showSearch>
             <Select.Option value={""}><StopOutlined /> No model selected</Select.Option>
-            {Object.keys(models).map(provider => <Select.OptGroup label={provider}>
-                {models[provider].map(model => <Select.Option value={model.id}>
+            {Object.keys(models).map((provider, i) => <Select.OptGroup key={i} label={provider}>
+                {models[provider].map(model => <Select.Option key={model.id} value={model.id}>
                     <Name model={model as any} />
                 </Select.Option>)}
             </Select.OptGroup>)}

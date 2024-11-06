@@ -1,5 +1,6 @@
 import { BankOutlined, BookOutlined, InfoCircleOutlined, QuestionCircleOutlined, ReadOutlined, TeamOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
+import { Tab } from "rc-tabs/es/interface";
 import { Overview } from "../Overview";
 import { StoryMenu } from "../StoryMenu";
 import { Acts } from "./Acts";
@@ -10,27 +11,40 @@ import { Read } from "./Read";
 import { StoryGenProps } from "./StoryGen.d";
 import styles from "./StoryGen.module.scss";
 
+const tabs:Tab[] = [{
+    key: "overview",
+    label: "What is this?",
+    icon: <QuestionCircleOutlined />,
+    children: <Overview />,
+},{
+    key: "outline",
+    label: "Story Overview",
+    icon: <InfoCircleOutlined />,
+    children: <Outline />,
+},{
+    key: "locations",
+    label: "Locations",
+    icon: <BankOutlined />,
+    children: <Locations />,
+},{
+    key: "characters",
+    label: "Characters",
+    icon: <TeamOutlined />,
+    children: <Characters />,
+},{
+    key: "acts",
+    label: "Write",
+    icon: <BookOutlined />,
+    children: <Acts />,
+},{
+    key: "read",
+    label: "Read",
+    icon: <ReadOutlined />,
+    children: <Read />
+}];
+
 export const StoryGenComponent = ({}:StoryGenProps) => <div className={styles.content}>
-    <Tabs tabBarExtraContent={<div className={styles.controls}>
+    <Tabs items={tabs} tabBarExtraContent={<div className={styles.controls}>
         <StoryMenu />
-    </div>}>
-        <Tabs.TabPane key="overview" tabKey="overview" tab={<><QuestionCircleOutlined /> What is this?</>}>
-            <Overview />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="outline" tabKey="outline" tab={<><InfoCircleOutlined /> Story Overview</>}>
-            <Outline />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="locations" tabKey="locations" tab={<><BankOutlined /> Locations</>}>
-            <Locations />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="characters" tabKey="characters" tab={<><TeamOutlined /> Characters</>}>
-            <Characters />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="acts" tabKey="acts" tab={<><BookOutlined /> Write</>}>
-            <Acts />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="read" tabKey="read" tab={<><ReadOutlined /> Read</>}>
-            <Read />
-        </Tabs.TabPane>
-    </Tabs>
+    </div>} />
 </div>;

@@ -3,7 +3,7 @@ import {SummarizeBtnProps} from "./SummarizeBtn.d";
 import styles from './SummarizeBtn.module.scss';
 import { Button, Spin } from "antd";
 import { SendOutlined } from "@ant-design/icons";
-import { finalPrompt, usePrompt } from "../../lib/usePrompt";
+import { compilePrompt, usePrompt } from "../../lib/usePrompt";
 import { useStory } from "../../lib/storyGen/useStory";
 import { PromptEditor } from "../PromptEditor";
 
@@ -16,8 +16,8 @@ export const SummarizeBtnComponent = ({entities, field, promptId, onUpdate, enti
 
     const {story} = useStory();
 
-    const systemPrompt = finalPrompt(`${promptId}.system`, story, {});
-    const userPrompt = finalPrompt(`${promptId}.user`, story, params);
+    const systemPrompt = compilePrompt(`${promptId}.system`, story, {});
+    const userPrompt = compilePrompt(`${promptId}.user`, story, params);
 
     const prompt = usePrompt(systemPrompt, updateSummary, true, `has finished summarizing your ${entityName}`);
 
