@@ -35,11 +35,11 @@ export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            "@assets":     _("./src/assets"),
-            "@components": _("./src/components"),
-            "@lib":        _("./src/lib"),
-            "@plugins":    _("./src/plugins"),
-            "@styles":     _("./src/styles"),
+            "@APP":        _("./src/Phantom"),
+            "@ATP":        _("./src/ATP"    ),
+            "@assets":     _("./src/assets" ),
+            "@config":     _("./src/config" ),
+            "@styles":     _("./src/styles" ),
         }
     }
 })

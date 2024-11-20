@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { App } from './components/App'
+import { App } from './Phantom/components/App'
 import { ConfigProvider, Layout, theme } from 'antd'
 import ReactGA from "react-ga4";
 
